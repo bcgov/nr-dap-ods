@@ -1,0 +1,25 @@
+create table fta_replication.forest_client 
+   (	client_number varchar(8) not null, 
+	client_name varchar(60) not null, 
+	legal_first_name varchar(30), 
+	legal_middle_name varchar(30), 
+	client_status_code varchar(3) not null, 
+	client_type_code varchar(1) not null, 
+	birthdate timestamp(0), 
+	client_id_type_code varchar(4), 
+	client_identification varchar(40), 
+	registry_company_type_code varchar(4), 
+	corp_regn_nmbr varchar(9), 
+	client_acronym varchar(8), 
+	wcb_firm_number varchar(6), 
+	ocg_supplier_nmbr varchar(10), 
+	client_comment varchar(4000), 
+	add_timestamp timestamp(0) not null, 
+	add_userid varchar(30) not null, 
+	add_org_unit bigint not null, 
+	update_timestamp timestamp(0) not null, 
+	update_userid varchar(30) not null, 
+	update_org_unit bigint not null, 
+	revision_count int not null
+   ) 
+ ;
