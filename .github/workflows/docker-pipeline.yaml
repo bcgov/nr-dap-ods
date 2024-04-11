@@ -15,7 +15,7 @@ env:
 
 jobs:
   build:
-  
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -64,5 +64,5 @@ jobs:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-          
+
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
