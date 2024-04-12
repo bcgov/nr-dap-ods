@@ -8,7 +8,7 @@ env:
   # DF-NOTE: pull ghcr.io/bcgov/nr-dap-ods-trino:main
   REGISTRY: ghcr.io
   DOCKERFILE_PATH: shared/ods_replication_pg2pg
-  IMAGE_NAME: ${{ github.repository }}-ods-pg2pg
+  IMAGE_NAME: ${{ github.repository }}-pg2pg
 
 jobs:
   build:
