@@ -10,8 +10,8 @@ RUN apt-get update \
 
 ADD *.py .
 
-#COPY requirements.txt requirements.txt
+COPY requirements.txt requirements.txt
 
-#RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 CMD ["python3", "./data_replication_pg2pg.py"]
