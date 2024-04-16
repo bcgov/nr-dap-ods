@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ods-replication-pg2pg" ]
 
 env:
   # DF-NOTE: pull ghcr.io/bcgov/nr-dap-ods-trino:main
@@ -55,11 +55,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      #- name: Sign the published Docker image
-        #if: ${{ github.event_name != 'pull_request' }}
-        #env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          #TAGS: ${{ steps.meta.outputs.tags }}
-          #DIGEST: ${{ steps.build-and-push.outputs.digest }}
+      - name: Sign the published Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
+          TAGS: ${{ steps.meta.outputs.tags }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
           
-        #run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
