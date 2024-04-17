@@ -84,15 +84,20 @@ except psycopg2.OperationalError as e:
 def del_audit_entries_rerun(current_date):
   postgres_connection  = PgresPool.getconn()  
   postgres_cursor = postgres_connection.cursor()
-  del_sql = f"""
-  DELETE FROM {mstr_schema}.{audit_table} c
-  where application_name='{app_name}' and batch_run_date='{current_date}'
-  """
-  postgres_cursor.execute(del_sql)
-  postgres_connection.commit()
-  postgres_cursor.close()
-  PgresPool.putconn(postgres_connection)
-  return print(del_sql)
+  try:
+    del_sql = f"""
+    DELETE FROM {mstr_schema}.{audit_table} c
+    where application_name='{app_name}' and batch_run_date='{current_date}'
+    """
+    postgres_cursor.execute(del_sql)
+    postgres_connection.commit()
+    postgres_cursor.close()
+    PgresPool.putconn(postgres_connection)
+    print(del_sql)
+    return None
+  except Exception as e:
+      print(f"Failed to delete audit entries for application name {app_name} and date '{current_date}': {str(e)}")
+      sys.exit(3)
 
 # Function to insert the audit batch status entry
 def audit_batch_status_insert(table_name,status):
@@ -107,6 +112,7 @@ def audit_batch_status_insert(table_name,status):
     return None
   except Exception as e:
       print(f"Error inserting record into to audit batch status table: {str(e)}")
+      sys.exit(4)
       return None
   finally:
         # Return the connection to the pool
@@ -124,13 +130,19 @@ def get_active_tables(mstr_schema,app_name):
   where  active_ind = 'Y' and application_name='{app_name}'
   order by replication_order, source_table_name
   """
-  with postgres_connection.cursor() as curs:
-            curs.execute(list_sql)
-            rows = curs.fetchall()
-  postgres_connection.commit()
-  postgres_cursor.close()
-  PgresPool.putconn(postgres_connection)
-  return rows
+  try:  
+    with postgres_connection.cursor() as curs:
+                curs.execute(list_sql)
+                rows = curs.fetchall()
+    postgres_connection.commit()
+    postgres_cursor.close()
+    PgresPool.putconn(postgres_connection)
+    return rows
+  except Exception as e:
+    print(f"Error selecting record from cdc_master_table_list table: {str(e)}")
+    sys.exit(5)
+    return None
+      
 
 # In[9]: Function to extract data from Oracle
 def extract_from_srcpg(table_name,source_schema,customsql_ind,customsql_query):
