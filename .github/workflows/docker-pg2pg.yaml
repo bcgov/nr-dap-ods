@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ods-replication-pg2pg" ]
 
 env:
   # DF-NOTE: pull ghcr.io/bcgov/nr-dap-ods-trino:main
