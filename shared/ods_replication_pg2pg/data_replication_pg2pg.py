@@ -26,11 +26,11 @@ src_postgres_host = os.environ['DB_HOST']
 src_postgres_port = os.environ['DB_PORT']
 src_postgres_database = os.environ['DATABASE']
 # In[4]: Retrieve Postgres database configuration
-postgres_username = os.environ['ODS_USERNAME']
-postgres_password = os.environ['ODS_PASSWORD']
-postgres_host = os.environ['ODS_HOST']
-postgres_port = os.environ['ODS_PORT']
-postgres_database = os.environ['ODS_DATABASE']
+postgres_username = os.environ['TGT_USERNAME']
+postgres_password = os.environ['TGT_PASSWORD']
+postgres_host = os.environ['TGT_HOST']
+postgres_port = os.environ['TGT_PORT']
+postgres_database = os.environ['TGT_DATABASE']
 # In[5]: Script parameters
 mstr_schema = os.environ['MSTR_SCHEMA']
 app_name = os.environ['APP_NAME']
@@ -44,16 +44,42 @@ current_date = datetime.now().strftime('%Y-%m-%d')
 
 # In[6]: Set up Oracle connection pool
 # In[7]: Setup Postgres Pool 
-SrcPgresPool = psycopg2.pool.ThreadedConnectionPool(
-    minconn = concurrent_tasks, maxconn = concurrent_tasks,host=src_postgres_host, port=src_postgres_port, dbname=src_postgres_database, user=src_postgres_username, password=src_postgres_password
-)
-print('Source Postgres Connection Successful')
+
+try:
+    SrcPgresPool = psycopg2.pool.ThreadedConnectionPool(
+        minconn=concurrent_tasks, 
+        maxconn=concurrent_tasks,
+        host=src_postgres_host, 
+        port=src_postgres_port, 
+        dbname=src_postgres_database, 
+        user=src_postgres_username, 
+        password=src_postgres_password
+    )
+    print('Source Postgres Connection Successful')
+    # Exit with code 0 (success) if connection successful
+except Exception as e:
+    print(f'Error connecting to Source PostgreSQL: {e}')
+    # Exit with code 1 (failure) if connection unsuccessful
+    sys.exit(1)
+
 
 # In[7]: Setup Postgres Pool 
-PgresPool = psycopg2.pool.ThreadedConnectionPool(
-    minconn = concurrent_tasks, maxconn = concurrent_tasks,host=postgres_host, port=postgres_port, dbname=postgres_database, user=postgres_username, password=postgres_password
-)
-print('Target Postgres Connection Successful')
+try:
+    PgresPool = psycopg2.pool.ThreadedConnectionPool(
+        minconn=concurrent_tasks, 
+        maxconn=concurrent_tasks,
+        host=postgres_host, 
+        port=postgres_port, 
+        dbname=postgres_database, 
+        user=postgres_username, 
+        password=postgres_password
+    )
+    print('Target Postgres Connection Successful')
+
+except psycopg2.OperationalError as e:
+    print(f'Error connecting to Target PostgreSQL: {e}')
+    # Exit with code 1 (failure) if connection unsuccessful
+    sys.exit(2)
 
 def del_audit_entries_rerun(current_date):
   postgres_connection  = PgresPool.getconn()  
@@ -222,3 +248,4 @@ if __name__ == '__main__':
     print("ETL process completed successfully.")
     print("The time of execution of the program is:", (end - start) , "secs")
 
+sys.exit(0)
