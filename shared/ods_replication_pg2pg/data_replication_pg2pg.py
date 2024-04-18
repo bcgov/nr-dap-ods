@@ -229,7 +229,6 @@ def check_failed_tables(mstr_schema,app_name,current_date):
   SELECT object_name
   from {mstr_schema}.audit_batch_status c
   where application_name='{app_name}' and batch_run_date='{current_date}' and object_execution_status='failed'
-  order by replication_order, source_table_name
   """
   try:  
     with postgres_connection.cursor() as curs:
