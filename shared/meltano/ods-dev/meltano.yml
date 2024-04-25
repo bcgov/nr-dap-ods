@@ -1,0 +1,26 @@
+version: 1
+default_environment: dev
+project_id: 466659bb-07ef-46d8-8dcc-d494519dac67
+environments:
+- name: dev
+- name: staging
+- name: prod
+plugins:
+  extractors:
+  - name: tap-rest-api-msdk
+    variant: widen
+    pip_url: tap-rest-api-msdk
+    config:
+      api_keys: {}
+      api_url: https://postrest1-c2b678-dev.apps.silver.devops.gov.bc.ca
+      streams: []
+      path: /sample_table
+  loaders:
+  - name: target-postgres
+    variant: meltanolabs
+    pip_url: meltanolabs-target-postgres
+    config:
+      database: odsdev
+      host: theory.bcgov
+      port: 3433
+      user: ods_admin_user

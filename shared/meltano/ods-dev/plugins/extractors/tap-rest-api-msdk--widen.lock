@@ -1,0 +1,357 @@
+{
+  "plugin_type": "extractors",
+  "name": "tap-rest-api-msdk",
+  "namespace": "tap_rest_api_msdk",
+  "variant": "widen",
+  "label": "REST API",
+  "docs": "https://hub.meltano.com/extractors/tap-rest-api-msdk--widen",
+  "repo": "https://github.com/Widen/tap-rest-api-msdk",
+  "pip_url": "tap-rest-api-msdk",
+  "description": "REST API",
+  "logo_url": "https://hub.meltano.com/assets/logos/extractors/restapi.png",
+  "capabilities": [
+    "about",
+    "batch",
+    "catalog",
+    "discover",
+    "schema-flattening",
+    "state",
+    "stream-maps"
+  ],
+  "settings_group_validation": [
+    [
+      "api_url"
+    ]
+  ],
+  "settings": [
+    {
+      "name": "access_token_url",
+      "kind": "password",
+      "label": "Access Token URL",
+      "description": "Used for the OAuth2 authentication method. This is the end-point for the authentication server used to exchange the authorization codes for a access token.",
+      "sensitive": true
+    },
+    {
+      "name": "api_keys",
+      "kind": "object",
+      "label": "API Keys",
+      "description": "A object of API Key/Value pairs used by the api_key auth method Example: { X-API-KEY: my secret value}."
+    },
+    {
+      "name": "api_url",
+      "kind": "string",
+      "label": "API URL",
+      "description": "The base url/endpoint for the desired api"
+    },
+    {
+      "name": "auth_method",
+      "kind": "string",
+      "value": "no_auth",
+      "label": "Auth Method",
+      "description": "The method of authentication used by the API. Supported options include oauth: for OAuth2 authentication, basic: Basic Header authorization - base64-encoded username + password config items, api_key: for API Keys in the header e.g. X-API-KEY,bearer_token: for Bearer token authorization, aws: for AWS Authentication. Defaults to `no_auth` which will take authentication parameters passed via the headersconfig."
+    },
+    {
+      "name": "aws_credentials",
+      "kind": "object",
+      "label": "AWS Credentials",
+      "description": "An object of aws credentials to authenticate to access AWS services. This example is to access the AWS OpenSearch service. Example: { aws_access_key_id: my_aws_key_id, aws_secret_access_key: my_aws_secret_access_key, aws_region: us-east-1, aws_service: es, use_signed_credentials: true}"
+    },
+    {
+      "name": "backoff_param",
+      "kind": "string",
+      "value": "Retry-After",
+      "label": "Backoff Param",
+      "description": "The header parameter to inspect for a backoff time. Optional: Defaults to `Retry-After`."
+    },
+    {
+      "name": "backoff_time_extension",
+      "kind": "string",
+      "value": 0,
+      "label": "Backoff Time Extension",
+      "description": "An additional extension (seconds) to the backoff time over and above a jitter value - use where an API is not precise in its backoff times. Optional: Defaults to `0`."
+    },
+    {
+      "name": "backoff_type",
+      "kind": "string",
+      "label": "Backoff Type",
+      "description": "The style of Backoff [message|header] applied to rate limited APIs. Backoff times (seconds) come from response either the `message` or `header`. Optional: Defaults to `None`."
+    },
+    {
+      "name": "batch_config.encoding.compression",
+      "kind": "options",
+      "label": "Batch Config Encoding Compression",
+      "description": "Compression format to use for batch files.",
+      "options": [
+        {
+          "label": "Gzip",
+          "value": "gzip"
+        },
+        {
+          "label": "None",
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "name": "batch_config.encoding.format",
+      "kind": "options",
+      "label": "Batch Config Encoding Format",
+      "description": "Format to use for batch files.",
+      "options": [
+        {
+          "label": "Jsonl",
+          "value": "jsonl"
+        }
+      ]
+    },
+    {
+      "name": "batch_config.storage.prefix",
+      "kind": "string",
+      "label": "Batch Config Storage Prefix",
+      "description": "Prefix to use when writing batch files."
+    },
+    {
+      "name": "batch_config.storage.root",
+      "kind": "string",
+      "label": "Batch Config Storage Root",
+      "description": "Root path to use when writing batch files."
+    },
+    {
+      "name": "bearer_token",
+      "kind": "password",
+      "label": "Bearer Token",
+      "description": "Used for the Bearer Authentication method, which uses a token as part of the authorization header for authentication.",
+      "sensitive": true
+    },
+    {
+      "name": "client_id",
+      "kind": "password",
+      "label": "Client ID",
+      "description": "Used for the OAuth2 authentication method. The public application ID that's assigned for Authentication. The client_id should accompany a client_secret.",
+      "sensitive": true
+    },
+    {
+      "name": "client_secret",
+      "kind": "password",
+      "label": "Client Secret",
+      "description": "Used for the OAuth2 authentication method. The client_secret is a secret known only to the application and the authorization server. It is essential the application's own password.",
+      "sensitive": true
+    },
+    {
+      "name": "except_keys",
+      "kind": "array",
+      "value": [],
+      "label": "Except Keys",
+      "description": "This tap automatically flattens the entire json structure and builds keys based on the corresponding paths. Keys, whether composite or otherwise, listed in this dictionary will not be recursively flattened, but instead their values will be; turned into a json string and processed in that format. This is also automatically done for any lists within the records; therefore, records are not duplicated for each item in lists."
+    },
+    {
+      "name": "flattening_enabled",
+      "kind": "boolean",
+      "label": "Flattening Enabled",
+      "description": "'True' to enable schema flattening and automatically expand nested properties."
+    },
+    {
+      "name": "flattening_max_depth",
+      "kind": "integer",
+      "label": "Flattening Max Depth",
+      "description": "The max depth to flatten schemas."
+    },
+    {
+      "name": "grant_type",
+      "kind": "string",
+      "label": "Grant Type",
+      "description": "Used for the OAuth2 authentication method. The grant_type is required to describe the OAuth2 flow. Flows support by this tap include client_credentials, refresh_token, password."
+    },
+    {
+      "name": "headers",
+      "kind": "object",
+      "label": "Headers",
+      "description": "An object of headers to pass into the api calls. Stream level headers will be merged with top-level params with streamlevel params overwriting top-level params with the same key."
+    },
+    {
+      "name": "next_page_token_path",
+      "kind": "password",
+      "label": "Next Page Token Path",
+      "description": "A jsonpath string representing the path to the 'next page' token. Defaults to `$.next_page` for the `jsonpath_paginator` paginator only otherwise `None`.",
+      "sensitive": true
+    },
+    {
+      "name": "num_inference_records",
+      "kind": "integer",
+      "value": 50,
+      "label": "Num Inference Records",
+      "description": "Number of records used to infer the stream's schema. Defaults to `50`."
+    },
+    {
+      "name": "oauth_expiration_secs",
+      "kind": "integer",
+      "label": "OAuth Expiration Secs",
+      "description": "Used for OAuth2 authentication method. This optional setting is a timer for the expiration of a token in seconds. If not set the OAuth will use the default expiration set in the token by the authorization server."
+    },
+    {
+      "name": "oauth_extras",
+      "kind": "object",
+      "label": "OAuth Extras",
+      "description": "A object of Key/Value pairs for additional oauth config parameters which may be required by the authorization server. Example: {resource: https://analysis.windows.net/powerbi/api}."
+    },
+    {
+      "name": "pagination_limit_per_page_param",
+      "kind": "string",
+      "label": "Pagination Limit Per Page Param",
+      "description": "The name of the param that indicates the limit/per_page. Defaults to `None`."
+    },
+    {
+      "name": "pagination_next_page_param",
+      "kind": "string",
+      "label": "Pagination Next Page Param",
+      "description": "The name of the param that indicates the page/offset. Defaults to `None`."
+    },
+    {
+      "name": "pagination_page_size",
+      "kind": "integer",
+      "label": "Pagination Page Size",
+      "description": "The size of each page in records. Defaults to `None`."
+    },
+    {
+      "name": "pagination_request_style",
+      "kind": "string",
+      "value": "default",
+      "label": "Pagination Request Style",
+      "description": "The pagination style to use for requests. Defaults to `default`."
+    },
+    {
+      "name": "pagination_response_style",
+      "kind": "string",
+      "value": "default",
+      "label": "Pagination Response Style",
+      "description": "The pagination style to use for response. Defaults to `default`."
+    },
+    {
+      "name": "pagination_results_limit",
+      "kind": "integer",
+      "label": "Pagination Results Limit",
+      "description": "Limits the max number of records. Defaults to `None`."
+    },
+    {
+      "name": "pagination_total_limit_param",
+      "kind": "string",
+      "value": "total",
+      "label": "Pagination Total Limit Param",
+      "description": "The name of the param that indicates the total limit e.g. `total`, `count`. Defaults to `total`."
+    },
+    {
+      "name": "params",
+      "kind": "object",
+      "value": {},
+      "label": "Params",
+      "description": "An object providing the `params` in a `requests.get` method. Stream level params will be merged with top-level params with stream level params overwriting top-level params with the same key."
+    },
+    {
+      "name": "password",
+      "kind": "password",
+      "label": "Password",
+      "description": "Used for a number of authentication methods that use a user password combination for authentication.",
+      "sensitive": true
+    },
+    {
+      "name": "path",
+      "kind": "string",
+      "label": "Path",
+      "description": "The path appended to the `api_url`. Stream-level path will overwrite top-level path"
+    },
+    {
+      "name": "primary_keys",
+      "kind": "array",
+      "label": "Primary Keys",
+      "description": "A list of the json keys of the primary key for the stream."
+    },
+    {
+      "name": "records_path",
+      "kind": "string",
+      "label": "Records Path",
+      "description": "A jsonpath string representing the path in the requests response that contains the records to process. Defaults to `$[*]`. Stream level records_path will overwrite the top-level records_path"
+    },
+    {
+      "name": "redirect_uri",
+      "kind": "string",
+      "label": "Redirect Uri",
+      "description": "Used for the OAuth2 authentication method. This is optional as the redirect_uri may be part of the token returned by the authentication server. If a redirect_uri is provided, it determines where the API server redirects the user after the user completes the authorization flow."
+    },
+    {
+      "name": "refresh_token",
+      "kind": "password",
+      "label": "Refresh Token",
+      "description": "An OAuth2 Refresh Token is a string that the OAuth2 client can use to get a new access token without the user's interaction.",
+      "sensitive": true
+    },
+    {
+      "name": "replication_key",
+      "kind": "password",
+      "label": "Replication Key",
+      "description": "The json response field representing the replication key. Note that this should be an incrementing integer or datetime object.",
+      "sensitive": true
+    },
+    {
+      "name": "scope",
+      "kind": "string",
+      "label": "Scope",
+      "description": "Used for the OAuth2 authentication method. The scope is optional, it is a mechanism to limit the amount of access that is granted to an access token. One or more scopes can be provided delimited by a space."
+    },
+    {
+      "name": "source_search_field",
+      "kind": "string",
+      "label": "Source Search Field",
+      "description": "An optional field name which can be used for querying specific records from supported API's. The intend for this parameter is to continue incrementally processing from a previous state. Example `last-updated`. Note: You must also set the replication_key, where the replication_key is json response representation of the API `source_search_field`. You should also supply the `source_search_query`, `replication_key` and `start_date`."
+    },
+    {
+      "name": "source_search_query",
+      "kind": "string",
+      "label": "Source Search Query",
+      "description": "An optional query template to be issued against the API. Substitute the query field you are querying against with $last_run_date. At run-time, the tap will dynamically update the token with either the `start_date` or the last bookmark / state value. A simple template Example for FHIR APIs: gt$last_run_date. A more complex example against an Opensearch API, `\"{\\\"bool\\\": {\\\"filter\\\": [{\\\"range\\\": { \\\"meta.lastUpdated\\\": { \\\"gt\\\": \\\"$last_run_date\\\" }}}] }}\"`. Note: Any required double quotes in the query template must be escaped."
+    },
+    {
+      "name": "start_date",
+      "kind": "date_iso8601",
+      "label": "Start Date",
+      "description": "An optional field. Normally required when using the replication_key. This is the initial starting date when using adate based replication key and there is no state available."
+    },
+    {
+      "name": "store_raw_json_message",
+      "kind": "boolean",
+      "value": false,
+      "label": "Store Raw JSON Message",
+      "description": "An additional extension which will emit the whole message into an field. Optional: Defaults to `False`."
+    },
+    {
+      "name": "stream_map_config",
+      "kind": "object",
+      "label": "Stream Map Config",
+      "description": "User-defined config values to be used within map expressions."
+    },
+    {
+      "name": "stream_maps",
+      "kind": "object",
+      "label": "Stream Maps",
+      "description": "Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html)."
+    },
+    {
+      "name": "streams",
+      "kind": "array",
+      "label": "Streams",
+      "description": "An array of streams, designed for separate paths using thesame base url.\n\nStream level config options.\n\nParameters that appear at the stream-level will overwrite their top-level counterparts except where noted below:\n\n- name: required: name of the stream.\n- path: optional: the path appended to the `api_url`.\n- params: optional: an object of objects that provide the `params` in a `requests.get` method. Stream level params will be merged with top-level params with stream level params overwriting top-level params with the same key.\n- headers: optional: an object of headers to pass into the api calls. Stream level headers will be merged with top-level params with stream level params overwriting top-level params with the same key\n- records_path: optional: a jsonpath string representing the path in the requests response that contains the records to process. Defaults to `$[*]`.\n- primary_keys: required: a list of the json keys of the primary key for the stream.\n- replication_key: optional: the json key of the replication key. Note that this should be an incrementing integer or datetime object.\n- except_keys: This tap automatically flattens the entire json structure and builds keys based on the corresponding paths. Keys, whether composite or otherwise, listed in this dictionary will not be recursively flattened, but instead their values will be turned into a json string and processed in that format. This is also automatically done for any lists within the records; therefore, records are not duplicated for each item in lists.\n- num_inference_keys: optional: number of records used to infer the stream's schema. Defaults to `50`.\n- schema: optional: A valid Singer schema or a path-like string that provides the path to a `.json` file that contains a valid Singer schema. If provided, the schema will not be inferred from the results of an api call.\n"
+    },
+    {
+      "name": "use_request_body_not_params",
+      "kind": "boolean",
+      "value": false,
+      "label": "Use Request Body Not Params",
+      "description": "Sends the request parameters in the request body. This is normally not required, a few API's like OpenSearch require this. Defaults to `False`."
+    },
+    {
+      "name": "username",
+      "kind": "string",
+      "label": "Username",
+      "description": "Used for a number of authentication methods that use a user password combination for authentication."
+    }
+  ]
+}
