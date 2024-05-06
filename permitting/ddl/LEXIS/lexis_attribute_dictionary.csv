@@ -37,7 +37,7 @@
 ,EXPORT_PRODUCT_TYPE_CODE,"Defines the product category code. Values include standing timber, harvested timber, and specialty timber",
 ,,,
 ,,,
-EXPORT_PERMIT_STATUS,EXPORT_PERMIT_STATUS_CODE,"Status of the permit: ACT - active (means in process), CAN - cancelled, COM - complete (means processed), EXP - expired (after 6 months)",
+EXPORT_PERMIT_STATUS_CODE,EXPORT_PERMIT_STATUS_CODE,"Status of the permit: ACT - active (means in process), CAN - cancelled, COM - complete (means processed), EXP - expired (after 6 months)",
 ,DESCRIPTION,The meaning of the associated export_permit_status_code,
 ,EFFECTIVE_DATE,The date the status code has been active since,
 ,EXPIRY_DATE,The date the status code is scheduled to expire,
