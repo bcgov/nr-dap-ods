@@ -1,4 +1,4 @@
--- Steps to transfer ownership of tables
+-- Steps to transfer ownership of tables (using 'ats_replication' schema as an example)
 
 -- 1, as amichel
 SELECT administration.create_proxy_account('ats_replication','');
@@ -19,3 +19,5 @@ BEGIN
         EXECUTE 'ALTER TABLE ats_replication.' || quote_ident(table_name) || ' OWNER TO ats_replication';
     END LOOP;
 END$$;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ods_data_management TO ats_replication;
