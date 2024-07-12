@@ -22,21 +22,21 @@ start = time.time()
 # oracledb.init_oracle_client(lib_dir="/opt/oracle/instantclient_21_12")
 
 # In[3]: Retrieve Oracle database configuration
-oracle_username = os.environ['user']
-oracle_password = os.environ['password']
-oracle_host = os.environ['host']
-oracle_port = os.environ['port']
-oracle_database = os.environ['database']
+oracle_username = os.environ['DB_USERNAME']
+oracle_password = os.environ['DB_PASSWORD']
+oracle_host = os.environ['DB_HOST']
+oracle_port = os.environ['DB_PORT']
+oracle_database = os.environ['DATABASE']
 # In[4]: Retrieve Postgres database configuration
-postgres_username = os.environ['ods-user']
-postgres_password = os.environ['ods-password']
-postgres_host = os.environ['ods-host']
-postgres_port = os.environ['ods-port']
-postgres_database = os.environ['ods-database']
+postgres_username = os.environ['ODS_USERNAME']
+postgres_password = os.environ['ODS_PASSWORD']
+postgres_host = os.environ['ODS_HOST']
+postgres_port = os.environ['ODS_PORT']
+postgres_database = os.environ['ODS_DATABASE']
 # In[5]: Script parameters
-mstr_schema = os.environ['schema']
-app_name = os.environ['app']
-concurrent_tasks = int(os.environ['concurrency'])
+mstr_schema = os.environ['MSTR_SCHEMA']
+app_name = os.environ['APP_NAME']
+concurrent_tasks = int(os.environ['CONCUR_TASKS'])
 audit_table = 'audit_batch_status'
 current_date = datetime.now().strftime('%Y-%m-%d')
 
