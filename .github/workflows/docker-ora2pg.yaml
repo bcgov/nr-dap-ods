@@ -2,11 +2,11 @@ name: Push to GHCR
 
 on:
   push:
-    branches: [ "ods-replication-pg2pg" ]
+    branches: [ "main" ]
 
 env:
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
+  # github.repository as <account>/<repo> # should be renamed to end in -ora2pg
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
