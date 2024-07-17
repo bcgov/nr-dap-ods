@@ -36,6 +36,8 @@ BEGIN
     END LOOP;
 END$$;
 
+GRANT USAGE ON SCHEMA ods_data_management TO ats_replication;
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ods_data_management TO ats_replication;
 
 GRANT USAGE, CREATE ON SCHEMA rrs_replication TO rrs_replication;
@@ -51,6 +53,8 @@ BEGIN
         EXECUTE 'ALTER TABLE rrs_replication.' || quote_ident(table_name) || ' OWNER TO rrs_replication';
     END LOOP;
 END$$;
+
+GRANT USAGE ON SCHEMA ods_data_management TO rrs_replication;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ods_data_management TO rrs_replication;
 
@@ -68,6 +72,8 @@ BEGIN
     END LOOP;
 END$$;
 
+GRANT USAGE ON SCHEMA ods_data_management TO lexis_replication;
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ods_data_management TO lexis_replication;
 
 GRANT USAGE, CREATE ON SCHEMA fta_replication TO fta_replication;
@@ -83,5 +89,7 @@ BEGIN
         EXECUTE 'ALTER TABLE fta_replication.' || quote_ident(table_name) || ' OWNER TO fta_replication';
     END LOOP;
 END$$;
+
+GRANT USAGE ON SCHEMA ods_data_management TO fta_replication;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA ods_data_management TO fta_replication;
