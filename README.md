@@ -24,7 +24,7 @@ The Operational Data Store (ODS) provides access to exact copies of data assets 
   `nr-dap-ods/shared/tools/{name of tool}/{Files}`
 
 ##  Use of GitHub Container Registry
-Container images under the 'shared' folder are built automatically and pushed to the GHCR any time there is a push or PR to the **main** branch. Images are named according to the file path and tagged with the branch name. Use the image name in an Airflow DAG to create a job using the shared containers. See Airflow example here: [permitting_ats.py](https://github.com/bcgov/nr-airflow/blob/main/dags/permitting_ats.py)
+Container images under the 'shared' folder are built automatically and pushed to the GHCR any time there is a push to the **main** branch. Images are named according to the file path and tagged with the branch name. Use the image name in an Airflow DAG to create a job using the shared containers. See Airflow example here: [permitting_ats.py](https://github.com/bcgov/nr-airflow/blob/main/dags/permitting_ats.py)
 
 Usage example:
 ```sh
