@@ -5,10 +5,9 @@ on:
     branches: [ "main" ]
 
 env:
-  # DF-NOTE: pull ghcr.io/bcgov/nr-dap-ods-trino:main
   REGISTRY: ghcr.io
-  DOCKERFILE_PATH: shared/trino
-  IMAGE_NAME: ${{ github.repository }}-trino
+  DOCKERFILE_PATH: shared/ora2s3
+  IMAGE_NAME: ${{ github.repository }}-ora2s3
 
 jobs:
   build:
@@ -61,5 +60,5 @@ jobs:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-          
+
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}

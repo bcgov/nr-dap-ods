@@ -5,9 +5,8 @@ on:
     branches: ["main"]
 
 env:
-  # DF-NOTE: pull ghcr.io/bcgov/nr-dap-ods-trino:main
   REGISTRY: ghcr.io
-  DOCKERFILE_PATH: shared/ods_replication_pg2pg
+  DOCKERFILE_PATH: shared/pg2pg
   IMAGE_NAME: ${{ github.repository }}-pg2pg
 
 jobs:
@@ -61,5 +60,5 @@ jobs:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-          
+
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}

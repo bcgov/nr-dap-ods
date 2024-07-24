@@ -1,0 +1,4 @@
+oracledb
+pandas
+boto3
+xlsxwriter

@@ -2,12 +2,12 @@ name: Push to GHCR
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo> # should be renamed to end in -ora2pg
-  IMAGE_NAME: ${{ github.repository }}
+  DOCKERFILE_PATH: shared/ora2pg
+  IMAGE_NAME: ${{ github.repository }}-ora2pg
 
 jobs:
   build:
@@ -46,7 +46,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: .
+          # DF-NOTE: to help the action find the Dockerfile to build from
+          context: ${{ env.DOCKERFILE_PATH }}/
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
