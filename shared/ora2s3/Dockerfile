@@ -12,7 +12,7 @@ RUN        apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR    /app
 
-ADD data_replication_ora2s3 .
+ADD data_replication_ora2s3.py .
 
 COPY requirements.txt requirements.txt
 
