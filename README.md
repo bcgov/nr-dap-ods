@@ -5,8 +5,14 @@ The Operational Data Store (ODS) provides access to exact copies of data assets 
 
 ## File Structure
 
-- **DDLs:**
+- **DDL (Data Definition Language)** Includes commands like CREATE, ALTER, and COMMENT that define and modify database structure.
   `nr-dap-ods/{domain}/ddl/{application name}/{Filename = name of the table}`
+
+- **DQL (Data Query Language) / DML (Data Manipulation Language)** Includes commands like SELECT, INSERT, UPDATE, and DELETE that manipulate data within the database.
+  `nr-dap-ods/{domain}/dml/{application name, if more than 1 within the domain}/{Files}`
+
+- **DCL (Data Control Language)** Includes commands like GRANT and REVOKE that control access to the data in the database.
+  `nr-dap-ods/{domain}/dcl/{Files}`
 
 - **Custom Replication Containers:**
   `nr-dap-ods/{source system}/replication/{Files}`
