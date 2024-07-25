@@ -15,7 +15,7 @@ The Operational Data Store (ODS) provides access to exact copies of data assets 
   `nr-dap-ods/{domain}/dcl/{Files}`
 
 - **Custom Replication Containers:**
-  `nr-dap-ods/{source system}/replication/{Files}`
+  `nr-dap-ods/{domain}/replication/{Files}`
 
 - **Shared Replication Containers:**
   `nr-dap-ods/shared/{Files}`
