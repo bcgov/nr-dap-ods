@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"adpyke.vscode-sql-formatter",
+		"bierner.markdown-preview-github-styles",
+		"davidanson.vscode-markdownlint",
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens",
+		"editorconfig.editorconfig",
+		"esbenp.prettier-vscode",
+		"ms-python.autopep8",
+		"ryanluker.vscode-coverage-gutters"
+	]
+}
