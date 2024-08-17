@@ -1,4 +1,5 @@
-### Set up Meltano CLI
+# Set up Meltano CLI
+
 ```sh
 python3 -m pip install --user pipx
 
@@ -7,15 +8,18 @@ pipx install meltano
 pipx ensurepath
 ```
 
-### Run with Docker
-Link: https://docs.meltano.com/guide/containerization/
+## Run with Docker
+
+Link: <https://docs.meltano.com/guide/containerization/>
+
 ```sh
 mkdir projects
 
 docker run -v .:/projects -w /projects meltano/meltano
 ```
 
-### Set up a new Meltano replication job
+## Set up a new Meltano replication job
+
 ```sh
 meltano init odsdev
 
@@ -37,7 +41,8 @@ meltano invoke target-postgres
 
 meltano select target-postgres --list --all
 ```
-### Required Parameters
+
+## Required Parameters
 
 For PostgreSQL:
 3. database
@@ -50,7 +55,8 @@ For (public) API:
 3. API endpoint
 34. path
 
-### Notes
+## Notes
+
 - make sure to also set default_target_schema
 - secrets automatically go to .env file
 - --interactive allows you to semi-interactively set up the source and target details

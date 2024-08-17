@@ -1,25 +1,25 @@
-create table fta_replication.cut_block 
-   (	cb_skey bigint not null, 
-	hva_skey bigint, 
-	forest_file_id varchar(10) not null, 
-	cutting_permit_id varchar(3), 
-	timber_mark varchar(10), 
-	cut_block_id varchar(10) not null, 
-	sp_exempt_ind varchar(1) default 'n' not null, 
-	block_status_date timestamp(0), 
-	cut_block_description varchar(120), 
-	cut_regulation_code varchar(3), 
-	block_status_st varchar(3) not null, 
-	reforest_declare_type_code varchar(3), 
-	revision_count int not null, 
-	entry_userid varchar(30) not null, 
-	entry_timestamp timestamp(0) not null, 
-	update_userid varchar(30) not null, 
-	update_timestamp timestamp(0) not null, 
-	is_waste_assessment_required varchar(1) default 'u' not null, 
-	cut_block_guid bytea not null
-   ) 
- ;
+CREATE TABLE fta_replication.cut_block (
+	cb_skey bigint NOT NULL,
+	hva_skey bigint,
+	forest_file_id VARCHAR(10) NOT NULL,
+	cutting_permit_id VARCHAR(3),
+	timber_mark VARCHAR(10),
+	cut_block_id VARCHAR(10) NOT NULL,
+	sp_exempt_ind VARCHAR(1) DEFAULT 'n' NOT NULL,
+	block_status_date TIMESTAMP(0),
+	cut_block_description VARCHAR(120),
+	cut_regulation_code VARCHAR(3),
+	block_status_st VARCHAR(3) NOT NULL,
+	reforest_declare_type_code VARCHAR(3),
+	revision_count INT NOT NULL,
+	entry_userid VARCHAR(30) NOT NULL,
+	entry_timestamp TIMESTAMP(0) NOT NULL,
+	update_userid VARCHAR(30) NOT NULL,
+	update_timestamp TIMESTAMP(0) NOT NULL,
+	is_waste_assessment_required VARCHAR(1) DEFAULT 'u' NOT NULL,
+	cut_block_guid bytea NOT NULL
+);
 
-comment on column fta_replication.cut_block.is_waste_assessment_required is 'a value indicating whefta_replicationr a harvesting authority record requires waste assessment or not.';
-comment on column fta_replication.cut_block.cut_block_guid is 'global unique identifier. created as part of cp / fta 5 changes.';
+COMMENT ON column fta_replication.cut_block.is_waste_assessment_required IS 'a value indicating whefta_replicationr a harvesting authority record requires waste assessment or not.';
+
+COMMENT ON column fta_replication.cut_block.cut_block_guid IS 'global unique identifier. created as part of cp / fta 5 changes.';

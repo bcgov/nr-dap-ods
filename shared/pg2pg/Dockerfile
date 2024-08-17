@@ -1,8 +1,8 @@
 FROM python:3.11.4-slim-buster
 
-WORKDIR    /app
+WORKDIR /app
 
-# PostgreSQL library 
+# PostgreSQL library
 
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc \

@@ -1,15 +1,15 @@
-create table ats_replication.ats_regional_users (
-	regional_user_id decimal(38,0) not null,
-	regional_user varchar(40) not null,
-	first_name varchar(40) not null,
-	surname varchar(40) not null,
-	email varchar(128) not null,
-	active_ind varchar(3) default 'yes'  not null,
-	resource_officer_ind varchar(3) default 'no'  not null,
-	managing_fcbc_region_id decimal(38,0) not null,
-	who_created varchar(30) not null,
-	when_created timestamp(0) not null,
-	who_updated varchar(30) null,
-	when_updated timestamp(0) null,
-	subregional_office_id decimal(38,0) null
+CREATE TABLE ats_replication.ats_regional_users (
+	regional_user_id DECIMAL(38, 0) NOT NULL,
+	regional_user VARCHAR(40) NOT NULL,
+	first_name VARCHAR(40) NOT NULL,
+	surname VARCHAR(40) NOT NULL,
+	email VARCHAR(128) NOT NULL,
+	active_ind VARCHAR(3) DEFAULT 'yes' NOT NULL,
+	resource_officer_ind VARCHAR(3) DEFAULT 'no' NOT NULL,
+	managing_fcbc_region_id DECIMAL(38, 0) NOT NULL,
+	who_created VARCHAR(30) NOT NULL,
+	when_created TIMESTAMP(0) NOT NULL,
+	who_updated VARCHAR(30) NULL,
+	when_updated TIMESTAMP(0) NULL,
+	subregional_office_id DECIMAL(38, 0) NULL
 );
