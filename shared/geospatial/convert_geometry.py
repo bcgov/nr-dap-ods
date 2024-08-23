@@ -93,4 +93,4 @@ postgres_connection.commit()
 end = time.time()
 
 print("Geometry conversion completed successfully.")
-print("The time of execution of the program is:", (end - start), "seconds")
+print(f"The time of execution of the program is: {(end - start)} seconds")

@@ -1,4 +1,4 @@
-FROM trinodb/trino
+FROM trinodb/trino:452
 
 USER trino
 

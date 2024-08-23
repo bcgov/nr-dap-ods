@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.12.5-slim-bookworm
 
 WORKDIR /opt/oracle
 RUN apt-get update && apt-get install -y libaio1 wget unzip \
@@ -12,9 +12,7 @@ RUN apt-get update && apt-get install -y libaio1 wget unzip \
 
 WORKDIR /app
 
-ADD data_replication_ora2s3.py .
-
-COPY requirements.txt requirements.txt
+COPY . .
 
 RUN pip3 install -r requirements.txt
 

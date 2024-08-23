@@ -67,7 +67,7 @@ def del_audit_entries_rerun(current_date):
     postgres_cursor = postgres_connection.cursor()
     del_sql = f"""
   DELETE FROM {mstr_schema}.{audit_table} c
-  where application_name='{app_name}' and batch_run_date='{current_date}'
+  WHERE application_name='{app_name}' and batch_run_date='{current_date}'
   """
     postgres_cursor.execute(del_sql)
     postgres_connection.commit()
@@ -86,7 +86,7 @@ def audit_batch_status_insert(table_name, status):
         print(audit_batch_status_query)
         postgres_cursor.execute(audit_batch_status_query)
         postgres_connection.commit()
-        print(f"Record inserted into audit batch status table")
+        print("Record inserted into audit batch status table")
         return None
     except Exception as e:
         print(
@@ -106,9 +106,9 @@ def get_active_tables(mstr_schema, app_name):
     postgres_cursor = postgres_connection.cursor()
     list_sql = f"""
   SELECT application_name,source_schema_name,source_table_name,target_schema_name,target_table_name,truncate_flag,cdc_flag,full_inc_flag,cdc_column,replication_order,customsql_ind,customsql_query
-  from {mstr_schema}.cdc_master_table_list c
-  where  active_ind = 'Y' and application_name='{app_name}'
-  order by replication_order, source_table_name
+  FROM {mstr_schema}.cdc_master_table_list c
+  WHERE active_ind = 'Y' and application_name='{app_name}'
+  ORDER BY replication_order, source_table_name
   """
     with postgres_connection.cursor() as curs:
         curs.execute(list_sql)
@@ -240,4 +240,4 @@ if __name__ == '__main__':
     PgresPool.closeall()
 
     print("ETL process completed successfully.")
-    print("The time of execution of the program is:", (end - start), "secs")
+    print(f"The time of execution of the program is: {(end - start)} secs")

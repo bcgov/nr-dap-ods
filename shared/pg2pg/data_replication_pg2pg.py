@@ -88,7 +88,7 @@ def del_audit_entries_rerun(current_date):
     try:
         del_sql = f"""
     DELETE FROM {mstr_schema}.{audit_table} c
-    where application_name='{app_name}' and batch_run_date='{current_date}'
+    WHERE application_name='{app_name}' AND batch_run_date='{current_date}'
     """
         postgres_cursor.execute(del_sql)
         postgres_connection.commit()
@@ -133,9 +133,9 @@ def get_active_tables(mstr_schema, app_name):
     postgres_cursor = postgres_connection.cursor()
     list_sql = f"""
   SELECT application_name,source_schema_name,source_table_name,target_schema_name,target_table_name,truncate_flag,cdc_flag,full_inc_flag,cdc_column,replication_order,customsql_ind,customsql_query
-  from {mstr_schema}.cdc_master_table_list c
-  where  active_ind = 'Y' and application_name='{app_name}' AND replication_source = 'postgresql'
-  order by replication_order, source_table_name
+  FROM {mstr_schema}.cdc_master_table_list c
+  WHERE active_ind = 'Y' and application_name='{app_name}' AND replication_source = 'postgresql'
+  ORDER BY replication_order, source_table_name
   """
     try:
         with postgres_connection.cursor() as curs:
@@ -244,8 +244,8 @@ def check_failed_tables(mstr_schema, app_name, current_date):
     postgres_cursor = postgres_connection.cursor()
     list_sql = f"""
   SELECT object_name
-  from {mstr_schema}.audit_batch_status c
-  where application_name='{app_name}' and batch_run_date='{current_date}' and object_execution_status='failed'
+  FROM {mstr_schema}.audit_batch_status c
+  WHERE application_name='{app_name}' and batch_run_date='{current_date}' AND object_execution_status='failed'
   """
     try:
         with postgres_connection.cursor() as curs:
@@ -339,18 +339,18 @@ def get_table_comments_from_source(table):
     srcpostgres_connection_c = SrcPgresPool.getconn()
     srcpostgres_cursor_c = srcpostgres_connection_c.cursor()
     srcpostgres_cursor_c.execute("""
-        select
+        SELECT
             'COMMENT ON COLUMN ' || %s||'.'||c.table_name||'.'||c.column_name||' IS '''||pgd.description||''';' as comments
-             from pg_catalog.pg_statio_all_tables as st
-            inner join pg_catalog.pg_description pgd on (
+            FROM pg_catalog.pg_statio_all_tables as st
+            INNER JOIN pg_catalog.pg_description pgd on (
                 pgd.objoid = st.relid
                 )
-            inner join information_schema.columns c on (
+            INNER JOIN information_schema.columns c on (
             pgd.objsubid   = c.ordinal_position and
             c.table_schema = st.schemaname and
             c.table_name   = st.relname
             )
-            where c.table_schema=%s and c.table_name=%s;
+            WHERE c.table_schema=%s and c.table_name=%s;
     """, (table[3], table[1], table[0]))
     comments = srcpostgres_cursor_c.fetchall()
     print(comments)
@@ -506,6 +506,6 @@ if __name__ == '__main__':
     PgresPool.closeall()
 
     print("ETL process completed successfully.")
-    print("The time of execution of the program is:", (end - start), "secs")
+    print(f"The time of execution of the program is: {(end - start)} secs")
 
 sys.exit(0)

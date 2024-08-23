@@ -12,17 +12,15 @@ RUN apt-get update && apt-get install -y libaio1 wget unzip \
     && echo /opt/oracle/instantclient* > /etc/ld.so.conf.d/oracle-instantclient.conf \
     && ldconfig
 
-WORKDIR /app
-
 # PostgreSQL library
 
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
     && pip install psycopg2
 
-ADD *.py .
+WORKDIR /app
 
-COPY requirements.txt requirements.txt
+COPY . .
 
 RUN pip3 install -r requirements.txt
 
