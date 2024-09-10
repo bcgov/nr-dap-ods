@@ -1,10 +1,10 @@
-create table ats_replication.ats_authorization_status_codes (
-	authorization_status_code varchar(6) not null,
-	name varchar(15) not null,
-	sort_seq decimal(38,0) null,
-	who_created varchar(30) not null,
-	when_created timestamp(0) not null,
-	description varchar(50) not null,
-	who_updated varchar(30) null,
-	when_updated timestamp(0) null
+CREATE TABLE ats_replication.ats_authorization_status_codes (
+	authorization_status_code VARCHAR(6) NOT NULL,
+	NAME VARCHAR(15) NOT NULL,
+	sort_seq DECIMAL(38, 0) NULL,
+	who_created VARCHAR(30) NOT NULL,
+	when_created TIMESTAMP(0) NOT NULL,
+	description VARCHAR(50) NOT NULL,
+	who_updated VARCHAR(30) NULL,
+	when_updated TIMESTAMP(0) NULL
 );

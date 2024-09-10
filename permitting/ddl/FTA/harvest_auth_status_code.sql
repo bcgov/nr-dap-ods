@@ -1,8 +1,7 @@
-create table fta_replication.harvest_auth_status_code 
-   (	harvest_auth_status_code varchar(3) not null, 
-	description varchar(120) not null, 
-	effective_date timestamp(0) not null, 
-	expiry_date timestamp(0) not null, 
-	update_timestamp timestamp(0) not null
-   ) 
- ;
+CREATE TABLE fta_replication.harvest_auth_status_code (
+	harvest_auth_status_code VARCHAR(3) NOT NULL,
+	description VARCHAR(120) NOT NULL,
+	effective_date TIMESTAMP(0) NOT NULL,
+	expiry_date TIMESTAMP(0) NOT NULL,
+	update_timestamp TIMESTAMP(0) NOT NULL
+);

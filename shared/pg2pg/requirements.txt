@@ -1,5 +1,5 @@
-psycopg2==2.9.6
-pandas==2.0.2
 configparser==6.0.0
+pandas==2.0.2
+psycopg2==2.9.6
 pyodbc==4.0.39
 python-dotenv==1.0.0

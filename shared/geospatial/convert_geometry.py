@@ -24,7 +24,7 @@ target_columns = source_columns.lower()
 # oracledb.init_oracle_client(lib_dir="/opt/oracle/instantclient_21_11")
 
 # record start time
-start = time.time() 
+start = time.time()
 
 # Retrieve Oracle database configuration
 oracle_username = os.environ['DB_USERNAME']
@@ -41,12 +41,14 @@ postgres_port = os.environ['ODS_PORT']
 postgres_database = os.environ['ODS_DATABASE']
 
 # Set up Oracle database connection
-dsn = oracledb.makedsn(host=oracle_host, port=oracle_port, service_name=oracle_database)
-oracle_connection = oracledb.connect(user=oracle_username, password=oracle_password, dsn=dsn)
+dsn = oracledb.makedsn(host=oracle_host, port=oracle_port,
+                       service_name=oracle_database)
+oracle_connection = oracledb.connect(
+    user=oracle_username, password=oracle_password, dsn=dsn)
 
 # Set up Postgres database connection
 postgres_connection = psycopg2.connect(user=postgres_username, password=postgres_password,
-                                      host=postgres_host, port=postgres_port, database=postgres_database)
+                                       host=postgres_host, port=postgres_port, database=postgres_database)
 
 # Create Oracle cursor
 oracle_cursor = oracle_connection.cursor()
@@ -55,7 +57,8 @@ oracle_cursor = oracle_connection.cursor()
 postgres_cursor = postgres_connection.cursor()
 
 # Query Oracle for geometry data and convert it to WKT
-oracle_cursor.execute(f"SELECT SDO_UTIL.TO_WKTGEOMETRY(GEOMETRY) AS GEOMETRY, {source_columns} FROM {source_schema}.{source_table} WHERE GEOMETRY IS NOT NULL")
+oracle_cursor.execute(
+    f"SELECT SDO_UTIL.TO_WKTGEOMETRY(GEOMETRY) AS GEOMETRY, {source_columns} FROM {source_schema}.{source_table} WHERE GEOMETRY IS NOT NULL")
 
 # Fetch all geometry data from Oracle
 oracle_geometry_data = oracle_cursor.fetchall()
@@ -80,7 +83,8 @@ for geometry_data in oracle_geometry_data:
     other_values_text = ', '.join(map(str, other_values))
 
     # Insert the data into PostgreSQL
-    postgres_cursor.execute(f"INSERT INTO {target_schema}.{target_table} (geometry, {target_columns}) VALUES ((ST_GeomFromText('{oracle_geometry_wkt}', 3005)), {other_values_text})")
+    postgres_cursor.execute(
+        f"INSERT INTO {target_schema}.{target_table} (geometry, {target_columns}) VALUES ((ST_GeomFromText('{oracle_geometry_wkt}', 3005)), {other_values_text})")
 
 # Commit the changes and close the connections
 postgres_connection.commit()
@@ -89,4 +93,4 @@ postgres_connection.commit()
 end = time.time()
 
 print("Geometry conversion completed successfully.")
-print("The time of execution of the program is:", (end - start) , "seconds")
+print(f"The time of execution of the program is: {(end - start)} seconds")

@@ -1,0 +1,31 @@
+{
+	"[dockerfile]": {
+		"editor.defaultFormatter": "ms-azuretools.vscode-docker"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "vscode.html-language-features"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.autopep8"
+	},
+	"[sql]": {
+		"editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+	},
+	"coverage-gutters.showGutterCoverage": false,
+	"coverage-gutters.showLineCoverage": true,
+	"editor.defaultFormatter": "vscode.html-language-features",
+	"editor.formatOnSave": true,
+	"eslint.format.enable": true,
+	"files.insertFinalNewline": true,
+	"sql-formatter.uppercase": true,
+	"sql-formatter.dialect": "pl/sql"
+}

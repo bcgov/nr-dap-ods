@@ -1,10 +1,10 @@
-create table ats_replication.ats_athn_close_reason_codes (
-	athn_close_reason_code varchar(6) not null,
-	name varchar(40) not null,
-	description varchar(80) not null,
-	sort_seq decimal(38,0) null,
-	who_created varchar(30) not null,
-	when_created timestamp(0) not null,
-	who_updated varchar(30) null,
-	when_updated timestamp(0) null
+CREATE TABLE ats_replication.ats_athn_close_reason_codes (
+	athn_close_reason_code VARCHAR(6) NOT NULL,
+	NAME VARCHAR(40) NOT NULL,
+	description VARCHAR(80) NOT NULL,
+	sort_seq DECIMAL(38, 0) NULL,
+	who_created VARCHAR(30) NOT NULL,
+	when_created TIMESTAMP(0) NOT NULL,
+	who_updated VARCHAR(30) NULL,
+	when_updated TIMESTAMP(0) NULL
 );

@@ -1,4 +1,4 @@
-oracledb
-pandas
-boto3
-xlsxwriter
+boto3==1.34.147
+oracledb==2.3.0
+pandas==2.2.2
+xlsxwriter==3.2.0
