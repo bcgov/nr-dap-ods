@@ -1287,3 +1287,26 @@ VALUES
 		NULL,
 		'oracle'
 	);
+
+INSERT INTO
+	ods_data_management.cdc_master_table_list
+VALUES
+	(
+		NULL,
+		'FTA',
+		NULL,
+		'the',
+		'TENURE_APPLICATION_PURP_CODE',
+		'fta_replication',
+		'TENURE_APPLICATION_PURP_CODE',
+		'Y',
+		NULL,
+		NULL,
+		'UPDATE_DATE',
+		'Y',
+		2,
+		' ',
+		'N',
+		NULL,
+		'oracle'
+	);
