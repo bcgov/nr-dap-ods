@@ -15,22 +15,26 @@ CREATE ROLE BCTS_STAGE_ANALYST_PI_ROLE;
 CREATE ROLE BCTS_ANALYST_ROLE;
 CREATE ROLE BCTS_ANALYST_PI_ROLE;
 
--- 2. Grant access to schemas A, B, and C
+-- 2. Grant access to schemas lrm_replication, bcts_staging, and bcts_reporting
 GRANT USAGE ON SCHEMA lrm_replication TO bcts_etl_user;
 GRANT USAGE ON SCHEMA bcts_staging TO bcts_etl_user;
 GRANT USAGE ON SCHEMA bcts_reporting TO bcts_etl_user;
 
--- 3. Grant read and write access to existing tables in schemas A, B, and C
+-- 3. Grant read and write access to existing tables in schemas lrm_replication, bcts_staging, and bcts_reporting
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA lrm_replication TO bcts_etl_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bcts_staging TO bcts_etl_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bcts_reporting TO bcts_etl_user;
 
--- 4. Grant permission to create new tables, functions, etc., in schemas A, B, and C
+GRANT USAGE ON SCHEMA ods_data_management TO bcts_etl_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ods_data_management.cdc_master_table_list TO bcts_etl_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ods_data_management.audit_batch_status TO bcts_etl_user;
+
+-- 4. Grant permission to create new tables, functions, etc., in schemas lrm_replication, bcts_staging, and bcts_reporting
 GRANT CREATE ON SCHEMA lrm_replication TO bcts_etl_user;
 GRANT CREATE ON SCHEMA bcts_staging TO bcts_etl_user;
 GRANT CREATE ON SCHEMA bcts_reporting TO bcts_etl_user;
 
--- 5. Grant privileges to automatically apply on any new tables created in schemas A, B, and C
+-- 5. Grant privileges to automatically apply on any new tables created in schemas lrm_replication, bcts_staging, and bcts_reporting
 ALTER DEFAULT PRIVILEGES IN SCHEMA lrm_replication GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO bcts_etl_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA bcts_staging GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO bcts_etl_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA bcts_reporting GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO bcts_etl_user;
