@@ -29,3 +29,5 @@ CREATE TABLE lrm_replication.block_allocation (
     blal_data_source VARCHAR(120) NULL,
     PRIMARY KEY (blal_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.block_allocation OWNER TO bcts_etl_user;

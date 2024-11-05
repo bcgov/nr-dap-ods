@@ -42,3 +42,5 @@ CREATE TABLE lrm_replication.licence (
     licn_archive_date TIMESTAMP NULL,
     PRIMARY KEY (licn_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.licence OWNER TO bcts_etl_user;

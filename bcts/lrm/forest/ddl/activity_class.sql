@@ -13,3 +13,5 @@ CREATE TABLE lrm_replication.activity_class (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (accl_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.activity_class OWNER TO bcts_etl_user;

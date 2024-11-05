@@ -24,3 +24,5 @@ CREATE TABLE lrm_replication.management_unit (
     non_bcts_aac_ind NUMERIC(1) NULL,
     PRIMARY KEY (manu_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.management_unit OWNER TO bcts_etl_user;

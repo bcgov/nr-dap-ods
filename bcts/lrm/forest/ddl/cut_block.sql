@@ -129,3 +129,6 @@ CREATE TABLE lrm_replication.cut_block (
     safety_concern VARCHAR(4000) NULL,
     PRIMARY KEY (cutb_seq_nbr)
 );
+
+
+ALTER TABLE lrm_replication.cut_block OWNER TO bcts_etl_user;

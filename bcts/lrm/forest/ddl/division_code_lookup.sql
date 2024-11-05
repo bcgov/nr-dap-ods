@@ -10,3 +10,5 @@ CREATE TABLE lrm_replication.division_code_lookup (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (colu_lookup_type, colu_lookup_id, divi_div_nbr)
 );
+
+ALTER TABLE lrm_replication.division_code_lookup OWNER TO bcts_etl_user;

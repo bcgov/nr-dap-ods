@@ -31,3 +31,5 @@ CREATE TABLE lrm_replication.division (
     PRIMARY KEY (divi_div_nbr)
 );
 
+ALTER TABLE lrm_replication.division OWNER TO bcts_etl_user;
+

@@ -13,3 +13,5 @@ CREATE TABLE lrm_replication.tenure_type (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (tent_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.tenure_type OWNER TO bcts_etl_user;

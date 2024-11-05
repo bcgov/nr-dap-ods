@@ -15,3 +15,5 @@ CREATE TABLE lrm_replication.code_lookup (
     hq_display_ind VARCHAR(1) NULL,
     PRIMARY KEY (colu_lookup_type, colu_lookup_id)
 );
+
+ALTER TABLE lrm_replication.code_lookup OWNER TO bcts_etl_user;

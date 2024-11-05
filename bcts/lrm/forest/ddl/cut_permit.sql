@@ -68,3 +68,5 @@ CREATE TABLE lrm_replication.cut_permit (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (perm_seq_nbr)
 );
+
+ALTER TABLE lrm_replication.cut_permit OWNER TO bcts_etl_user;

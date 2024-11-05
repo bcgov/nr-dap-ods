@@ -33,3 +33,5 @@ CREATE TABLE lrm_replication.activity (
     PRIMARY KEY (acti_seq_nbr)
 );
 
+ALTER TABLE lrm_replication.activity OWNER TO bcts_etl_user;
+

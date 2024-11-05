@@ -11,3 +11,5 @@ CREATE TABLE lrm_replication.block_admin_zone (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (blaz_admin_zone_id, divi_div_nbr)
 );
+
+ALTER TABLE lrm_replication.block_admin_zone OWNER TO bcts_etl_user;
