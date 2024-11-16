@@ -40,11 +40,10 @@ def apply_grants():
     all_statements = []
     for _, row in df.iterrows():
         all_statements.extend(generate_grant_statements(row))
-
+    logging.info(statement)
     # Execute the grant statements in PostgreSQL
     with engine.begin() as connection:
         for statement in all_statements:
-            logging.info(statement)
             connection.execute(text(statement))
 
     logging.info("Grant statements executed successfully.")
