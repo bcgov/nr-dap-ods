@@ -56,7 +56,6 @@ def generate_grant_statements(row):
     
     # List of roles and their permissions in the DataFrame
     role_permissions = {
-        'BCTS_ETL_ROLE': row['BCTS_ETL_ROLE'],
         'BCTS_DEV_ROLE': row['BCTS_DEV_ROLE'],
         'BCTS_STAGE_ANALYST_ROLE': row['BCTS_STAGE_ANALYST_ROLE'],
         'BCTS_STAGE_ANALYST_PI_ROLE': row['BCTS_STAGE_ANALYST_PI_ROLE'],
