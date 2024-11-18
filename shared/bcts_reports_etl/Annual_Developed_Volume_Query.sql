@@ -1,67 +1,67 @@
-DROP TABLE IF EXISTS bcts_staging.DIVISION;
-CREATE TABLE bcts_staging.DIVISION AS
+DROP VIEW IF EXISTS bcts_staging.DIVISION;
+CREATE VIEW bcts_staging.DIVISION AS
     SELECT * FROM lrm_replication.DIVISION;
 
-DROP TABLE IF EXISTS bcts_staging.BLOCK_ALLOCATION;
-CREATE TABLE bcts_staging.BLOCK_ALLOCATION AS
+DROP VIEW IF EXISTS bcts_staging.BLOCK_ALLOCATION;
+CREATE VIEW bcts_staging.BLOCK_ALLOCATION AS
     SELECT * FROM lrm_replication.BLOCK_ALLOCATION;
 
-DROP TABLE IF EXISTS bcts_staging.MANAGEMENT_UNIT;
-CREATE TABLE bcts_staging.MANAGEMENT_UNIT AS
+DROP VIEW IF EXISTS bcts_staging.MANAGEMENT_UNIT;
+CREATE VIEW bcts_staging.MANAGEMENT_UNIT AS
     SELECT * FROM lrm_replication.MANAGEMENT_UNIT;
 
-DROP TABLE IF EXISTS bcts_staging.LICENCE;
-CREATE TABLE bcts_staging.LICENCE AS
+DROP VIEW IF EXISTS bcts_staging.LICENCE;
+CREATE VIEW bcts_staging.LICENCE AS
     SELECT * FROM lrm_replication.LICENCE;
 
-DROP TABLE IF EXISTS bcts_staging.BLOCK_ADMIN_ZONE;
-CREATE TABLE bcts_staging.BLOCK_ADMIN_ZONE AS
+DROP VIEW IF EXISTS bcts_staging.BLOCK_ADMIN_ZONE;
+CREATE VIEW bcts_staging.BLOCK_ADMIN_ZONE AS
     SELECT * FROM lrm_replication.BLOCK_ADMIN_ZONE;
 
-DROP TABLE IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
-CREATE TABLE bcts_staging.DIVISION_CODE_LOOKUP AS
+DROP VIEW IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
+CREATE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
     SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
 
-DROP TABLE IF EXISTS bcts_staging.CODE_LOOKUP;
-CREATE TABLE bcts_staging.CODE_LOOKUP AS
+DROP VIEW IF EXISTS bcts_staging.CODE_LOOKUP;
+CREATE VIEW bcts_staging.CODE_LOOKUP AS
     SELECT * FROM lrm_replication.CODE_LOOKUP;
 
-DROP TABLE IF EXISTS bcts_staging.TENURE_TYPE;
-CREATE TABLE bcts_staging.TENURE_TYPE AS
+DROP VIEW IF EXISTS bcts_staging.TENURE_TYPE;
+CREATE VIEW bcts_staging.TENURE_TYPE AS
     SELECT * FROM lrm_replication.TENURE_TYPE;
 
-DROP TABLE IF EXISTS bcts_staging.CUT_PERMIT;
-CREATE TABLE bcts_staging.CUT_PERMIT AS
+DROP VIEW IF EXISTS bcts_staging.CUT_PERMIT;
+CREATE VIEW bcts_staging.CUT_PERMIT AS
     SELECT * FROM lrm_replication.CUT_PERMIT;
 
-DROP TABLE IF EXISTS bcts_staging.MARK;
-CREATE TABLE bcts_staging.MARK AS
+DROP VIEW IF EXISTS bcts_staging.MARK;
+CREATE VIEW bcts_staging.MARK AS
     SELECT * FROM lrm_replication.MARK;
 
-DROP TABLE IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
-CREATE TABLE bcts_staging.DIVISION_CODE_LOOKUP AS
+DROP VIEW IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
+CREATE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
     SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
 
-DROP TABLE IF EXISTS bcts_staging.CUT_BLOCK;
-CREATE TABLE bcts_staging.CUT_BLOCK AS
+DROP VIEW IF EXISTS bcts_staging.CUT_BLOCK;
+CREATE VIEW bcts_staging.CUT_BLOCK AS
     SELECT * FROM lrm_replication.CUT_BLOCK;
 
-DROP TABLE IF EXISTS bcts_staging.ACTIVITY_CLASS;
-CREATE TABLE bcts_staging.ACTIVITY_CLASS AS
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY_CLASS;
+CREATE VIEW bcts_staging.ACTIVITY_CLASS AS
     SELECT * FROM lrm_replication.ACTIVITY_CLASS;
 
-DROP TABLE IF EXISTS bcts_staging.ACTIVITY_TYPE;
-CREATE TABLE bcts_staging.ACTIVITY_TYPE AS
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY_TYPE;
+CREATE VIEW bcts_staging.ACTIVITY_TYPE AS
     SELECT * FROM lrm_replication.ACTIVITY_TYPE;
 
-DROP TABLE IF EXISTS bcts_staging.ACTIVITY;
-CREATE TABLE bcts_staging.ACTIVITY AS
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY;
+CREATE VIEW bcts_staging.ACTIVITY AS
     SELECT * FROM lrm_replication.ACTIVITY;
 
 
-DROP TABLE IF EXISTS bcts_staging.annual_developed_volume;
+DROP VIEW IF EXISTS bcts_staging.annual_developed_volume;
 
-CREATE TABLE bcts_staging.annual_developed_volume AS
+CREATE VIEW bcts_staging.annual_developed_volume AS
 WITH annual_developed_volume AS
 (
     SELECT DISTINCT
@@ -174,7 +174,7 @@ ORDER BY
     block
 ;
 
-DROP TABLE IF EXISTS bcts_reporting.annual_developed_volume;
+DROP VIEW IF EXISTS bcts_reporting.annual_developed_volume;
 
 CREATE TABLE bcts_reporting.annual_developed_volume AS
     SELECT * FROM bcts_staging.annual_developed_volume;
