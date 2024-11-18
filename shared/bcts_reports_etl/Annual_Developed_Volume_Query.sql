@@ -1,6 +1,63 @@
+DROP VIEW IF EXISTS bcts_staging.DIVISION;
+CREATE VIEW bcts_staging.DIVISION AS
+    SELECT 1 FROM lrm_replication.DIVISION;
 
-SELECT 1 FROM lrm_replication.DIVISION;
+DROP VIEW IF EXISTS bcts_staging.BLOCK_ALLOCATION;
+CREATE VIEW bcts_staging.BLOCK_ALLOCATION AS
+    SELECT * FROM lrm_replication.BLOCK_ALLOCATION;
+
+DROP VIEW IF EXISTS bcts_staging.MANAGEMENT_UNIT;
+CREATE VIEW bcts_staging.MANAGEMENT_UNIT AS
+    SELECT * FROM lrm_replication.MANAGEMENT_UNIT;
+
+DROP VIEW IF EXISTS bcts_staging.LICENCE;
+CREATE VIEW bcts_staging.LICENCE AS
+    SELECT * FROM lrm_replication.LICENCE;
+
+DROP VIEW IF EXISTS bcts_staging.BLOCK_ADMIN_ZONE;
+CREATE VIEW bcts_staging.BLOCK_ADMIN_ZONE AS
+    SELECT * FROM lrm_replication.BLOCK_ADMIN_ZONE;
+
+DROP VIEW IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
+CREATE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
+    SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
+
+DROP VIEW IF EXISTS bcts_staging.CODE_LOOKUP;
+CREATE VIEW bcts_staging.CODE_LOOKUP AS
+    SELECT * FROM lrm_replication.CODE_LOOKUP;
+
+DROP VIEW IF EXISTS bcts_staging.TENURE_TYPE;
+CREATE VIEW bcts_staging.TENURE_TYPE AS
+    SELECT * FROM lrm_replication.TENURE_TYPE;
+
+DROP VIEW IF EXISTS bcts_staging.CUT_PERMIT;
+CREATE VIEW bcts_staging.CUT_PERMIT AS
+    SELECT * FROM lrm_replication.CUT_PERMIT;
+
+DROP VIEW IF EXISTS bcts_staging.MARK;
+CREATE VIEW bcts_staging.MARK AS
+    SELECT * FROM lrm_replication.MARK;
+
+DROP VIEW IF EXISTS bcts_staging.DIVISION_CODE_LOOKUP;
+CREATE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
+    SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
+
+DROP VIEW IF EXISTS bcts_staging.CUT_BLOCK;
+CREATE VIEW bcts_staging.CUT_BLOCK AS
+    SELECT * FROM lrm_replication.CUT_BLOCK;
+
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY_CLASS;
+CREATE VIEW bcts_staging.ACTIVITY_CLASS AS
+    SELECT * FROM lrm_replication.ACTIVITY_CLASS;
+
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY_TYPE;
+CREATE VIEW bcts_staging.ACTIVITY_TYPE AS
+    SELECT * FROM lrm_replication.ACTIVITY_TYPE;
+
+DROP VIEW IF EXISTS bcts_staging.ACTIVITY;
+CREATE VIEW bcts_staging.ACTIVITY AS
+    SELECT * FROM lrm_replication.ACTIVITY;
 
 
-SELECT 2 FROM lrm_replication.BLOCK_ALLOCATION;
+DROP VIEW IF EXISTS bcts_staging.annual_developed_volume;
 
