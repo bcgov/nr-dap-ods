@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["SD-128488-BCTS-ODS-GRANT-MANAGEMENT"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
