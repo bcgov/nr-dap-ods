@@ -47,6 +47,7 @@ def run_sql_script(script_path):
             sql_script = file.read()
         
         # Execute the SQL script
+        logging.info(sql_script)
         cursor.execute(sql_script)
         connection.commit()
         logging.info(f"SQL script executed successfully from {script_path}.")
@@ -63,9 +64,13 @@ def run_sql_script(script_path):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        filename = sys.argv[1]
-        print(f"Processing file: {filename}")
-        run_sql_script(filename)
+        filenames = sys.argv[1]
+        filenames = [file.strip() for file in filenames[2:-2].split(',')]
+        logging.info(filenames)
+        for file in filenames:
+            logging.info(f"Processing file: {file}")
+            file_path = f'./sql/active/{file}'
+            run_sql_script(file_path)
     else:
-        print("No filename provided.")
+        logging.info("No filename provided.")
     
