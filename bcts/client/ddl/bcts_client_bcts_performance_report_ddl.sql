@@ -1,6 +1,6 @@
-CREATE SCHEMA client_replication;
+CREATE SCHEMA mofclient_replication;
 
-CREATE TABLE client_replication.v_client_public (
+CREATE TABLE mofclient_replication.v_client_public (
     client_number VARCHAR(8) NOT NULL,
     client_name VARCHAR(60) NOT NULL,
     legal_first_name VARCHAR(30) NULL,
@@ -9,7 +9,7 @@ CREATE TABLE client_replication.v_client_public (
     client_type_code VARCHAR(1) NOT NULL
 );
 
-CREATE TABLE client_replication.org_unit (
+CREATE TABLE mofclient_replication.org_unit (
     org_unit_no NUMERIC(10) NOT NULL,
     org_unit_code VARCHAR(6) NOT NULL,
     org_unit_name VARCHAR(100) NOT NULL,

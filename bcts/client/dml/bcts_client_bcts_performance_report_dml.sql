@@ -14,7 +14,7 @@ BEGIN
             NULL,               
             'the',
             table_name,               
-            'bcts_client_replication',
+            'mofclient_replication',
             table_name,
             'Y',
             NULL,
