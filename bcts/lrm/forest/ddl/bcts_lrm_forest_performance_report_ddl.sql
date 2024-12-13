@@ -23,8 +23,19 @@ CREATE TABLE lrm_replication.lrm_vt_commit_lic_type (
     modifiedusing VARCHAR(30) NULL
 );
 
-CREATE TABLE lrm_replication.forest.permit_allocation (
-
+CREATE TABLE lrm_replication.permit_allocation (
+    peal_seq_nbr NUMERIC(15) NOT NULL,
+    perm_seq_nbr NUMERIC(15) NOT NULL,
+    manu_seq_nbr NUMERIC(15) NULL,
+    divi_div_nbr NUMERIC(2) NOT NULL,
+    licn_seq_nbr NUMERIC(15) NULL,
+    modifiedby VARCHAR(120) NULL,
+    modifiedon TIMESTAMP NULL,
+    modifiedusing VARCHAR(120) NULL,
+    createdby VARCHAR(120) NULL,
+    createdon TIMESTAMP NULL,
+    createdusing VARCHAR(120) NULL,
+    PRIMARY KEY (peal_seq_nbr)
 );
 
 CREATE TABLE lrm_replication.ctor_contractor_location (
@@ -371,7 +382,7 @@ CREATE TABLE lrm_replication.ecology_unit (
     createdon TIMESTAMP NULL,
     createdusing VARCHAR(120) NULL,
     documentkey NUMERIC(9) NULL,
-    PRIMARY KEY (ecou_seq_nbr, ecou_seq_nbr)
+    PRIMARY KEY (ecou_seq_nbr)
 );
 
 CREATE TABLE lrm_replication.sub_operating_area (
@@ -541,6 +552,6 @@ CREATE TABLE lrm_replication.silviculture_prescription (
     createdon TIMESTAMP NULL,
     createdusing VARCHAR(120) NULL,
     fspm_seq_nbr NUMERIC(15) NULL,
-    PRIMARY KEY (silp_seq_nbr, silp_seq_nbr)
+    PRIMARY KEY (silp_seq_nbr)
 );
 
