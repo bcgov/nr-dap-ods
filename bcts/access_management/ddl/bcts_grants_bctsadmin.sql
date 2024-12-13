@@ -1,0 +1,22 @@
+CREATE SCHEMA bctsadmin_replication;
+
+-- Grant access to schema bctsadmin_replication
+GRANT USAGE ON SCHEMA bctsadmin_replication TO bcts_etl_user WITH GRANT OPTION;
+
+-- Grant read and write access to existing tables in schema bctsadmin_replication
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bctsadmin_replication TO bcts_etl_user WITH GRANT OPTION;
+
+-- Grant permission to create new tables, functions, etc.
+GRANT CREATE ON SCHEMA bctsadmin_replication TO bcts_etl_user;
+
+
+-- Grant privileges to automatically apply on any new tables created 
+ALTER DEFAULT PRIVILEGES IN SCHEMA bctsadmin_replication GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO bcts_etl_user;
+
+
+-- Grant usage on sequences if needed for ID generation or other purposes
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA bctsadmin_replication TO bcts_etl_user;
+
+-- Set default privileges for sequences
+ALTER DEFAULT PRIVILEGES IN SCHEMA bctsadmin_replication GRANT USAGE ON SEQUENCES TO bcts_etl_user;
+
