@@ -1,4 +1,4 @@
-CREATE TABLE lrm_replication.operating_area (
+CREATE TABLE IF NOT EXISTS lrm_replication.operating_area (
     opar_operating_area_id VARCHAR(10) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     opar_operating_area_name VARCHAR(30) NULL,
@@ -14,7 +14,7 @@ CREATE TABLE lrm_replication.operating_area (
     PRIMARY KEY (opar_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.lrm_vt_commit_lic_type (
+CREATE TABLE IF NOT EXISTS lrm_replication.lrm_vt_commit_lic_type (
     code VARCHAR(2) NULL,
     description VARCHAR(50) NULL,
     activeflag NUMERIC(1) NULL,
@@ -23,7 +23,7 @@ CREATE TABLE lrm_replication.lrm_vt_commit_lic_type (
     modifiedusing VARCHAR(30) NULL
 );
 
-CREATE TABLE lrm_replication.permit_allocation (
+CREATE TABLE IF NOT EXISTS lrm_replication.permit_allocation (
     peal_seq_nbr NUMERIC(15) NOT NULL,
     perm_seq_nbr NUMERIC(15) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
@@ -38,7 +38,7 @@ CREATE TABLE lrm_replication.permit_allocation (
     PRIMARY KEY (peal_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.ctor_contractor_location (
+CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor_location (
     cloc_seq_nbr NUMERIC(15) NOT NULL,
     ctor_seq_nbr NUMERIC(15) NOT NULL,
     cloc_address_line1 VARCHAR(160) NULL,
@@ -65,7 +65,7 @@ CREATE TABLE lrm_replication.ctor_contractor_location (
     PRIMARY KEY (cloc_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.cut_block_silv_regime (
+CREATE TABLE IF NOT EXISTS lrm_replication.cut_block_silv_regime (
     cbsr_seq_nbr NUMERIC(15) NOT NULL,
     cutb_seq_nbr NUMERIC(15) NOT NULL,
     treg_seq_nbr NUMERIC(15) NULL,
@@ -77,7 +77,7 @@ CREATE TABLE lrm_replication.cut_block_silv_regime (
     createdusing VARCHAR(120) NULL
 );
 
-CREATE TABLE lrm_replication.v_res_vt_fdtm_team (
+CREATE TABLE IF NOT EXISTS lrm_replication.v_res_vt_fdtm_team (
     colu_lookup_type VARCHAR(4) NOT NULL,
     colu_lookup_id VARCHAR(30) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE lrm_replication.v_res_vt_fdtm_team (
     colu_display_order NUMERIC(10) NULL
 );
 
-CREATE TABLE lrm_replication.commitment_partition (
+CREATE TABLE IF NOT EXISTS lrm_replication.commitment_partition (
     copa_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(30) NULL,
     copa_percent NUMERIC(7, 4) NULL,
@@ -108,7 +108,7 @@ CREATE TABLE lrm_replication.commitment_partition (
     PRIMARY KEY (copa_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.block_seed_zone (
+CREATE TABLE IF NOT EXISTS lrm_replication.block_seed_zone (
     blsz_seq_nbr NUMERIC(15) NOT NULL,
     cutb_seq_nbr NUMERIC(15) NOT NULL,
     blsz_class_id VARCHAR(80) NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE lrm_replication.block_seed_zone (
     PRIMARY KEY (blsz_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.standard_unit (
+CREATE TABLE IF NOT EXISTS lrm_replication.standard_unit (
     stun_seq_nbr NUMERIC(15) NOT NULL,
     silp_seq_nbr NUMERIC(15) NOT NULL,
     stun_id VARCHAR(10) NOT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE lrm_replication.standard_unit (
     PRIMARY KEY (stun_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.apportionment (
+CREATE TABLE IF NOT EXISTS lrm_replication.apportionment (
     appo_seq_nbr NUMERIC(15) NOT NULL,
     manu_seq_nbr NUMERIC(15) NOT NULL,
     appo_tenure_type VARCHAR(120) NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE lrm_replication.apportionment (
     PRIMARY KEY (appo_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.silv_treatment_regime (
+CREATE TABLE IF NOT EXISTS lrm_replication.silv_treatment_regime (
     treg_seq_nbr NUMERIC(15) NOT NULL,
     pers_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -234,7 +234,7 @@ CREATE TABLE lrm_replication.silv_treatment_regime (
     PRIMARY KEY (treg_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.person (
+CREATE TABLE IF NOT EXISTS lrm_replication.person (
     pers_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     pers_first_name VARCHAR(200) NULL,
@@ -260,7 +260,7 @@ CREATE TABLE lrm_replication.person (
     PRIMARY KEY (pers_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.bcts_harvest_history (
+CREATE TABLE IF NOT EXISTS lrm_replication.bcts_harvest_history (
     bchh_seq_nbr NUMERIC(15) NOT NULL,
     mark_seq_nbr NUMERIC(15) NOT NULL,
     bchh_billing_year NUMERIC(4) NULL,
@@ -288,7 +288,7 @@ CREATE TABLE lrm_replication.bcts_harvest_history (
     PRIMARY KEY (bchh_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.commitments (
+CREATE TABLE IF NOT EXISTS lrm_replication.commitments (
     licn_seq_nbr NUMERIC(15) NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
@@ -304,7 +304,7 @@ CREATE TABLE lrm_replication.commitments (
     PRIMARY KEY (commit_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.ecology_unit (
+CREATE TABLE IF NOT EXISTS lrm_replication.ecology_unit (
     ecou_seq_nbr NUMERIC(15) NOT NULL,
     cutb_seq_nbr NUMERIC(15) NOT NULL,
     ecou_name VARCHAR(50) NOT NULL,
@@ -385,7 +385,7 @@ CREATE TABLE lrm_replication.ecology_unit (
     PRIMARY KEY (ecou_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.sub_operating_area (
+CREATE TABLE IF NOT EXISTS lrm_replication.sub_operating_area (
     suop_subop_area_id VARCHAR(10) NOT NULL,
     suop_subop_area_name VARCHAR(120) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE lrm_replication.sub_operating_area (
     PRIMARY KEY (suop_subop_area_id, divi_div_nbr, opar_operating_area_id)
 );
 
-CREATE TABLE lrm_replication.mark_allocation (
+CREATE TABLE IF NOT EXISTS lrm_replication.mark_allocation (
     mark_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     licn_seq_nbr NUMERIC(15) NULL,
@@ -414,7 +414,7 @@ CREATE TABLE lrm_replication.mark_allocation (
     maal_seq_nbr NUMERIC(15) NULL
 );
 
-CREATE TABLE lrm_replication.ctor_contractor (
+CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor (
     ctor_seq_nbr NUMERIC(15) NOT NULL,
     ctor_name VARCHAR(60) NOT NULL,
     ctor_email_address VARCHAR(200) NULL,
@@ -457,7 +457,7 @@ CREATE TABLE lrm_replication.ctor_contractor (
     PRIMARY KEY (ctor_seq_nbr)
 );
 
-CREATE TABLE lrm_replication.licence_allocation (
+CREATE TABLE IF NOT EXISTS lrm_replication.licence_allocation (
     licn_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
@@ -469,7 +469,7 @@ CREATE TABLE lrm_replication.licence_allocation (
     createdusing VARCHAR(120) NULL
 );
 
-CREATE TABLE lrm_replication.silviculture_prescription (
+CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     silp_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     cutb_seq_nbr NUMERIC(15) NOT NULL,
