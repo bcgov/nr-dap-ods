@@ -10,7 +10,7 @@ BEGIN
         INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
             NULL,
-            'lrm',
+            'mof-client',
             NULL,               
             'the',
             table_name,               
