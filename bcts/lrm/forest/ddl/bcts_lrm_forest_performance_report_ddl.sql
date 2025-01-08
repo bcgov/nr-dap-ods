@@ -555,3 +555,17 @@ CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     PRIMARY KEY (silp_seq_nbr)
 );
 
+
+CREATE TABLE IF NOT EXISTS lrm_replication.licensee (
+    lsee_licensee_id VARCHAR(40) NOT NULL,
+    lsee_licensee_name VARCHAR(120) NOT NULL,
+    lsee_client_code VARCHAR(60) NULL,
+    modifiedby VARCHAR(120) NULL,
+    modifiedon TIMESTAMP NULL,
+    modifiedusing VARCHAR(120) NULL,
+    createdby VARCHAR(120) NULL,
+    createdon TIMESTAMP NULL,
+    createdusing VARCHAR(120) NULL,
+    PRIMARY KEY (lsee_licensee_id)
+);
+
