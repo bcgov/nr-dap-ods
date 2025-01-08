@@ -569,3 +569,24 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licensee (
     PRIMARY KEY (lsee_licensee_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
+    objectid NUMERIC(38) NULL,
+    transaction_id VARCHAR(8) NULL,
+    licn_seq_nbr NUMERIC(16) NULL,
+    feature_len NUMERIC(38, 8) NULL,
+    feature_area NUMERIC(38, 8) NULL,
+    shape_len NUMERIC(38, 8) NULL,
+    shape_area NUMERIC(38, 8) NULL,
+    shape GEOMETRY NULL,
+    manu_seq_nbr NUMERIC(15) NULL,
+    modifiedby VARCHAR(30) NULL,
+    modifiedon TIMESTAMP(6) NULL,
+    modifiedusing VARCHAR(30) NULL,
+    createdby VARCHAR(30) NULL,
+    createdon TIMESTAMP(6) NULL,
+    createdusing VARCHAR(30) NULL,
+    sde_state_id INTEGER NULL
+);
+
+
