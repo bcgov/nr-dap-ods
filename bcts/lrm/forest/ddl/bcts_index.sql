@@ -1,0 +1,2 @@
+CREATE INDEX idx_block_allocation_licn_seq_nbr
+ON LRM_REPLICATION.block_allocation(licn_seq_nbr);

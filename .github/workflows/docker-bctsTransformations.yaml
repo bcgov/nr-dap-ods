@@ -2,12 +2,12 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["SD-132828-ODS-MIGRATION-BCTS-PERFORMANCE-REPORT"]
 
 env:
   REGISTRY: ghcr.io
   DOCKERFILE_PATH: shared/bcts_reports_etl
-  IMAGE_NAME: ${{ github.repository }}-bctsTransformations
+  IMAGE_NAME: ${{ github.repository }}-bctsTransformations:SD-132828-ODS-MIGRATION-BCTS-PERFORMANCE-REPORT
 
 jobs:
   build:
