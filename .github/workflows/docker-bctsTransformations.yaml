@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   DOCKERFILE_PATH: shared/bcts_reports_etl
-  IMAGE_NAME: ${{ github.repository }}-bctsTransformations:SD-132828-ODS-MIGRATION-BCTS-PERFORMANCE-REPORT
+  IMAGE_NAME: ${{ github.repository }}-bctsTransformations
 
 jobs:
   build:
