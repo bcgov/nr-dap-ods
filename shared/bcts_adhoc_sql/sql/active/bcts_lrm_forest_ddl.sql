@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.division (
     PRIMARY KEY (divi_div_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.division IS 'Contains information about BC Timber Sales business areas, including their name, code, and office location.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.block_allocation (
     cutb_seq_nbr NUMERIC(15) NOT NULL,
     blal_seq_nbr NUMERIC(15) NOT NULL,
@@ -64,6 +66,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.block_allocation (
     PRIMARY KEY (blal_seq_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.block_allocation IS 'Links forestry cutblocks to licenses, permits, marks, and business areas, along with associated area and volume data.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.management_unit (
     manu_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -90,6 +94,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.management_unit (
     non_bcts_aac_ind NUMERIC(1) NULL,
     PRIMARY KEY (manu_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.management_unit IS 'Represents management units used in LRM to organize objects within the navigation tree, each with an associated annual allowable cut and linked to provincial Timber Supply Units defined by the Chief Forester.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence (
     licn_seq_nbr NUMERIC(15) NOT NULL,
@@ -136,6 +142,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence (
     PRIMARY KEY (licn_seq_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.licence IS 'Stores detailed information about individual timber sale licences, such as Licence ID (LICN_LICENCE_ID), Business Area (DIVI_DIV_NBR), tenure type (TENT_SEQ_NBR), contractor (CTOR_SEQ_NBR), field team (LICN_FIELD_TEAM_ID), and other related attributes.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.block_admin_zone (
     blaz_admin_zone_id VARCHAR(40) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -150,6 +158,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.block_admin_zone (
     PRIMARY KEY (blaz_admin_zone_id, divi_div_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.block_admin_zone IS 'Contains agreement type descriptions.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.division_code_lookup (
     colu_lookup_type VARCHAR(4) NOT NULL,
     colu_lookup_id VARCHAR(120) NOT NULL,
@@ -162,6 +172,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.division_code_lookup (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (colu_lookup_type, colu_lookup_id, divi_div_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.division_code_lookup IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.code_lookup (
     colu_lookup_type VARCHAR(4) NOT NULL,
@@ -181,6 +193,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.code_lookup (
     PRIMARY KEY (colu_lookup_type, colu_lookup_id)
 );
 
+COMMENT ON TABLE lrm_replication.code_lookup IS 'Definitions of acronyms, classified by type.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.tenure_type (
     tent_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -196,6 +210,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.tenure_type (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (tent_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.tenure_type IS 'Defines the various types of forestry tenure available in LRM, outlining specific categories or forms of legal agreements that grant individuals, companies, or communities the rights to access, manage, and utilize public forest lands and resources. Each tenure type includes distinct terms, conditions, and management requirements governing the use of the associated forest resources.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_permit (
     perm_seq_nbr NUMERIC(15) NOT NULL,
@@ -268,6 +284,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.cut_permit (
     PRIMARY KEY (perm_seq_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.cut_permit IS 'Legal agreement issued by government that authorizes the holder of a forest tenure, such as a licence agreement, to harvest a specified volume of timber within a defined area. BCTS Timber Sale Licences have cutting permit provisions included. Contains information for individual cutting permits, such as permit ID, district, jurisdiction, primary species.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.mark (
     mark_seq_nbr NUMERIC(15) NOT NULL,
     mark_mark_id VARCHAR(15) NULL,
@@ -288,6 +306,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.mark (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (mark_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.mark IS 'Individual timber mark identification information.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block (
     cutb_seq_nbr NUMERIC(15) NOT NULL,
@@ -421,6 +441,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.cut_block (
     PRIMARY KEY (cutb_seq_nbr)
 );
 
+COMMENT ON TABLE lrm_replication.cut_block IS 'Contains identity information for cutblocks, including Unique Block Identifier (UBI), block ID, block number, and tabular location data, as established by the Forest Tenures Administration (FTA) application.';
+
 CREATE TABLE IF NOT EXISTS lrm_replication.activity_class (
     accl_seq_nbr NUMERIC(15) NOT NULL,
     accl_description VARCHAR(40) NULL,
@@ -436,6 +458,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity_class (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (accl_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.activity_class IS ' Classifies activity types to apply business rules and enable querying of activity types that meet specific classification criteria, with activity classes being unique to each business area identified by DIVI_DIV_NBR.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.activity_type (
     actt_seq_nbr NUMERIC(15) NOT NULL,
@@ -467,6 +491,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity_type (
     createdusing VARCHAR(120) NULL,
     PRIMARY KEY (actt_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.activity_type IS 'Defines the types of activities, providing detailed descriptions for each, with activity types unique to each business area identified by DIVI_DIV_NBR.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     acti_seq_nbr NUMERIC(15) NOT NULL,
@@ -502,4 +528,6 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     accl_description VARCHAR(160) NULL,
     PRIMARY KEY (acti_seq_nbr)
 );
+
+COMMENT ON TABLE lrm_replication.activity IS 'Individual activities associated with objects including date and status information. Objects include block, licence, cutting permit, contractor, mark, forest plan.';
 
