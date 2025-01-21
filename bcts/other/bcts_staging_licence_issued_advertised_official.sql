@@ -60,11 +60,8 @@ CREATE TABLE bcts_staging.licence_issued_advertised_official
     fta_file_status_date timestamp without time zone,
     report_frequency text,
     report_start_date date, 
-    report_end_date date
+    report_end_date date,
+    fiscal_year integer
 
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS bcts_staging.licence_issued_advertised_official
-    OWNER to bcts_etl_user;

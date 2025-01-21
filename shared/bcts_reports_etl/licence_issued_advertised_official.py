@@ -443,7 +443,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         pfu.file_status_date as FTA_File_Status_Date,
     '{report_frequency}' as report_frequency,
     '{start_date}'::Date as report_start_date,
-    '{end_date}'::Date as report_end_date
+    '{end_date}'::Date as report_end_date,
+    date_part('year', '{end_date}'::Date ) as fiscal_year
 
     FROM bcts_staging.prov_forest_use pfu
         INNER JOIN mofclient_replication.org_unit ou
@@ -567,7 +568,9 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         null as FTA_File_Status_Date,
         '{report_frequency}' as report_frequency,
         '{start_date}'::Date as report_start_date,
-        '{end_date}'::Date as report_end_date
+        '{end_date}'::Date as report_end_date,
+        date_part('year', '{end_date}'::Date ) as fiscal_year
+
 
         from
             mofclient_replication.org_unit ou
