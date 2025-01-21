@@ -137,7 +137,7 @@ def report_exists(start_date, end_date, report_frequency):
         df = pd.DataFrame(result, columns=columns)
         logging.info(f"SQL script executed successfully.")
         logging.info(f"report_exists: {df['report_exists']}")
-        return df['report_exists']
+        return df['report_exists'][0]
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
