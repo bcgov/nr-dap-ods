@@ -78,8 +78,8 @@ def run_licence_issued_advertised_official_report(connection, cursor, start_date
     sql_statement = get_licence_issued_advertised_official_query(start_date, end_date, report_frequency)
 
     try:
-        logging.info(f"Executing the following query...")
-        logging.info(sql_statement)
+        # logging.info(f"Executing the following query...")
+        # logging.info(sql_statement)
         cursor.execute(sql_statement)
         connection.commit()
         logging.info(f"SQL script executed successfully.")
@@ -98,8 +98,8 @@ def truncate_licence_issued_advertised_official_report(connection, cursor, start
     """
 
     try:
-        logging.info(f"Executing the following query...")
-        logging.info(sql_statement)
+        # logging.info(f"Executing the following query...")
+        # logging.info(sql_statement)
         cursor.execute(sql_statement)
         connection.commit()
         logging.info(f"SQL script executed successfully.")
