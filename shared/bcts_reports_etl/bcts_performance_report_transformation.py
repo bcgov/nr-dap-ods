@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 
-from bcts_performance_report_transformation import get_licence_issued_advertised_official_query
+from licence_issued_advertised_official import get_licence_issued_advertised_official_query
 from CurrentlyInMarket import get_currently_in_market
 
 start = time.time()
