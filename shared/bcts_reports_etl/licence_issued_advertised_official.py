@@ -444,7 +444,10 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
     '{report_frequency}' as report_frequency,
     '{start_date}'::Date as report_start_date,
     '{end_date}'::Date as report_end_date,
-    date_part('year', '{end_date}'::Date ) as fiscal_year
+    CASE
+        WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 THEN EXTRACT(YEAR FROM CURRENT_DATE)
+        ELSE EXTRACT(YEAR FROM CURRENT_DATE) - 1
+    END AS fiscal_year
 
     FROM bcts_staging.prov_forest_use pfu
         INNER JOIN mofclient_replication.org_unit ou
@@ -569,7 +572,10 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         '{report_frequency}' as report_frequency,
         '{start_date}'::Date as report_start_date,
         '{end_date}'::Date as report_end_date,
-        date_part('year', '{end_date}'::Date ) as fiscal_year
+        CASE
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 THEN EXTRACT(YEAR FROM CURRENT_DATE)
+            ELSE EXTRACT(YEAR FROM CURRENT_DATE) - 1
+        END AS fiscal_year
 
 
         from
