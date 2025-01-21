@@ -157,12 +157,30 @@ def run_get_currently_in_market(current_date_pst):
         connection.rollback()
 
 
+def refresh_mat_views():
+
+    sql_statement = \
+    """
+    refresh materialized view bcts_staging.mv_licence_issued_advertised_lrm;
+    refresh materialized view bcts_staging.mv_licence_issued_advertised_main;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
 
 
 if __name__ == "__main__":
 
     connection = get_connection()
     cursor = connection.cursor()
+
+
 
     # Fetch the start and end dates for the report periods
     df = get_reporting_periods(connection, cursor)
@@ -194,6 +212,11 @@ if __name__ == "__main__":
                 run_get_currently_in_market(current_date_pst)
 
                 currently_in_market_executed = True
+
+    # Refresh materialized views for BCTS Performance Reports
+    logging.info("Refreshing materialized views...")
+    refresh_mat_views()
+    logging.info("Materialized views have been refreshed!")
 
 
     # Clean up
