@@ -33,8 +33,11 @@ Manually include or exclude results accordingly.
 def get_currently_in_market(end_date):
     sql_statement = \
     f"""    
+    INSERT INTO bcts_staging.currently_in_market
     /* Tender Posted Activity Done Date (TENPOST) */
-    WITH TENPOST AS
+    SELECT *
+    FROM
+    (WITH TENPOST AS
     (
         SELECT
             a.LICN_SEQ_NBR,
@@ -357,12 +360,10 @@ def get_currently_in_market(end_date):
             then
                 'Coast'
             end as BUSINESS_AREA_REGION,
-        decode(
-            D.DIVI_DIVISION_NAME,
-            'Seaward',
-            'Seaward-Tlasta',
-            D.DIVI_DIVISION_NAME
-        ) || ' (' || D.DIVI_SHORT_CODE || ')' AS BUSINESS_AREA,
+        CASE 
+            WHEN D.DIVI_DIVISION_NAME = 'Seaward' THEN 'Seaward-Tlasta'
+            ELSE D.DIVI_DIVISION_NAME
+        END || ' (' || D.DIVI_SHORT_CODE || ')' AS BUSINESS_AREA,
         D.DIVI_SHORT_CODE as business_area_code,
         null as nav_name,
         null as FIELD_TEAM,
@@ -395,6 +396,7 @@ def get_currently_in_market(end_date):
         NAV_NAME,
         FIELD_TEAM,
         LICENCE_ID
+        ) CURRENTLY_IN_MARKET
     ;
     """
     return sql_statement

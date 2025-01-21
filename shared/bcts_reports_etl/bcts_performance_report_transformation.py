@@ -7,6 +7,9 @@ import psycopg2
 import logging
 import sys
 import pandas as pd
+from datetime import datetime
+import pytz
+
 
 from licence_issued_advertised_official import get_licence_issued_advertised_official_query
 from CurrentlyInMarket import get_currently_in_market
@@ -117,7 +120,7 @@ def run_currently_in_market_report(connection, cursor, start_date, end_date, rep
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
-def report_exists(start_date, end_date, report_frequency):
+def licence_issued_advertised_official_report_exists(start_date, end_date, report_frequency):
     sql_statement = \
     f"""
 
@@ -142,6 +145,19 @@ def report_exists(start_date, end_date, report_frequency):
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
+def run_get_currently_in_market(current_date_pst):
+    sql_statement = get_currently_in_market(current_date_pst)
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+
+
+
 
 if __name__ == "__main__":
 
@@ -151,9 +167,10 @@ if __name__ == "__main__":
     # Fetch the start and end dates for the report periods
     df = get_reporting_periods(connection, cursor)
 
+    currently_in_market_executed = False
     for start_date, end_date, report_frequency in zip(df['start_date'], df['end_date'], df['report_frequency']):
         # Skip if report is already generated
-        if report_exists(start_date, end_date, report_frequency):
+        if licence_issued_advertised_official_report_exists(start_date, end_date, report_frequency):
             logging.info("Report already exists! Skipping...")
             continue
         else:
@@ -163,6 +180,20 @@ if __name__ == "__main__":
             logging.info(f"Running license issued advertised official report {report_frequency} for the period of  {start_date} and {end_date}...")
             run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
 
+            if not currently_in_market_executed:
+                # Get currently in Market if at least one report is updated and execute only once
+                # Get the current date and time in UTC
+                utc_now = datetime.now(pytz.utc)
+
+                # Convert to Pacific Standard Time
+                pst_timezone = pytz.timezone('US/Pacific')
+                pst_now = utc_now.astimezone(pst_timezone)
+
+                # Get the current date in PST
+                current_date_pst = pst_now.date()
+                run_get_currently_in_market(current_date_pst)
+
+                currently_in_market_executed = True
 
 
     # Clean up
