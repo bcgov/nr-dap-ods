@@ -297,7 +297,7 @@ def get_currently_in_market(end_date):
     'Y' as In_CurrentlyInMarket_query,
     null as On_BC_Bid,  -- Populate this column manually, according to what is open on BC Bid at the time of interest.
     null as Data_Error,  -- Populate this column manually if there are data errors that cause licences to be incorrectly included or excluded in the query results.
-    {end_date} as report_end_date
+    '''{end_date}''' as report_end_date
 
     from
         lrm_replication.division d
@@ -306,19 +306,19 @@ def get_currently_in_market(end_date):
     LEFT JOIN TENPOST
     ON L.LICN_SEQ_NBR = TENPOST.LICN_SEQ_NBR 
         AND TENPOST.licn_seq_nbr is not null  -- TENPOST (CML) must be Done. If a licence does not sell at auction, TENPOST must be set back to Planned.
-        AND tenpost.LRM_Tender_Posted_Done_Date <= {end_date}  -- Date: report period end. Tender posted before the time of interest.
+        AND tenpost.LRM_Tender_Posted_Done_Date <= '{end_date}'  -- Date: report period end. Tender posted before the time of interest.
     LEFT JOIN HA
     ON L.LICN_SEQ_NBR = HA.LICN_SEQ_NBR
     AND (
             HA.LICN_SEQ_NBR is null  -- HA (CML) must not be Done; the licence has not been awarded.
-            OR HA.LRM_Licence_Awarded_Done_Date >  {end_date}  -- Date: report period end. Licences not yet awarded at time of interest.
+            OR HA.LRM_Licence_Awarded_Done_Date >  '{end_date}'  -- Date: report period end. Licences not yet awarded at time of interest.
         )
     LEFT JOIN AUC
     ON l.LICN_SEQ_NBR = AUC.licn_seq_nbr
     AND (
             NOT AUC.LRM_Auction_Done_Date
                 BETWEEN tenpost.LRM_Tender_Posted_Done_Date
-                AND  {end_date}  -- Date: report period end. Auction date not done after the tender is posted and before the end of the report period.
+                AND  '{end_date}'  -- Date: report period end. Auction date not done after the tender is posted and before the end of the report period.
             OR AUC.LRM_Auction_Done_Date is null
         )
     LEFT JOIN LV
@@ -383,7 +383,7 @@ def get_currently_in_market(end_date):
         'Y' as In_CurrentlyInMarket_query,
         'Not applicable' as On_BC_Bid,  -- n/a for these blank rows in the UNION SELECT
         'Not applicable' as Data_Error,  -- n/a for these blank rows in the UNION SELECT
-        {end_date} as report_end_date
+        '{end_date}' as report_end_date
 
     from
         lrm_replication.division d

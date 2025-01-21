@@ -92,8 +92,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
             on pfu.forest_file_id = tt.forest_file_id
             /* Tenure term legal effective date in reporting period*/
                 AND tt.legal_effective_dt
-                    between To_Date({start_date}, 'YYYY-MM-DD')  -- Date: beginning of reporting period
-                    and To_Date({end_date}, 'YYYY-MM-DD')  -- Date: end of reporting period
+                    between To_Date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of reporting period
+                    and To_Date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
             inner join mofclient_replication.v_client_public fc
             on tb.client_number = fc.client_number
 
@@ -221,7 +221,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                         bctsadmin_replication.bcts_timber_sale ts
                     where
                         coalesce(no_sale_rationale_code, ' ') <> 'TB'
-                        and ts.auction_date <= To_Date({end_date}, 'YYYY-MM-DD')  -- Date: end of reporting period
+                        and ts.auction_date <= To_Date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
                     group by
                         ts.forest_file_id
                 ) all_auctions_to_date
@@ -250,8 +250,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                 bctsadmin_replication.bcts_timber_sale
             where
                 auction_date
-                    between to_date({start_date}, 'YYYY-MM-DD')  -- Date: beginning of reporting period
-                    and to_date({end_date}, 'YYYY-MM-DD')  -- Date: end of reporting period
+                    between to_date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of reporting period
+                    and to_date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
         ) 
 
     select distinct
@@ -325,24 +325,24 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         case
             when
                 advertised.first_auction_date
-                    between to_date({start_date}, 'YYYY-MM-DD')  -- Date: beginning of report period
-                    and to_date({end_date}, 'YYYY-MM-DD')  -- Date: end of report period
+                    between to_date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of report period
+                    and to_date('{end_date}', 'YYYY-MM-DD')  -- Date: end of report period
             then
                 advertised.first_auction_volume
             end as first_auction_volume_is_in_report_period,
         case
             when
                 advertised.first_auction_date
-                    between to_date({start_date}, 'YYYY-MM-DD')  -- Date: beginning of report period
-                    and to_date({end_date}, 'YYYY-MM-DD')  -- Date: end of report period
+                    between to_date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of report period
+                    and to_date('{end_date}', 'YYYY-MM-DD')  -- Date: end of report period
             then
                 advertised.first_auction_category_A_and_1_volume
             end as first_auction_category_A_and_1_volume_is_in_report_period,
         case
             when
                 advertised.first_auction_date
-                    between to_date({start_date}, 'YYYY-MM-DD')  -- Date: beginning of report period
-                    and to_date({end_date}, 'YYYY-MM-DD')  -- Date: end of report period
+                    between to_date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of report period
+                    and to_date('{end_date}', 'YYYY-MM-DD')  -- Date: end of report period
             then
                 advertised.first_auction_category_2_and_4_volume
             end as first_auction_category_2_and_4_volume_is_in_report_period,
@@ -442,8 +442,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
             end as FTA_File_Status,
         pfu.file_status_date as FTA_File_Status_Date,
     {report_frequency} as report_frequency,
-    {start_date} as report_start_date,
-    {end_date} as report_end_date
+    '{start_date}' as report_start_date,
+    '{end_date}' as report_end_date
 
     FROM bcts_staging.prov_forest_use pfu
         INNER JOIN mofclient_replication.org_unit ou
@@ -566,8 +566,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         null as FTA_File_Status,
         null as FTA_File_Status_Date,
         {report_frequency} as report_frequency,
-        {start_date} as report_start_date,
-        {end_date} as report_end_date
+        '{start_date}' as report_start_date,
+        '{end_date}' as report_end_date
 
         from
             mofclient_replication.org_unit ou
