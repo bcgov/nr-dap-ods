@@ -595,5 +595,5 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         business_area,
         x_axis_fiscal desc,  -- list empty business area rows before rows with licences for each business area
         forest_file_id
-    );
+    ) licence_issued_advertised_official;
 """
