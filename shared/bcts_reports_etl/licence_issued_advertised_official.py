@@ -566,8 +566,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         null as FTA_File_Status,
         null as FTA_File_Status_Date,
         '{report_frequency}' as report_frequency,
-        '{start_date}' as report_start_date,
-        '{end_date}' as report_end_date
+        '{start_date}'::Date as report_start_date,
+        '{end_date}':Date as report_end_date
 
         from
             mofclient_replication.org_unit ou
