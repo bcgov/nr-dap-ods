@@ -441,7 +441,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                 pfu.file_status_st
             end as FTA_File_Status,
         pfu.file_status_date as FTA_File_Status_Date,
-    {report_frequency} as report_frequency,
+    '{report_frequency}' as report_frequency,
     '{start_date}' as report_start_date,
     '{end_date}' as report_end_date
 
@@ -565,7 +565,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         null as Advertised_in_Report_Period,
         null as FTA_File_Status,
         null as FTA_File_Status_Date,
-        {report_frequency} as report_frequency,
+        '{report_frequency}' as report_frequency,
         '{start_date}' as report_start_date,
         '{end_date}' as report_end_date
 
