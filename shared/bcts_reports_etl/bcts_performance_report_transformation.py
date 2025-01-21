@@ -117,6 +117,32 @@ def run_currently_in_market_report(connection, cursor, start_date, end_date, rep
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
+def report_exists(start_date, end_date, report_frequency):
+    sql_statement = \
+    f"""
+
+    select exists (select * from bcts_staging.licence_issued_advertised_official
+    where report_start_date = '{start_date}'
+    and report_end_date = '{end_date}'
+    and report_frequency = '{report_frequency}') as report_exists;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        # Fetch the result and load into a DataFrame
+        result = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]  # Get column names
+        df = pd.DataFrame(result, columns=columns)
+        logging.info(f"SQL script executed successfully.")
+        logging.info(f"report_exists: {df['report_exists']}")
+        return df['report_exists']
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+
+
 if __name__ == "__main__":
 
     connection = get_connection()
@@ -126,11 +152,16 @@ if __name__ == "__main__":
     df = get_reporting_periods(connection, cursor)
 
     for start_date, end_date, report_frequency in zip(df['start_date'], df['end_date'], df['report_frequency']):
-        # Run each report
-        logging.info(f"Deleting rows for the selected time period if already exists!")
-        truncate_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
-        logging.info(f"Running license issued advertised official report {report_frequency} for the period of  {start_date} and {end_date}...")
-        run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
+        # Skip if report is already generated
+        if report_exists(start_date, end_date, report_frequency):
+            logging.info("Report already exists! Skipping...")
+            continue
+        else:
+            # Run each report
+            logging.info(f"Deleting rows for the selected time period if already exists!")
+            truncate_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
+            logging.info(f"Running license issued advertised official report {report_frequency} for the period of  {start_date} and {end_date}...")
+            run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
 
 
 
