@@ -84,6 +84,27 @@ def run_licence_issued_advertised_official_report(connection, cursor, start_date
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
+def truncate_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency):
+
+    sql_statement = \
+    f"""
+    delete from bcts_staging.licence_issued_advertised_official
+    where report_start_date = '{start_date}'
+    and report_end_date = '{end_date}'
+    and report_frequency = '{report_frequency}';
+    """
+
+    try:
+        logging.info(f"Executing the following query...")
+        logging.info(sql_statement)
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+
+
 def run_currently_in_market_report(connection, cursor, start_date, end_date, report_frequency):
 
     sql_statement = get_currently_in_market(end_date)
@@ -106,6 +127,8 @@ if __name__ == "__main__":
 
     for start_date, end_date, report_frequency in zip(df['start_date'], df['end_date'], df['report_frequency']):
         # Run each report
+        logging.info(f"Deleting rows for the selected time period if already exists!")
+        truncate_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
         logging.info(f"Running license issued advertised official report {report_frequency} for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
 

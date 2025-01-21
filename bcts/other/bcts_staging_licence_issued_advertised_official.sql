@@ -61,7 +61,8 @@ CREATE TABLE bcts_staging.licence_issued_advertised_official
     report_frequency text,
     report_start_date date, 
     report_end_date date,
-    fiscal_year integer
+    fiscal_year integer,
+    primary key (report_start_date, report_end_date, report_frequency)
 
-)
+);
 
