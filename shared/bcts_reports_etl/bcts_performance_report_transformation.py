@@ -174,6 +174,41 @@ def refresh_mat_views():
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
+def publish_datasets():
+
+    sql_statement = \
+    """
+    
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_official;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_official
+    AS SELECT * 
+    FROM BCTS_STAGING.licence_issued_advertised_official;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.currently_in_market;
+    CREATE TABLE BCTS_REPORTING.currently_in_market
+    AS SELECT * 
+    FROM BCTS_STAGING.currently_in_market;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_lrm;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_lrm
+    AS SELECT * 
+    FROM BCTS_STAGING.mv_licence_issued_advertised_lrm;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
+    AS SELECT * 
+    FROM BCTS_STAGING.mv_licence_issued_advertised_lrm;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+
 
 if __name__ == "__main__":
 
@@ -217,6 +252,11 @@ if __name__ == "__main__":
     logging.info("Refreshing materialized views...")
     refresh_mat_views()
     logging.info("Materialized views have been refreshed!")
+
+    # Publish reporting objects to the reporting layer
+    logging.info("Updating datasets to the reporting layer...")
+    publish_datasets()
+    logging.info("Datasets in the reporting layer have been updated!")
 
 
     # Clean up
