@@ -78,7 +78,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                 and ts0.auction_date = tb.auction_date
                 and ts0.no_sale_rationale_code is null
                 and upper(tb.sale_awarded_ind) = 'Y'  -- Only look at the winning bid
-            inner join bcts_staging.prov_forest_use pfu
+            inner join bcts_staging.fta_prov_forest_use pfu
             on pfu.forest_file_id = ts0.forest_file_id
             and pfu.file_status_st in (
                     'HI',  -- Issued
@@ -88,13 +88,13 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                     'HS',  -- Suspended
                     'HRS'  -- Harvesting Rights Surrendered
                 )
-            inner join bcts_staging.tenure_term tt
+            inner join bcts_staging.fta_tenure_term tt
             on pfu.forest_file_id = tt.forest_file_id
             /* Tenure term legal effective date in reporting period*/
                 AND tt.legal_effective_dt
                     between To_Date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of reporting period
                     and To_Date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
-            inner join mofclient_replication.v_client_public fc
+            inner join mofclient_replication.the_v_client_public fc
             on tb.client_number = fc.client_number
 
         ),
@@ -449,15 +449,15 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         ELSE EXTRACT(YEAR FROM CURRENT_DATE) - 1
     END AS fiscal_year
 
-    FROM bcts_staging.prov_forest_use pfu
-        INNER JOIN mofclient_replication.org_unit ou
+    FROM bcts_staging.fta_prov_forest_use pfu
+        INNER JOIN mofclient_replication.the_org_unit ou
         ON pfu.bcts_org_unit = ou.org_unit_no
         LEFT JOIN bctsadmin_replication.bcts_timber_sale ts
         ON  pfu.forest_file_id = ts.forest_file_id
         AND  ts.forest_file_id is not null
-        LEFT JOIN bcts_staging.tenure_term tt
+        LEFT JOIN bcts_staging.fta_tenure_term tt
         ON pfu.forest_file_id = tt.forest_file_id
-        LEFT JOIN bcts_staging.tenure_file_status_code tfsc
+        LEFT JOIN bcts_staging.fta_tenure_file_status_code tfsc
         ON pfu.file_status_st = tfsc.tenure_file_status_code
         LEFT JOIN issued
         ON ts.forest_file_id = issued.forest_file_id
@@ -579,7 +579,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
 
 
         from
-            mofclient_replication.org_unit ou
+            mofclient_replication.the_org_unit ou
 
         where
             /* BCTS Business Area org unit numbers in the org_unit table */

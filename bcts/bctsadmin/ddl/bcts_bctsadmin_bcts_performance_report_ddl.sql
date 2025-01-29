@@ -69,3 +69,13 @@ CREATE TABLE bctsadmin_replication.no_sale_rationale_code (
     PRIMARY KEY (no_sale_rationale_code)
 );
 
+CREATE OR REPLACE VIEW bcts_staging.THE_BCTS_TENURE_BIDDER AS
+SELECT * FROM bctsadmin_replication.BCTS_TENURE_BIDDER;
+
+
+CREATE OR REPLACE VIEW bcts_staging.THE_BCTS_TIMBER_SALE AS
+SELECT * FROM bctsadmin_replication.BCTS_TIMBER_SALE;
+
+
+CREATE OR REPLACE VIEW bcts_staging.THE_NO_SALE_RATIONALE_CODE AS
+SELECT * FROM bctsadmin_replication.NO_SALE_RATIONALE_CODE;

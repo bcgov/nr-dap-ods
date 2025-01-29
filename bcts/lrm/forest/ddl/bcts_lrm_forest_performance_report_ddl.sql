@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.operating_area (
     PRIMARY KEY (opar_seq_nbr)
 );
 
-COMMENT ON TABLE lrm_replication.operating_area IS ''
+COMMENT ON TABLE lrm_replication.operating_area IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.lrm_vt_commit_lic_type (
     code VARCHAR(2) NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.lrm_vt_commit_lic_type (
 );
 
 
-COMMENT ON TABLE lrm_replication.lrm_vt_commit_lic_type IS ''
+COMMENT ON TABLE lrm_replication.lrm_vt_commit_lic_type IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.permit_allocation (
     peal_seq_nbr NUMERIC(15) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.permit_allocation (
 );
 
 
-COMMENT ON TABLE lrm_replication.permit_allocation IS ''
+COMMENT ON TABLE lrm_replication.permit_allocation IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor_location (
     cloc_seq_nbr NUMERIC(15) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor_location (
 );
 
 
-COMMENT ON TABLE lrm_replication.ctor_contractor_location IS ''
+COMMENT ON TABLE lrm_replication.ctor_contractor_location IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block_silv_regime (
     cbsr_seq_nbr NUMERIC(15) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.cut_block_silv_regime (
 );
 
 
-COMMENT ON TABLE lrm_replication.cut_block_silv_regime IS ''
+COMMENT ON TABLE lrm_replication.cut_block_silv_regime IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.v_res_vt_fdtm_team (
     colu_lookup_type VARCHAR(4) NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.v_res_vt_fdtm_team (
 );
 
 
-COMMENT ON TABLE lrm_replication.v_res_vt_fdtm_team IS ''
+COMMENT ON TABLE lrm_replication.v_res_vt_fdtm_team IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.commitment_partition (
     copa_seq_nbr NUMERIC(15) NOT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.commitment_partition (
 );
 
 
-COMMENT ON TABLE lrm_replication.commitment_partition IS ''
+COMMENT ON TABLE lrm_replication.commitment_partition IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.block_seed_zone (
     blsz_seq_nbr NUMERIC(15) NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.block_seed_zone (
 );
 
 
-COMMENT ON TABLE lrm_replication.block_seed_zone IS ''
+COMMENT ON TABLE lrm_replication.block_seed_zone IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.standard_unit (
     stun_seq_nbr NUMERIC(15) NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.standard_unit (
 );
 
 
-COMMENT ON TABLE lrm_replication.standard_unit IS 'A portion of a cutblock with similar site conditions, such as soil type, moisture levels, and vegetation. Standard units are used to define silviculture obligations and manage silviculture activities towards legal objectives.'
+COMMENT ON TABLE lrm_replication.standard_unit IS 'A portion of a cutblock with similar site conditions, such as soil type, moisture levels, and vegetation. Standard units are used to define silviculture obligations and manage silviculture activities towards legal objectives.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.apportionment (
     appo_seq_nbr NUMERIC(15) NOT NULL,
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.apportionment (
 );
 
 
-COMMENT ON TABLE lrm_replication.apportionment IS 'The resultant from the Chief Forester''s  determination of dividing and distributing the Allowable Annual Cut (AAC) of a Timber Supply Area (TSA)  among various types of forest tenures and providing BCTS with an allocated volume available to auction over the business cycle.'
+COMMENT ON TABLE lrm_replication.apportionment IS 'The resultant from the Chief Forester''s  determination of dividing and distributing the Allowable Annual Cut (AAC) of a Timber Supply Area (TSA)  among various types of forest tenures and providing BCTS with an allocated volume available to auction over the business cycle.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.silv_treatment_regime (
     treg_seq_nbr NUMERIC(15) NOT NULL,
@@ -264,7 +264,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.silv_treatment_regime (
 );
 
 
-COMMENT ON TABLE lrm_replication.silv_treatment_regime IS 'Preset of silvicultural treatment activities , outlining common  sequences of activities for any given biogeoclimatic zone that offer an initiation for silvicultural  strategies to manage a standard unit towards legal obligations.'
+COMMENT ON TABLE lrm_replication.silv_treatment_regime IS 'Preset of silvicultural treatment activities , outlining common  sequences of activities for any given biogeoclimatic zone that offer an initiation for silvicultural  strategies to manage a standard unit towards legal obligations.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.person (
     pers_seq_nbr NUMERIC(15) NOT NULL,
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.person (
 );
 
 
-COMMENT ON TABLE lrm_replication.person IS ''
+COMMENT ON TABLE lrm_replication.person IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.bcts_harvest_history (
     bchh_seq_nbr NUMERIC(15) NOT NULL,
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.bcts_harvest_history (
 );
 
 
-COMMENT ON TABLE lrm_replication.bcts_harvest_history IS ''
+COMMENT ON TABLE lrm_replication.bcts_harvest_history IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.commitments (
     licn_seq_nbr NUMERIC(15) NULL,
@@ -343,7 +343,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.commitments (
 );
 
 
-COMMENT ON TABLE lrm_replication.commitments IS ''
+COMMENT ON TABLE lrm_replication.commitments IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.ecology_unit (
     ecou_seq_nbr NUMERIC(15) NOT NULL,
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.ecology_unit (
 );
 
 
-COMMENT ON TABLE lrm_replication.ecology_unit IS 'A distinct area of a cutblock within common environmental characteristics, such as climate, soil, and vegetation types. '
+COMMENT ON TABLE lrm_replication.ecology_unit IS 'A distinct area of a cutblock within common environmental characteristics, such as climate, soil, and vegetation types.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.sub_operating_area (
     suop_subop_area_id VARCHAR(10) NOT NULL,
@@ -444,7 +444,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.sub_operating_area (
 );
 
 
-COMMENT ON TABLE lrm_replication.sub_operating_area IS ''
+COMMENT ON TABLE lrm_replication.sub_operating_area IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.mark_allocation (
     mark_seq_nbr NUMERIC(15) NOT NULL,
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.mark_allocation (
 );
 
 
-COMMENT ON TABLE lrm_replication.mark_allocation IS ''
+COMMENT ON TABLE lrm_replication.mark_allocation IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor (
     ctor_seq_nbr NUMERIC(15) NOT NULL,
@@ -508,7 +508,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor (
 );
 
 
-COMMENT ON TABLE lrm_replication.ctor_contractor IS ''
+COMMENT ON TABLE lrm_replication.ctor_contractor IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence_allocation (
     licn_seq_nbr NUMERIC(15) NOT NULL,
@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence_allocation (
 );
 
 
-COMMENT ON TABLE lrm_replication.licence_allocation IS ''
+COMMENT ON TABLE lrm_replication.licence_allocation IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     silp_seq_nbr NUMERIC(15) NOT NULL,
@@ -611,7 +611,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     PRIMARY KEY (silp_seq_nbr)
 );
 
-COMMENT ON TABLE lrm_replication.silviculture_prescription IS 'A detailed plan outlining  specific silviculture treatments and practices required to successfully regenerate a harvested area  based on factors such as site conditions, ecology units, legal requirements, and management objectives.'
+COMMENT ON TABLE lrm_replication.silviculture_prescription IS 'A detailed plan outlining  specific silviculture treatments and practices required to successfully regenerate a harvested area  based on factors such as site conditions, ecology units, legal requirements, and management objectives.';
 
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licensee (
@@ -628,7 +628,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licensee (
 );
 
 
-COMMENT ON TABLE lrm_replication.licensee IS ''
+COMMENT ON TABLE lrm_replication.licensee IS '';
 
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
@@ -651,6 +651,155 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
 );
 
 
-COMMENT ON TABLE lrm_replication.licence_shape_evw IS ''
+COMMENT ON TABLE lrm_replication.licence_shape_evw IS '';
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_OPERATING_AREA AS
+SELECT * FROM lrm_replication.OPERATING_AREA;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_LRM_VT_COMMIT_LIC_TYPE AS
+SELECT * FROM lrm_replication.LRM_VT_COMMIT_LIC_TYPE;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_PERMIT_ALLOCATION AS
+SELECT * FROM lrm_replication.PERMIT_ALLOCATION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CTOR_CONTRACTOR_LOCATION AS
+SELECT * FROM lrm_replication.CTOR_CONTRACTOR_LOCATION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CUT_BLOCK_SILV_REGIME AS
+SELECT * FROM lrm_replication.CUT_BLOCK_SILV_REGIME;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_V_RES_VT_FDTM_TEAM AS
+SELECT * FROM lrm_replication.V_RES_VT_FDTM_TEAM;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_COMMITMENT_PARTITION AS
+SELECT * FROM lrm_replication.COMMITMENT_PARTITION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_BLOCK_SEED_ZONE AS
+SELECT * FROM lrm_replication.BLOCK_SEED_ZONE;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_STANDARD_UNIT AS
+SELECT * FROM lrm_replication.STANDARD_UNIT;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_APPORTIONMENT AS
+SELECT * FROM lrm_replication.APPORTIONMENT;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_SILV_TREATMENT_REGIME AS
+SELECT * FROM lrm_replication.SILV_TREATMENT_REGIME;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_PERSON AS
+SELECT * FROM lrm_replication.PERSON;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_BCTS_HARVEST_HISTORY AS
+SELECT * FROM lrm_replication.BCTS_HARVEST_HISTORY;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_COMMITMENTS AS
+SELECT * FROM lrm_replication.COMMITMENTS;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_ECOLOGY_UNIT AS
+SELECT * FROM lrm_replication.ECOLOGY_UNIT;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_SUB_OPERATING_AREA AS
+SELECT * FROM lrm_replication.SUB_OPERATING_AREA;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_MARK_ALLOCATION AS
+SELECT * FROM lrm_replication.MARK_ALLOCATION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CTOR_CONTRACTOR AS
+SELECT * FROM lrm_replication.CTOR_CONTRACTOR;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_LICENCE_ALLOCATION AS
+SELECT * FROM lrm_replication.LICENCE_ALLOCATION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_SILVICULTURE_PRESCRIPTION AS
+SELECT * FROM lrm_replication.SILVICULTURE_PRESCRIPTION;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_LICENSEE AS
+SELECT * FROM lrm_replication.LICENSEE;
+
+
+CREATE OR REPLACE VIEW bcts_staging.FOREST_LICENCE_SHAPE_EVW AS
+SELECT * FROM lrm_replication.LICENCE_SHAPE_EVW;
+    
+​-- Renaming existing views to match the SOURCE_SCHEMA_TABLE naming convention
+
+DROP VIEW IF EXISTS BCTS_STAGING.DIVISION CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_DIVISION AS
+SELECT * FROM lrm_replication.DIVISION;
+
+DROP VIEW IF EXISTS BCTS_STAGING.BLOCK_ALLOCATION CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_BLOCK_ALLOCATION AS
+SELECT * FROM lrm_replication.BLOCK_ALLOCATION;
+
+DROP VIEW IF EXISTS BCTS_STAGING.MANAGEMENT_UNIT CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_MANAGEMENT_UNIT AS
+SELECT * FROM lrm_replication.MANAGEMENT_UNIT;
+
+DROP VIEW IF EXISTS BCTS_STAGING.LICENCE CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_LICENCE AS
+SELECT * FROM lrm_replication.LICENCE;
+
+DROP VIEW IF EXISTS BCTS_STAGING.BLOCK_ADMIN_ZONE CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_BLOCK_ADMIN_ZONE AS
+SELECT * FROM lrm_replication.BLOCK_ADMIN_ZONE;
+
+DROP VIEW IF EXISTS BCTS_STAGING.DIVISION_CODE_LOOKUP CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_DIVISION_CODE_LOOKUP AS
+SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
+
+DROP VIEW IF EXISTS BCTS_STAGING.CODE_LOOKUP CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CODE_LOOKUP AS
+SELECT * FROM lrm_replication.CODE_LOOKUP;
+
+DROP VIEW IF EXISTS BCTS_STAGING.TENURE_TYPE CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_TENURE_TYPE AS
+SELECT * FROM lrm_replication.TENURE_TYPE;
+
+DROP VIEW IF EXISTS BCTS_STAGING.CUT_PERMIT CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CUT_PERMIT AS
+SELECT * FROM lrm_replication.CUT_PERMIT;
+
+DROP VIEW IF EXISTS BCTS_STAGING.MARK CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_MARK AS
+SELECT * FROM lrm_replication.MARK;
+
+DROP VIEW IF EXISTS BCTS_STAGING.DIVISION_CODE_LOOKUP CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_DIVISION_CODE_LOOKUP AS
+SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
+
+DROP VIEW IF EXISTS BCTS_STAGING.CUT_BLOCK CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_CUT_BLOCK AS
+SELECT * FROM lrm_replication.CUT_BLOCK;
+
+DROP VIEW IF EXISTS BCTS_STAGING.ACTIVITY_CLASS CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_ACTIVITY_CLASS AS
+SELECT * FROM lrm_replication.ACTIVITY_CLASS;
+
+DROP VIEW IF EXISTS BCTS_STAGING.ACTIVITY_TYPE CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_ACTIVITY_TYPE AS
+SELECT * FROM lrm_replication.ACTIVITY_TYPE;
+
+DROP VIEW IF EXISTS BCTS_STAGING.ACTIVITY CASCADE;
+CREATE OR REPLACE VIEW bcts_staging.FOREST_ACTIVITY AS
+SELECT * FROM lrm_replication.ACTIVITY;
 
 

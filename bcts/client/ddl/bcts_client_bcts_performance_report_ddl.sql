@@ -28,3 +28,10 @@ CREATE TABLE mofclient_replication.org_unit (
     PRIMARY KEY (org_unit_no)
 );
 
+CREATE OR REPLACE VIEW bcts_staging.THE_V_CLIENT_PUBLIC AS
+SELECT * FROM mofclient_replication.V_CLIENT_PUBLIC;
+
+
+CREATE OR REPLACE VIEW bcts_staging.THE_ORG_UNIT AS
+SELECT * FROM mofclient_replication.ORG_UNIT;
+
