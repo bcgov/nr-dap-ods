@@ -70,7 +70,7 @@ INSERT INTO ods_data_management.cdc_master_table_list
                 createdby, 
                 createdon, 
                 createdusing
-            FROM forest.ctor_contractor_location;',
+            FROM forest.ctor_contractor_location',
             'Oracle'
         );
 
@@ -114,7 +114,7 @@ INSERT INTO ods_data_management.cdc_master_table_list
                 createdby, 
                 createdon, 
                 createdusing
-                FROM forest.person;',
+                FROM forest.person',
             'Oracle'
         );
 
@@ -217,7 +217,7 @@ INSERT INTO ods_data_management.cdc_master_table_list
                 createdon, 
                 createdusing, 
                 fspm_seq_nbr
-                FROM forest.silviculture_prescription;',
+                FROM forest.silviculture_prescription',
             'Oracle'
         );
 
