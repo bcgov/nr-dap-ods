@@ -1,5 +1,3 @@
-CREATE SCHEMA bctsadmin_replication;
-
 CREATE TABLE bctsadmin_replication.bcts_tenure_bidder (
     client_number VARCHAR(8) NOT NULL,
     forest_file_id VARCHAR(10) NOT NULL,

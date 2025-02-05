@@ -740,8 +740,6 @@ SELECT * FROM lrm_replication.LICENSEE;
 CREATE OR REPLACE VIEW bcts_staging.FOREST_LICENCE_SHAPE_EVW AS
 SELECT * FROM lrm_replication.LICENCE_SHAPE_EVW;
     
-​-- Renaming existing views to match the SOURCE_SCHEMA_TABLE naming convention
-
 DROP VIEW IF EXISTS BCTS_STAGING.DIVISION CASCADE;
 CREATE OR REPLACE VIEW bcts_staging.FOREST_DIVISION AS
 SELECT * FROM lrm_replication.DIVISION;

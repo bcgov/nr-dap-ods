@@ -209,13 +209,38 @@ def publish_datasets():
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
 
+def fetch_fta_tables():
+
+    sql_statement = \
+    """
+    
+    CREATE OR REPLACE TABLE bcts_staging.fta_tenure_term AS
+    SELECT * FROM fta_replication.pmt_tenure_term_vw;
+
+    CREATE OR REPLACE TABLE bcts_staging.fta_prov_forest_use AS
+    SELECT * FROM fta_replication.pmt_prov_forest_use_vw;
+
+    CREATE OR REPLACE TABLE bcts_staging.fta_tenure_file_status_code AS
+    SELECT * FROM fta_replication.pmt_tenure_file_status_code_vw;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+
 
 if __name__ == "__main__":
 
     connection = get_connection()
     cursor = connection.cursor()
 
-
+    # Fetch FTA tables from FTA_REPLICATION
+    fetch_fta_tables()
 
     # Fetch the start and end dates for the report periods
     df = get_reporting_periods(connection, cursor)

@@ -1,5 +1,3 @@
-CREATE SCHEMA mofclient_replication;
-
 CREATE TABLE mofclient_replication.v_client_public (
     client_number VARCHAR(8) NOT NULL,
     client_name VARCHAR(60) NOT NULL,
