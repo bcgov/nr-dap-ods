@@ -29,6 +29,77 @@ BEGIN
     END LOOP;
 END $$;
 
+
+-- FOREST VIEWS
+DO $$
+DECLARE
+    tables text[] := ARRAY['V_LRM_CUT_BLOCK', 'V_LRM_LICENCE_SHAPE', 'V_LRM_LICENCE', 'V_RES_VT_FDTM_TEAM', 'V_LRM_COMMITMENTS', 'CUT_BLOCK_SHAPE_EVW', 'V_LRM_COMMITMENT_PARTITION'];  
+    table_name text;
+    target_table text;
+BEGIN
+    -- Loop through the list of table names
+    FOREACH table_name IN ARRAY tables
+    LOOP
+        target_table := 'forest_' || table_name;
+        INSERT INTO ods_data_management.cdc_master_table_list 
+        VALUES (
+            NULL,
+            'lrm',
+            NULL,               
+            'forest',
+            table_name,               
+            'bcts_staging',
+            target_table,
+            'Y',
+            NULL,
+            NULL,
+            NULL,
+            'Y',
+            1,
+            'N',
+            'N',
+            NULL,
+            'Oracle'
+        );
+    END LOOP;
+END $$;
+
+
+
+-- FORESTVIEW VIEWS
+DO $$
+DECLARE
+    tables text[] := ARRAY['V_LICENCE', 'V_BLOCK', 'V_LICENCE', 'V_BLOCK_ACTIVITY_ALL', 'V_BLOCK_SPATIAL', 'V_LICENCE_ACTIVITY_ALL', 'V_BLOCK_SPATIAL', 'V_LICENCE_ACTIVITY_ALL'];  
+    table_name text;
+    target_table text;
+BEGIN
+    -- Loop through the list of table names
+    FOREACH table_name IN ARRAY tables
+    LOOP
+        target_table := 'forestview_' || table_name;
+        INSERT INTO ods_data_management.cdc_master_table_list 
+        VALUES (
+            NULL,
+            'lrm',
+            NULL,               
+            'forestview',
+            table_name,               
+            'lrm_replication',
+            target_table,
+            'Y',
+            NULL,
+            NULL,
+            NULL,
+            'Y',
+            1,
+            'N',
+            'N',
+            NULL,
+            'Oracle'
+        );
+    END LOOP;
+END $$;
+
 -- Tables with custom SQL
 INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
