@@ -653,6 +653,32 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
 
 COMMENT ON TABLE lrm_replication.licence_shape_evw IS '';
 
+
+CREATE TABLE bcts_staging.licence_issued_advertised_lrm (
+    business_area_region_category text, 
+    business_area_region text, 
+    business_area text, 
+    licence_id character varying, 
+    management_unit character varying, 
+    district text, 
+    category_id_lrm character varying, 
+    lrm_total_volume numeric, 
+    count_all_blocks_in_licence bigint, 
+    lrm_total_volume_salvage_all_fire_years numeric, 
+    count_blocks_salvage_any_fire_year bigint, 
+    lrm_total_volume_salvage_2021_fire numeric, 
+    count_blocks_salvage_21_fire bigint, 
+    lrm_total_volume_salvage_2022_fire numeric, 
+    count_blocks_salvage_22_fire bigint, 
+    lrm_total_volume_salvage_2023_fire numeric, 
+    count_blocks_salvage_23_fire bigint, 
+    lrm_total_volume_salvage_2024_fire numeric, 
+    count_blocks_salvage_24_fire bigint, 
+    lrm_total_volume_salvage_2025_fire numeric, 
+    count_blocks_salvage_25_fire bigint, 
+    licn_seq_nbr numeric);
+
+
 CREATE OR REPLACE VIEW bcts_staging.FOREST_OPERATING_AREA AS
 SELECT * FROM lrm_replication.OPERATING_AREA;
 
@@ -799,5 +825,746 @@ SELECT * FROM lrm_replication.ACTIVITY_TYPE;
 DROP VIEW IF EXISTS BCTS_STAGING.ACTIVITY CASCADE;
 CREATE OR REPLACE VIEW bcts_staging.FOREST_ACTIVITY AS
 SELECT * FROM lrm_replication.ACTIVITY;
+
+
+CREATE OR REPLACE VIEW BCTS_STAGING.V_BLOCK AS
+SELECT D.DIVI_DIV_NBR,
+             D.DIVI_SHORT_CODE                         AS TSO_CODE,
+             D.DIVI_DIVISION_NAME                      AS TSO_NAME,
+             COLU.COLU_LOOKUP_DESC                     AS FIELD_TEAM_DESC,
+             M.MANU_ID                                 AS NAV_NAME,
+             TN.TENT_TENURE_ID                         AS TENURE,
+             L.LICN_LICENCE_ID                         AS LICENCE_ID,
+			 CASE 
+				 WHEN UPPER(SUBSTRING(P.PERM_PERMIT_ID FROM 1 FOR 4)) = 'APR-' THEN NULL 
+				 ELSE P.PERM_PERMIT_ID 
+			 END AS PERMIT_ID,
+             MK.MARK_MARK_ID                           AS MARK_ID,
+             B.CUTB_BLOCK_ID                           AS BLOCK_ID,
+             B.CUTB_BLOCK_NUMBER                       AS BLOCK_NBR,
+             B.CUTB_SYSTEM_ID                          AS UBI,
+             B.CUTB_OPENING                            AS OPENING,
+             B.OPAR_OPERATING_AREA_ID                  AS OP_AREA,
+             OA.OPAR_OPERATING_AREA_NAME,
+             OA.OZON_OPERATING_ZONE_ID,
+             B.SBLK_SUPPLY_BLOCK_ID                    AS SUPPLY_BLOCK,
+             B.CUTB_EBM_IND                            AS EBM_INDICATOR,
+             B.CUTB_PHOTOS                             AS PHOTO,
+             TRIM (B.CUTB_LATITUDE)                    AS LATITUDE,
+             TRIM (B.CUTB_LONGITUDE)                   AS LONGITUDE,
+             B.CUTB_PROV_FOREST_CONFLICT               AS PROV_FRST_CONFLICT,
+             B.CUTB_USER_MAPSHEET_ID                   AS MAPSHEET_ID,
+             B.LSUN_LANDSCAPE_UNIT                     AS LANDSCAPE_UNIT,
+             B.CUTB_SITE_PLAN_EXEMPT_IND               AS SP_EXEMPT,
+             B.STTP_STAND_TYPE                         AS STAND_TYPE,
+             B.TTAC_TIMBERTYPE_AGE_CLASS               AS AGE_CLASS,
+             B.TTHC_TIMBERTYPE_HEIGHT_CLASS            AS HGT_CLASS,
+             B.TTSC_TIMBERTYPE_STOCK_CLASS             AS STK_CLASS,
+             SI.SITE_INDEX,
+             --b.cutb_site_index site_index,
+             B.SSSC_SOURCE_CODE                        AS source,
+             B.FDPS_STATUS_ID                          AS FDP_STATUS,
+             B.FUND_FUNDING_CODE                       AS FUNDING_CODE,
+             B.CUTB_BLOCK_MEMO,
+             BA.BLAL_GROSS_HA_AREA                     AS GROSS_AREA,
+             BA.BLAL_ESTIMATED_AREA                    AS EST_AREA,
+             BA.BLAL_MERCH_HA_AREA                     AS MERCH_AREA,
+             BA.BLAL_HARVESTED_HA_AREA                 AS HARVEST_AREA,
+             (  COALESCE (BA.BLAL_MERCH_HA_AREA, 0)
+              - COALESCE (BA.BLAL_HARVESTED_HA_AREA, 0))    AS REMAINING_AREA,
+             BA.BLAL_CRUISE_M3_VOL                     AS CRUISE_VOL,
+             BA.BLAL_DATA_SOURCE                       AS DATA_SOURCE,
+             BA.BLAL_HARVESTED_M3_VOL                  AS HARVEST_VOL,
+             (  COALESCE (BA.BLAL_CRUISE_M3_VOL, 0)
+              - COALESCE (BA.BLAL_HARVESTED_M3_VOL, 0))     AS REMAINING_VOL,
+             BA.BLAL_USR_CRUISE_M3_VOL,
+             BA.BLAL_RW_HA_AREA                        AS RW_AREA,
+             BA.BLAL_RW_VOL,
+             B.CUTB_FORMA_PRINT_DATE,
+             B.CUTB_FORMA_PRINTED,
+             B.CUTB_BLOCK_STATE,
+             B.PMOD_MODIFIER_ID,
+             B.CUTB_LOCATION,
+             B.SUOP_SUBOP_AREA_ID,
+             SUOP.SUOP_SUBOP_AREA_NAME,
+             B.CUTB_OPENING_ID,
+             l.LICN_LICENCE_STATE,
+             SZ.SEED_ZONE,
+             CUTB_FILE_ID,
+             ELV.MIN_ELEVATION,
+             ELV.MAX_ELEVATION,
+             B.BCAT_CATEGORY_CODE,
+             B.CUTB_ACCESS_RESTRICTION,
+             per.PERS_DISPLAY_NAME                     AS REGIME_CREATED_BY,
+             STR.TREG_REGIME_ID,
+             STR.TREG_REGIME_NAME,
+             STR.TREG_CREATE_DATE,
+             STR.TREG_ACTIVE_IND,
+             STR.TREG_DEF_IND,
+             m.MANU_NAME                               AS NAV_ID,
+             B.FINZ_FOREST_INVENTORY_ZONE_ID           AS FIZ,
+             HV.HVS_STATUS,
+             HV.HVS_TARGET_DATE,
+             HV.HVS_STATUS_DATE,
+             HV.HVC_STATUS,
+             HV.HVC_TARGET_DATE,
+             HV.HVC_STATUS_DATE,
+             M.MANU_SEQ_NBR,
+             L.LICN_SEQ_NBR,
+             P.PERM_SEQ_NBR,
+             MK.MARK_SEQ_NBR,
+             B.CUTB_SEQ_NBR,
+			 B.CUTB_CPRP_PROTECTION_IND,
+			 B.CUTB_RC_RISK_RATING,
+			 B.CUTB_RC_RISK_SOURCE
+        FROM LRM_REPLICATION.CUT_BLOCK            B
+		 INNER JOIN LRM_REPLICATION.DIVISION             D
+		 ON B.DIVI_DIV_NBR = D.DIVI_DIV_NBR
+		 LEFT JOIN LRM_REPLICATION.BLOCK_ALLOCATION     BA
+		 ON B.CUTB_SEQ_NBR = BA.CUTB_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.MANAGEMENT_UNIT      M
+		 ON BA.MANU_SEQ_NBR = M.MANU_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.LICENCE              L
+		 ON BA.LICN_SEQ_NBR = L.LICN_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.TENURE_TYPE          TN
+		 ON L.TENT_SEQ_NBR = TN.TENT_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.CUT_PERMIT           P
+		 ON BA.PERM_SEQ_NBR = P.PERM_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.MARK                 MK
+		 ON BA.MARK_SEQ_NBR = MK.MARK_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.OPERATING_AREA       OA
+		 ON B.DIVI_DIV_NBR = OA.DIVI_DIV_NBR
+		 LEFT JOIN LRM_REPLICATION.CUT_BLOCK_SILV_REGIME CBSR
+		 ON B.CUTB_SEQ_NBR = CBSR.CUTB_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.SILV_TREATMENT_REGIME STR
+		 ON CBSR.TREG_SEQ_NBR = STR.TREG_SEQ_NBR
+		 LEFT JOIN LRM_REPLICATION.CODE_LOOKUP          COLU
+		 ON L.LICN_FIELD_TEAM_ID = COLU.COLU_LOOKUP_ID
+             AND COLU.COLU_LOOKUP_TYPE = 'FDTM'
+		 LEFT JOIN LRM_REPLICATION.SUB_OPERATING_AREA   SUOP
+		 ON B.SUOP_SUBOP_AREA_ID = SUOP.SUOP_SUBOP_AREA_ID
+             AND B.DIVI_DIV_NBR = SUOP.DIVI_DIV_NBR
+             AND B.OPAR_OPERATING_AREA_ID = SUOP.OPAR_OPERATING_AREA_ID
+		 LEFT JOIN LRM_REPLICATION.PERSON               PER
+		 ON STR.PERS_SEQ_NBR = PER.PERS_SEQ_NBR
+		 LEFT JOIN 
+		 (
+			   /* Logging Started */
+              SELECT A0.CUTB_SEQ_NBR,
+				MAX (
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVC' THEN A0.acti_status_ind
+					ELSE NULL
+				END) AS HVC_STATUS,
+				
+				MAX(
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVC' THEN A0.acti_target_date
+					ELSE NULL
+				END
+				) AS HVC_TARGET_DATE,
+			
+				MAX(
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVC' THEN A0.acti_status_date
+					ELSE NULL
+				END
+				) AS HVC_STATUS_DATE,
+			
+				MAX(
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVS' THEN A0.acti_status_ind
+					ELSE NULL
+				END
+				) AS HVS_STATUS,
+			
+				MAX(
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVS' THEN A0.acti_target_date
+					ELSE NULL
+				END
+				) AS HVS_TARGET_DATE,
+			
+				MAX(
+				CASE 
+					WHEN AT0.actt_key_ind = 'HVS' THEN A0.acti_status_date
+					ELSE NULL
+				END
+				) AS HVS_STATUS_DATE
+			
+			FROM LRM_REPLICATION.activity_type AT0
+            INNER JOIN LRM_REPLICATION.activity A0
+			ON AT0.actt_seq_nbr = A0.actt_seq_nbr
+				AND AT0.actt_key_ind IN ('HVC', 'HVS')
+				AND A0.plan_seq_nbr IS NULL
+			GROUP BY A0.CUTB_SEQ_NBR) HV
+		 ON B.cutb_seq_nbr = HV.cutb_seq_nbr
+		 LEFT JOIN 
+		 /* Elevation */
+			(  SELECT EU.CUTB_SEQ_NBR,
+					MIN (EU.ECOU_ELEVATION_MIN)     AS MIN_ELEVATION,
+					MAX (EU.ECOU_ELEVATION_MAX)     AS MAX_ELEVATION
+			   FROM LRM_REPLICATION.ECOLOGY_UNIT EU
+			GROUP BY EU.CUTB_SEQ_NBR) ELV
+		 ON B.CUTB_SEQ_NBR = ELV.CUTB_SEQ_NBR
+		 LEFT JOIN
+		  /* Area weighted site index */
+		(  SELECT 
+			SILP.CUTB_SEQ_NBR,
+			ROUND(
+			CASE
+				WHEN SUM(
+						CASE 
+							WHEN COALESCE(STUN.STUN_GROSS_HA_AREA, 0) = 0 THEN 0
+							WHEN COALESCE(STUN.STUN_SITE_INDEX, 0) = 0 THEN 0
+							ELSE STUN.STUN_GROSS_HA_AREA
+						END
+					) = 0 THEN 0
+				ELSE 
+					SUM(
+						CASE 
+							WHEN COALESCE(STUN.STUN_GROSS_HA_AREA, 0) = 0 THEN 0
+							WHEN COALESCE(STUN.STUN_SITE_INDEX, 0) = 0 THEN 0
+							ELSE STUN.STUN_GROSS_HA_AREA * STUN.STUN_SITE_INDEX
+						END
+					)
+					/ 
+					SUM(
+						CASE 
+							WHEN COALESCE(STUN.STUN_GROSS_HA_AREA, 0) = 0 THEN 0
+							WHEN COALESCE(STUN.STUN_SITE_INDEX, 0) = 0 THEN 0
+							ELSE STUN.STUN_GROSS_HA_AREA
+						END
+					)
+			END, 
+			1
+			) AS SITE_INDEX
+		FROM LRM_REPLICATION.SILVICULTURE_PRESCRIPTION SILP
+		INNER JOIN LRM_REPLICATION.STANDARD_UNIT          STUN
+		ON     SILP.SILP_SEQ_NBR = STUN.SILP_SEQ_NBR
+			AND STUN.SUTY_TYPE_ID = 'PROD'
+		GROUP BY SILP.CUTB_SEQ_NBR) SI
+		 ON B.CUTB_SEQ_NBR = SI.CUTB_SEQ_NBR
+		 LEFT JOIN
+		 /* Seed Zone */
+             (
+		SELECT SP.CUTB_SEQ_NBR,
+		STRING_AGG(SP.BLSZ_ZONE_ID || '(' || SP.SPECIES || ')', ' ' ORDER BY SP.BLSZ_ZONE_ID) AS SEED_ZONE
+		FROM (  SELECT BSZ.CUTB_SEQ_NBR,
+			  BSZ.BLSZ_ZONE_ID,
+			  STRING_AGG(
+				BSZ.BLSZ_CLASS_ID::TEXT || ':' || BSZ.BLSZ_SPECIES_ID::TEXT,
+				', '
+				ORDER BY BSZ.BLSZ_CLASS_ID, BSZ.BLSZ_SPECIES_ID
+				) AS SPECIES
+		
+		 FROM LRM_REPLICATION.BLOCK_SEED_ZONE BSZ
+		 GROUP BY BSZ.CUTB_SEQ_NBR, BSZ.BLSZ_ZONE_ID) SP
+		GROUP BY SP.CUTB_SEQ_NBR
+			 ) SZ
+		ON B.CUTB_SEQ_NBR = SZ.CUTB_SEQ_NBR
+
+ORDER BY B.CUTB_SEQ_NBR;
+
+
+/* Formatted on 2025/01/08 12:01:36 PM (QP5 v5.417) */
+CREATE OR REPLACE VIEW BCTS_STAGING.V_LRM_LICENCE_SHAPE
+AS
+    SELECT /*
+                           V1.1     2018-05-30      JZHOU       SQ18387     Added V_TREEFIELD field
+                           V2.0    MXIAN       2020-10-26      SQ19482     Add fields: created%, modified%, shape_area
+                           V3.0    D.sabatino   2020-12-08      SQ19601    Pull Manu_seq_nbr from the allocation table.
+                           */
+           lcs.OBJECTID,
+           la.MANU_SEQ_NBR,
+           lcs.LICN_SEQ_NBR,
+           lcs.SHAPE,
+           lcs.SDE_STATE_ID,
+           'Licence Shape - ' || l.LICN_LICENCE_ID,
+           lcs.SHAPE_AREA,
+           lcs.MODIFIEDBY,
+           lcs.MODIFIEDON,
+           lcs.MODIFIEDUSING,
+           lcs.CREATEDBY,
+           lcs.CREATEDON,
+           lcs.CREATEDUSING
+      FROM LRM_REPLICATION.LICENCE_ALLOCATION  la
+           LEFT JOIN LRM_REPLICATION.LICENCE_SHAPE_EVW lcs
+               ON la.licn_seq_nbr = lcs.licn_seq_nbr
+           LEFT JOIN LRM_REPLICATION.LICENCE L ON LA.LICN_SEQ_NBR = L.LICN_SEQ_NBR;
+
+
+CREATE OR REPLACE FUNCTION BCTS_STAGING.SF_CALC_LICENCE_HARV_AREA (
+	a_licn_seq_nbr		NUMERIC,
+    a_manu_seq_nbr		NUMERIC
+)
+RETURNS NUMERIC AS $$
+
+DECLARE
+    ln_result NUMERIC := 0;
+    ls_merch_ha_area NUMERIC(21,6) := 0;
+    ls_harvested_ha_area NUMERIC(21,6) := 0;
+    ls_cruise_m3_vol NUMERIC(21,6) := 0;
+    ls_harvested_m3_vol NUMERIC(21,6) := 0;
+
+BEGIN
+
+    SELECT
+    SUM(COALESCE(blal_merch_ha_area, 0)) AS merch_ha_area,
+    SUM(COALESCE(blal_harvested_ha_area, 0)) AS harvested_ha_area,
+    SUM(COALESCE(blal_cruise_m3_vol, 0)) AS cruise_m3_vol,
+    SUM(COALESCE(blal_harvested_m3_vol, 0)) AS harvested_m3_vol
+    INTO ls_merch_ha_area, ls_harvested_ha_area, ls_cruise_m3_vol, ls_harvested_m3_vol
+    FROM LRM_REPLICATION.block_allocation
+    WHERE licn_seq_nbr = a_licn_seq_nbr;
+
+
+    IF ls_harvested_ha_area > 0 THEN 
+        ln_result := ls_harvested_ha_area;
+    ELSIF ls_merch_ha_area > 0 AND ls_cruise_m3_vol > 0 THEN 
+        ln_result := ls_harvested_m3_vol / (ls_cruise_m3_vol / ls_merch_ha_area);
+    ELSE ln_result := 0;
+    END IF;
+
+	RETURN ln_result;
+
+END;
+$$ LANGUAGE plpgsql; 
+
+
+
+CREATE OR REPLACE FUNCTION BCTS_STAGING.SF_CALC_LICENCE_STANDING_AREA(
+    a_licn_seq_nbr NUMERIC,
+    a_manu_seq_nbr NUMERIC
+)
+RETURNS NUMERIC AS $$
+
+DECLARE
+  ln_result NUMERIC := 0;
+  ls_merch_ha_area NUMERIC(21,6) := 0;
+  ls_harvested_ha_area NUMERIC(21,6) := 0;
+  
+BEGIN
+
+  SELECT 
+  SUM(COALESCE(blal_merch_ha_area, 0)),
+  SUM(COALESCE(blal_harvested_ha_area, 0))
+  INTO ls_merch_ha_area, ls_harvested_ha_area
+  FROM LRM_REPLICATION.block_allocation
+  WHERE block_allocation.licn_seq_nbr = a_licn_seq_nbr;
+  
+  IF ls_merch_ha_area = BCTS_STAGING.SF_CALC_LICENCE_HARV_AREA(a_licn_seq_nbr, a_manu_seq_nbr) THEN
+    ln_result := 0;
+  ELSIF BCTS_STAGING.SF_CALC_LICENCE_HARV_AREA(a_licn_seq_nbr, a_manu_seq_nbr) > 0 THEN
+    ln_result := ls_merch_ha_area - BCTS_STAGING.SF_CALC_LICENCE_HARV_AREA(a_licn_seq_nbr, a_manu_seq_nbr);
+  ELSE
+    ln_result := ls_merch_ha_area;
+  END IF;
+  RETURN ln_result;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE VIEW BCTS_STAGING.V_LRM_LICENCE AS
+SELECT                                                           --DISTINCT
+	 LRM_REPLICATION.LICENCE_ALLOCATION.MANU_SEQ_NBR,
+	  LRM_REPLICATION.LICENCE.DIVI_DIV_NBR,
+	  LRM_REPLICATION.LICENCE.LICN_SEQ_NBR,
+	  LRM_REPLICATION.LICENCE.LICN_DIGI_IND,
+	  LRM_REPLICATION.LICENCE.LICN_LICENCE_ID,
+	  LRM_REPLICATION.LICENCE.LICN_CATEGORY_ID,
+	  CAST (LRM_REPLICATION.LICENCE.LICN_CROWN_LAND AS VARCHAR (3))
+		 AS LICN_CROWN_LAND,
+	  LRM_REPLICATION.LICENCE.LICN_CROWN_GRANTED_IND,
+	  LRM_REPLICATION.LICENCE.BLAZ_ADMIN_ZONE_ID,
+	  LRM_REPLICATION.LICENCE.LICL_LICENCE_CLASS,
+	  LRM_REPLICATION.LICENCE.LICN_PARENT_LICENCE,
+	  LRM_REPLICATION.LICENCE.LICN_LICENCE_DESC,
+	  LRM_REPLICATION.LICENCE.LICN_LICENCE_TO_CUT_CODE,
+	  LRM_REPLICATION.LICENCE.LICN_PERMIT_EXISTS_IND,
+	  LRM_REPLICATION.LICENCE.LICN_LICENCE_STATE,
+	  LRM_REPLICATION.LICENCE.LICN_ANNUAL_ALLOWABLE_CUT,
+	  LRM_REPLICATION.LICENCE.LSEE_LICENSEE_ID,
+	  LRM_REPLICATION.LICENSEE.LSEE_CLIENT_CODE,
+	  --BLAL_CALC.GROSS_AREA,
+	  --sq18542 get from cut_block
+	  --(SELECT NVL (SUM (V.CUTB_GROSS_HA_AREA), 0)
+	  --   FROM LRM_REPLICATION.V_LRM_CUT_BLOCK V
+	  -- WHERE V.LICN_SEQ_NBR = LRM_REPLICATION.LICENCE.LICN_SEQ_NBR)
+	  --   AS GROSS_AREA,
+	  --sq18780 get from licence shape record
+	  LS.GROSS_AREA,                    --Rounding added in 18901 fixes
+	  CAST (LRM_REPLICATION.LICENCE.LICN_CLIENT_LOCATION_CODE AS VARCHAR (5))
+		 AS LICN_CLIENT_LOCATION_CODE,
+	  LRM_REPLICATION.LICENCE.LICN_SALVAGE_IND,
+	  LRM_REPLICATION.LICENCE.LICN_APPORTION_TENURE_TYPE,
+	  LRM_REPLICATION.LICENCE.CTOR_SEQ_NBR,
+	  LRM_REPLICATION.LICENCE.TENT_SEQ_NBR,
+	  LRM_REPLICATION.LICENCE.LINC_CERT_LEVEL_ID,
+	  LRM_REPLICATION.LICENCE.LICN_FIELD_TEAM_ID,
+	  LRM_REPLICATION.LICENCE.LICN_HAMMERMARK,
+	  LRM_REPLICATION.LICENCE.MODIFIEDBY,
+	  LRM_REPLICATION.LICENCE.MODIFIEDON,
+	  LRM_REPLICATION.LICENCE.MODIFIEDUSING,
+	  LRM_REPLICATION.LICENCE.CREATEDBY,
+	  LRM_REPLICATION.LICENCE.CREATEDON,
+	  LRM_REPLICATION.LICENCE.CREATEDUSING,
+	  ROUND (BLAL_CALC.MERCHANTABLE_AREA, 1) AS MERCHANTABLE_AREA, --Rounding added in 18901 fixes
+	  ROUND (
+		 BCTS_STAGING.SF_CALC_LICENCE_HARV_AREA(
+			LICENCE_ALLOCATION.LICN_SEQ_NBR,
+			LICENCE_ALLOCATION.MANU_SEQ_NBR),
+		 1)
+		 AS HARVESTED_AREA,                --Rounding added in 18901 fixes
+	  ROUND (
+		 BCTS_STAGING.SF_CALC_LICENCE_STANDING_AREA (
+			LICENCE_ALLOCATION.LICN_SEQ_NBR,
+			LICENCE_ALLOCATION.MANU_SEQ_NBR),
+		 1)
+		 AS STANDING_AREA,                 --Rounding added in 18901 fixes
+	  ROUND (BLAL_CALC.CRUISE_VOLUME, 0) AS CRUISE_VOLUME, --Rounding added in 18901 fixes
+	  ROUND (BLAL_CALC.HARVESTED_VOLUME, 0) AS HARVESTED_VOLUME, --Rounding added in 18901 fixes
+	  ROUND (BLAL_CALC.STANDING_VOLUME, 0) AS STANDING_VOLUME, --Rounding added in 18901 fixes
+	  ROUND ( (BLAL_CALC.CRUISE_VOLUME - BLAL_CALC.HARVESTED_VOLUME), 0)
+		 AS CRUISE_VARIANCE,               --Rounding added in 18901 fixes
+	  CASE
+        WHEN COUNT(LRM_REPLICATION.LICENCE_ALLOCATION.LICN_SEQ_NBR) OVER (PARTITION BY LRM_REPLICATION.LICENCE.LICN_SEQ_NBR) > 0 
+        THEN 'Y'
+        ELSE 'N'
+    END AS V_LOCK_FIELD,
+	  COALESCE(CS.NO_SHAPE, 1) AS NO_SHAPE,
+	  LRM_REPLICATION.LICENCE.LICN_ARCHIVE_IND,
+	  LRM_REPLICATION.LICENCE.LICN_ARCHIVE_DATE
+ FROM LRM_REPLICATION.LICENSEE
+	  RIGHT JOIN LRM_REPLICATION.LICENCE
+		 ON (LRM_REPLICATION.LICENCE.LSEE_LICENSEE_ID =
+				LRM_REPLICATION.LICENSEE.LSEE_LICENSEE_ID)
+	  LEFT JOIN LRM_REPLICATION.LICENCE_ALLOCATION
+		 ON (LRM_REPLICATION.LICENCE.LICN_SEQ_NBR =
+				LRM_REPLICATION.LICENCE_ALLOCATION.LICN_SEQ_NBR)
+	  LEFT JOIN
+	  (  SELECT LICN_SEQ_NBR,
+				SUM (COALESCE (BLAL_GROSS_HA_AREA, 0)) GROSS_AREA,
+				SUM (COALESCE (BLAL_MERCH_HA_AREA, 0)) MERCHANTABLE_AREA,
+				SUM (COALESCE (BLAL_CRUISE_M3_VOL, 0)) CRUISE_VOLUME,
+				SUM (COALESCE (BLAL_HARVESTED_M3_VOL, 0)) HARVESTED_VOLUME,
+				SUM (
+				   CASE
+					  WHEN BLAL_MERCH_HA_AREA = BLAL_HARVESTED_HA_AREA
+					  THEN
+						 0
+					  ELSE
+						   BLAL_CRUISE_M3_VOL
+						 - COALESCE (BLAL_HARVESTED_M3_VOL, 0)
+				   END)
+				   STANDING_VOLUME
+		   FROM LRM_REPLICATION.BLOCK_ALLOCATION
+	   GROUP BY LICN_SEQ_NBR) BLAL_CALC
+		 ON (BLAL_CALC.LICN_SEQ_NBR = LICENCE.LICN_SEQ_NBR)
+	  LEFT JOIN
+	  (  SELECT LICN_SEQ_NBR,
+				SUM(COALESCE(ST_IsEmpty(SHAPE)::int, 1)) AS NO_SHAPE
+		   FROM LRM_REPLICATION.LICENCE_SHAPE_EVW
+	   GROUP BY LICN_SEQ_NBR) CS
+		 ON (CS.LICN_SEQ_NBR = LRM_REPLICATION.LICENCE.LICN_SEQ_NBR)
+		LEFT JOIN 
+	(	SELECT LICN_SEQ_NBR,
+		ROUND(CAST(COALESCE(SUM(ST_Area(V.SHAPE)) / 10000, 0) AS numeric), 1) AS GROSS_AREA
+		FROM BCTS_STAGING.V_LRM_LICENCE_SHAPE V
+		GROUP BY LICN_SEQ_NBR
+	) LS
+  		ON LS.LICN_SEQ_NBR = LRM_REPLICATION.LICENCE.LICN_SEQ_NBR
+	WHERE LRM_REPLICATION.LICENCE_ALLOCATION.LICN_SEQ_NBR IS NOT NULL
+		 
+-- WHERE (   EXISTS
+--              (SELECT 1
+--                 FROM lrm.tfm_sys_user_data_priv
+--                WHERE username = USER AND unitcode = LICENCE.divi_div_nbr)
+--        OR NOT EXISTS
+--              (SELECT 1
+--                 FROM lrm.tfm_sys_user_data_priv
+--                WHERE username = USER))
+
+;
+
+
+
+
+CREATE OR REPLACE VIEW BCTS_STAGING.V_LRM_COMMITMENTS AS
+
+SELECT 
+C.LICN_SEQ_NBR,
+C.COMMIT_SEQ_NBR,
+C.COPA_PARTITION,
+C.COPA_COMMIT_APPO,
+P.SUM_COPA_COMMIT_M3_VOL                AS V_COPA_COMMIT_M3_VOL,
+ROUND (
+	(BLAL_CALC.CRUISE_VOLUME
+   + BLAL_CALC.REMAIN_VOLUME)
+   - SL.SUM_LIC_COPA_COMMIT_M3_VOL)    AS V_REMAIN_COMMIT_M3_VOL,
+C.MODIFIEDBY,
+C.MODIFIEDON,
+C.MODIFIEDUSING,
+C.CREATEDBY,
+C.CREATEDON,
+C.CREATEDUSING,
+C.MANU_SEQ_NBR,
+C.COPA_COMMIT_LIC_TYPE
+FROM LRM_REPLICATION.COMMITMENTS    C
+INNER JOIN BCTS_STAGING.V_LRM_LICENCE  L
+ON C.LICN_SEQ_NBR = L.LICN_SEQ_NBR
+LEFT JOIN 
+(  
+SELECT 
+SUM (COPA_COMMIT_M3_VOL)     SUM_COPA_COMMIT_M3_VOL,
+COMMIT_SEQ_NBR               AS P_COMMIT_SEQ_NBR
+FROM LRM_REPLICATION.COMMITMENT_PARTITION
+GROUP BY COMMIT_SEQ_NBR 
+) P
+ON P.P_COMMIT_SEQ_NBR = C.COMMIT_SEQ_NBR
+LEFT JOIN 
+(
+    SELECT 
+    SUM (COALESCE (COPA_COMMIT_M3_VOL, 0)) AS SUM_LIC_COPA_COMMIT_M3_VOL,
+    LICN_SEQ_NBR AS LICN_SEQ_NBR
+    FROM LRM_REPLICATION.COMMITMENT_PARTITION CP
+    INNER JOIN LRM_REPLICATION.COMMITMENTS C
+    ON CP.COMMIT_SEQ_NBR = C.COMMIT_SEQ_NBR
+    GROUP BY LICN_SEQ_NBR
+) SL
+ON SL.LICN_SEQ_NBR = L.LICN_SEQ_NBR
+INNER JOIN 
+(  
+    SELECT SUM (COALESCE (BLAL_CRUISE_M3_VOL, 0))     CRUISE_VOLUME,
+		 SUM (COALESCE (BLAL_RW_VOL, 0))            REMAIN_VOLUME,
+		 LICN_SEQ_NBR
+	FROM LRM_REPLICATION.BLOCK_ALLOCATION
+GROUP BY LICN_SEQ_NBR
+) BLAL_CALC
+ON BLAL_CALC.LICN_SEQ_NBR = L.LICN_SEQ_NBR;
+
+
+
+
+
+CREATE OR REPLACE VIEW BCTS_STAGING.V_LICENCE AS
+SELECT 
+DISTINCT
+--MXIAN  2022-09-22 SQ19820 update logic of REMAIN_COMMIT_VOLUME
+           L.LICN_SEQ_NBR,
+           L.TENT_SEQ_NBR,
+           L.CTOR_SEQ_NBR,
+           L.CLOC_SEQ_NBR,
+           D.DIVI_SHORT_CODE
+               TSO_CODE,
+           D.DIVI_DIVISION_NAME
+               TSO_NAME,
+           M.MANU_ID
+               NAV_NAME,
+           L.LICN_LICENCE_ID
+               LICENCE_ID,
+           LK.COLU_LOOKUP_DESC
+               CATEGORY,
+           TN.TENT_TENURE_ID
+               TENURE,
+           L.LSEE_LICENSEE_ID
+               LICENSEE,
+           CT.CTOR_NAME
+               REGISTRANT,
+           CL.CLOC_CITY
+               REGISTRANT_CITY,
+           LKF.COLU_LOOKUP_DESC
+               FIELD_TEAM,
+           P.DISTRICT_NAME,
+           L.DIVI_DIV_NBR,
+           L.LICN_CATEGORY_ID,
+           L.BLAZ_ADMIN_ZONE_ID,
+           BZ.BLAZ_ADMIN_ZONE_DESC,
+           L.LICN_LICENCE_STATE,
+           L.LICN_LICENCE_DESC,
+           L.LICN_LICENCE_TO_CUT_CODE,
+           L.LINC_CERT_LEVEL_ID,
+           L.LICN_DIGI_IND,
+           L.LICN_SALVAGE_IND,
+           L.LICN_APPORTION_TENURE_TYPE,
+            (
+                SELECT CASE
+                WHEN DISPO_AGREEMENT IS NOT NULL THEN
+                APPO_TENURE_TYPE || '-' || DISPO_AGREEMENT
+                ELSE
+                APPO_TENURE_TYPE
+                END AS result
+                FROM LRM_REPLICATION.APPORTIONMENT
+                WHERE CM.COPA_COMMIT_APPO = APPO_SEQ_NBR
+			) AS APPORTION_TYPE,
+           PRTN.COLU_LOOKUP_DESC
+               AS PARTITION_TYPE,
+           (SELECT DESCRIPTION
+              FROM LRM_REPLICATION.LRM_VT_COMMIT_LIC_TYPE AS VT
+             WHERE CM.COPA_COMMIT_LIC_TYPE = VT.CODE)
+               AS COMMIT_LICENCE_TYPE,
+           PP.SUM_COPA_COMMIT_M3_VOL
+               AS COMMIT_VOLUME,
+           ROUND (BLAL_CALC.CRUISE_VOLUME + BLAL_CALC.REMAIN_VOLUME - SL.SUM_LIC_COPA_COMMIT_M3_VOL)
+               AS REMAIN_COMMIT_VOLUME,
+           HH.BCHH_BILLING_YEAR  AS BCHH_BILLING_YEAR,
+           M.MANU_SEQ_NBR
+      FROM LRM_REPLICATION.DIVISION                  D
+           INNER JOIN LRM_REPLICATION.LICENCE                   L
+		   ON D.DIVI_DIV_NBR = L.DIVI_DIV_NBR
+		   INNER JOIN  LRM_REPLICATION.LICENCE_ALLOCATION        LA
+		   ON L.LICN_SEQ_NBR = LA.LICN_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.MANAGEMENT_UNIT           M
+		   ON LA.MANU_SEQ_NBR = M.MANU_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.CODE_LOOKUP               LK
+		   ON L.LICN_CATEGORY_ID = LK.COLU_LOOKUP_ID
+		   AND LK.COLU_LOOKUP_TYPE = 'LICA'
+		   LEFT OUTER JOIN LRM_REPLICATION.TENURE_TYPE               TN
+		   ON L.TENT_SEQ_NBR = TN.TENT_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.CTOR_CONTRACTOR           CT
+		   ON L.CTOR_SEQ_NBR = CT.CTOR_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.CTOR_CONTRACTOR_LOCATION  CL
+		   ON L.CLOC_SEQ_NBR = CL.CTOR_SEQ_NBR
+		   AND L.CTOR_SEQ_NBR = CL.CLOC_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.CODE_LOOKUP               LKF
+		   ON L.LICN_FIELD_TEAM_ID = LKF.COLU_LOOKUP_ID
+		   AND LKF.COLU_LOOKUP_TYPE = 'FDTM'
+		   
+		   LEFT OUTER JOIN
+		   (
+				SELECT B.LICN_SEQ_NBR,
+				MAX (A.ADMIN_DSCT_DISTRICT_NAME)     AS DISTRICT_NAME
+				FROM LRM_REPLICATION.CUT_PERMIT A
+				INNER JOIN LRM_REPLICATION.PERMIT_ALLOCATION B
+				ON A.PERM_SEQ_NBR = B.PERM_SEQ_NBR
+				GROUP BY B.LICN_SEQ_NBR
+		   ) P
+		   ON LA.LICN_SEQ_NBR = P.LICN_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.BLOCK_ADMIN_ZONE          BZ
+		   ON L.DIVI_DIV_NBR = BZ.DIVI_DIV_NBR
+		   AND L.BLAZ_ADMIN_ZONE_ID = BZ.BLAZ_ADMIN_ZONE_ID
+		   LEFT OUTER JOIN BCTS_STAGING.V_LRM_COMMITMENTS         CM
+		   ON  L.LICN_SEQ_NBR = CM.LICN_SEQ_NBR
+		   LEFT OUTER JOIN LRM_REPLICATION.CODE_LOOKUP               PRTN
+		   ON CM.COPA_PARTITION = PRTN.COLU_LOOKUP_ID
+		   AND PRTN.COLU_LOOKUP_TYPE = 'PRTN'
+		   LEFT OUTER JOIN 
+		   (
+			SELECT  STRING_AGG( BHH.BCHH_BILLING_YEAR::TEXT,', ' ORDER BY MA.LICN_SEQ_NBR ) BCHH_BILLING_YEAR,
+        	MA.LICN_SEQ_NBR                 AS LICN_SEQ_NBR
+			FROM (SELECT DISTINCT BCHH_BILLING_YEAR, MARK_SEQ_NBR 
+				FROM LRM_REPLICATION.BCTS_HARVEST_HISTORY) BHH
+			INNER JOIN LRM_REPLICATION.MARK                M
+			ON BHH.MARK_SEQ_NBR = M.MARK_SEQ_NBR
+			INNER JOIN LRM_REPLICATION.MARK_ALLOCATION     MA
+			ON M.MARK_SEQ_NBR = MA.MARK_SEQ_NBR
+			GROUP BY MA.LICN_SEQ_NBR
+		   ) HH
+		   ON L.LICN_SEQ_NBR = HH.LICN_SEQ_NBR
+		   LEFT OUTER JOIN 
+		   (
+			SELECT SUM (COPA_COMMIT_M3_VOL)     SUM_LIC_COPA_COMMIT_M3_VOL,
+			       LICN_SEQ_NBR
+			FROM LRM_REPLICATION.COMMITMENT_PARTITION CP
+			INNER JOIN LRM_REPLICATION.COMMITMENTS C
+			ON CP.COMMIT_SEQ_NBR = C.COMMIT_SEQ_NBR
+			GROUP BY LICN_SEQ_NBR
+		   ) SL
+		   ON L.LICN_SEQ_NBR = SL.LICN_SEQ_NBR
+		   LEFT OUTER JOIN 
+		   (
+			SELECT SUM (COALESCE(BLAL_CRUISE_M3_VOL, 0))     CRUISE_VOLUME,
+			SUM (COALESCE(BLAL_RW_VOL,0)) REMAIN_VOLUME,
+			LICN_SEQ_NBR
+			FROM LRM_REPLICATION.BLOCK_ALLOCATION
+			GROUP BY LICN_SEQ_NBR
+		   ) BLAL_CALC
+		   ON L.LICN_SEQ_NBR = BLAL_CALC.LICN_SEQ_NBR
+		   LEFT OUTER JOIN 
+		      (  SELECT SUM (COPA_COMMIT_M3_VOL)     SUM_COPA_COMMIT_M3_VOL,
+                     COMMIT_SEQ_NBR
+                FROM LRM_REPLICATION.COMMITMENT_PARTITION
+            GROUP BY COMMIT_SEQ_NBR) PP
+			ON CM.COMMIT_SEQ_NBR = PP.COMMIT_SEQ_NBR
+
+           
+    
+		   
+
+CREATE OR REPLACE VIEW BCTS_STAGING.V_BLOCK_ACTIVITY_ALL
+AS SELECT
+-- C Johnston - Dec 22 2017 - SQ 18066 - Added FIELD_TEAM_DESC
+-- E Luo     -  Apr 12 2017 - SQ 18059 - Added feild uri, LICN_LICENCE_STATE
+      d.divi_short_code tso_code,
+       d.divi_division_name tso_name,
+       m.manu_id nav_name,
+       tn.tent_tenure_id tenure,
+       l.licn_licence_id licence_id,
+		CASE 
+			WHEN UPPER(SUBSTRING(p.perm_permit_id FROM 1 FOR 4)) = 'APR-' THEN NULL 
+			ELSE p.perm_permit_id 
+		END AS permit_id,
+       mk.mark_mark_id mark_id,
+       b.cutb_block_id block_id,
+       b.cutb_block_number block_nbr,
+       a.cutb_seq_nbr,
+       a.acti_seq_nbr,
+       l.licn_seq_nbr,
+       ap.actt_seq_nbr,
+       ac.accl_description activity_class,
+       ap.actt_description activity_type,
+       ap.actt_key_ind,
+       a.acti_status_date activity_date,
+       a.acti_status_ind,
+       ac.accl_object_type,
+       a.acti_responsibility,
+       c.ctor_name,
+       a.acti_cost,
+       a.acti_target_date,
+       a.acti_target_cost,
+       a.acti_comments,
+       d.divi_div_nbr,
+       ft_vt.COLU_LOOKUP_DESC,
+        b.cutb_system_id ubi,
+       l.licn_licence_state
+  FROM lrm_replication.activity_class ac
+  INNER JOIN lrm_replication.activity_type ap
+	   ON ac.accl_seq_nbr = ap.accl_seq_nbr
+       AND ac.divi_div_nbr = ap.divi_div_nbr
+	    AND ac.accl_object_type = 'B'
+       INNER JOIN lrm_replication.activity a
+	     ON a.actt_seq_nbr = ap.actt_seq_nbr
+		     AND a.plan_seq_nbr IS NULL
+       LEFT JOIN lrm_replication.ctor_contractor c
+	   ON a.ctor_seq_nbr = c.ctor_seq_nbr
+	    INNER JOIN lrm_replication.cut_block b 
+		 ON b.cutb_seq_nbr = a.cutb_seq_nbr
+       INNER JOIN lrm_replication.division d
+	   ON b.divi_div_nbr = d.divi_div_nbr
+	   INNER JOIN lrm_replication.block_allocation ba  
+	   ON b.cutb_seq_nbr = ba.cutb_seq_nbr
+       LEFT JOIN lrm_replication.management_unit m
+	    ON ba.manu_seq_nbr = m.manu_seq_nbr
+       LEFT JOIN lrm_replication.licence l
+	       ON ba.licn_seq_nbr = l.licn_seq_nbr
+       LEFT JOIN lrm_replication.cut_permit p
+	     ON ba.perm_seq_nbr = p.perm_seq_nbr
+       LEFT JOIN lrm_replication.mark mk
+	     ON ba.mark_seq_nbr = mk.mark_seq_nbr
+       LEFT JOIN lrm_replication.tenure_type tn
+	    ON l.tent_seq_nbr = tn.tent_seq_nbr                  
+       LEFT JOIN lrm_replication.V_RES_VT_FDTM_TEAM ft_vt
+	    ON l.licn_field_team_id = ft_vt.COLU_LOOKUP_ID
+            
+          
+           
+           
+           
+           
+           
+           
+    
+           
 
 

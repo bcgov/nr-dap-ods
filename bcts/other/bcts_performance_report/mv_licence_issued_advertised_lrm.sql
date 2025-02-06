@@ -1,4 +1,4 @@
-create materialized view bcts_staging.mv_licence_issued_advertised_lrm as
+create view bcts_staging.mv_licence_issued_advertised_lrm as
 /* qLicenceIssuedAdvertised_LRM */
 
  /* Licence Info */
