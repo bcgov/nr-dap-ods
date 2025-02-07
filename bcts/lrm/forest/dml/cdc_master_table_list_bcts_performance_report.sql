@@ -1,6 +1,6 @@
 DO $$
 DECLARE
-    tables text[] := ARRAY['OPERATING_AREA','LRM_VT_COMMIT_LIC_TYPE','PERMIT_ALLOCATION','CUT_BLOCK_SILV_REGIME','V_RES_VT_FDTM_TEAM','COMMITMENT_PARTITION','BLOCK_SEED_ZONE','STANDARD_UNIT','APPORTIONMENT','SILV_TREATMENT_REGIME','BCTS_HARVEST_HISTORY','COMMITMENTS','ECOLOGY_UNIT','SUB_OPERATING_AREA','MARK_ALLOCATION','CTOR_CONTRACTOR','LICENCE_ALLOCATION','LICENSEE', 'LICENCE_SHAPE_EVW'];  
+    tables text[] := ARRAY['OPERATING_AREA','LRM_VT_COMMIT_LIC_TYPE','PERMIT_ALLOCATION','CUT_BLOCK_SILV_REGIME','V_RES_VT_FDTM_TEAM','COMMITMENT_PARTITION','BLOCK_SEED_ZONE','STANDARD_UNIT','APPORTIONMENT','SILV_TREATMENT_REGIME','BCTS_HARVEST_HISTORY','COMMITMENTS','ECOLOGY_UNIT','SUB_OPERATING_AREA','MARK_ALLOCATION','CTOR_CONTRACTOR','LICENCE_ALLOCATION','LICENSEE'];  
     table_name text;
 BEGIN
     -- Loop through the list of table names
@@ -35,12 +35,10 @@ DO $$
 DECLARE
     tables text[] := ARRAY['V_LRM_CUT_BLOCK','V_LRM_LICENCE', 'V_LRM_COMMITMENTS'];  
     table_name text;
-    target_table text;
 BEGIN
     -- Loop through the list of table names
     FOREACH table_name IN ARRAY tables
     LOOP
-        target_table := 'forest_' || table_name;
         INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
             NULL,
@@ -48,8 +46,8 @@ BEGIN
             NULL,               
             'forest',
             table_name,               
-            'bcts_staging',
-            target_table,
+            'lrm_replication',
+            table_name,
             'Y',
             NULL,
             NULL,
@@ -71,12 +69,10 @@ DO $$
 DECLARE
     tables text[] := ARRAY['V_LICENCE', 'V_BLOCK', 'V_BLOCK_ACTIVITY_ALL', 'V_LICENCE_ACTIVITY_ALL', 'V_BLOCK_SPATIAL'];  
     table_name text;
-    target_table text;
 BEGIN
     -- Loop through the list of table names
     FOREACH table_name IN ARRAY tables
     LOOP
-        target_table := 'forestview_' || table_name;
         INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
             NULL,
@@ -84,8 +80,8 @@ BEGIN
             NULL,               
             'forestview',
             table_name,               
-            'bcts_staging',
-            target_table,
+            'lrm_replication',
+            table_name,
             'Y',
             NULL,
             NULL,
@@ -301,8 +297,8 @@ INSERT INTO ods_data_management.cdc_master_table_list
             NULL,               
             'forest',
             'V_LRM_LICENCE_SHAPE',               
-            'bcts_staging',
-            'FOREST_V_LRM_LICENCE_SHAPE',
+            'lrm_replication',
+            'V_LRM_LICENCE_SHAPE',
             'Y',
             NULL,
             NULL,
@@ -325,8 +321,8 @@ INSERT INTO ods_data_management.cdc_master_table_list
             NULL,               
             'forest',
             'CUT_BLOCK_SHAPE_EVW',               
-            'bcts_staging',
-            'FOREST_CUT_BLOCK_SHAPE_EVW',
+            'lrm_replication',
+            'CUT_BLOCK_SHAPE_EVW',
             'Y',
             NULL,
             NULL,
@@ -340,5 +336,33 @@ INSERT INTO ods_data_management.cdc_master_table_list
             'Oracle'
         );
 
+
+
+
+
+
+
+
+INSERT INTO ods_data_management.cdc_master_table_list 
+        VALUES (
+            NULL,
+            'lrm',
+            NULL,               
+            'forest',
+            'LICENCE_SHAPE_EVW',               
+            'lrm_replication',
+            'LICENCE_SHAPE_EVW',
+            'Y',
+            NULL,
+            NULL,
+            NULL,
+            'Y',
+            1,
+            'N',
+            'Y',
+            'SELECT objectid, transaction_id, licn_seq_nbr, feature_len, feature_area, shape_len, shape_area, manu_seq_nbr, modifiedby, modifiedon, modifiedusing, createdby, createdon, createdusing, sde_state_id
+	FROM forest.licence_shape_evw;',
+            'Oracle'
+        );
 
 

@@ -639,7 +639,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
     feature_area NUMERIC(38, 8) NULL,
     shape_len NUMERIC(38, 8) NULL,
     shape_area NUMERIC(38, 8) NULL,
-    shape GEOMETRY NULL,
+    -- shape GEOMETRY NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(30) NULL,
     modifiedon TIMESTAMP(6) NULL,
@@ -654,34 +654,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
 COMMENT ON TABLE lrm_replication.licence_shape_evw IS '';
 
 
-CREATE TABLE bcts_staging.licence_issued_advertised_lrm (
-    business_area_region_category text, 
-    business_area_region text, 
-    business_area text, 
-    licence_id character varying, 
-    management_unit character varying, 
-    district text, 
-    category_id_lrm character varying, 
-    lrm_total_volume numeric, 
-    count_all_blocks_in_licence bigint, 
-    lrm_total_volume_salvage_all_fire_years numeric, 
-    count_blocks_salvage_any_fire_year bigint, 
-    lrm_total_volume_salvage_2021_fire numeric, 
-    count_blocks_salvage_21_fire bigint, 
-    lrm_total_volume_salvage_2022_fire numeric, 
-    count_blocks_salvage_22_fire bigint, 
-    lrm_total_volume_salvage_2023_fire numeric, 
-    count_blocks_salvage_23_fire bigint, 
-    lrm_total_volume_salvage_2024_fire numeric, 
-    count_blocks_salvage_24_fire bigint, 
-    lrm_total_volume_salvage_2025_fire numeric, 
-    count_blocks_salvage_25_fire bigint, 
-    licn_seq_nbr numeric);
-
-
-
 -- FOREST.V_LRM_CUT_BLOCK
-CREATE TABLE bcts_staging.forest_v_lrm_cut_block (
+CREATE TABLE lrm_replication.v_lrm_cut_block (
     manu_seq_nbr NUMERIC(15) NULL,
     licn_seq_nbr NUMERIC(15) NULL,
     perm_seq_nbr NUMERIC(15) NULL,
@@ -732,8 +706,12 @@ CREATE TABLE bcts_staging.forest_v_lrm_cut_block (
     cutb_archive_reason VARCHAR(4) NULL,
     cutb_archive_date TIMESTAMP NULL
 );
+CREATE VIEW bcts_staging.forest_v_lrm_cut_block AS
+SELECT * FROM lrm_replication.v_lrm_cut_block;
+
+
 -- FOREST.V_LRM_LICENCE_SHAPE
-CREATE TABLE bcts_staging.forest_v_lrm_licence_shape (
+CREATE TABLE lrm_replication.v_lrm_licence_shape (
     objectid NUMERIC(38) NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     licn_seq_nbr NUMERIC(16) NULL,
@@ -748,8 +726,12 @@ CREATE TABLE bcts_staging.forest_v_lrm_licence_shape (
     createdon TIMESTAMP(6) NULL,
     createdusing VARCHAR(30) NULL
 );
+CREATE VIEW bcts_staging.forest_v_lrm_licence_shape AS
+SELECT * FROM lrm_replication.v_lrm_licence_shape;
+
+
 -- FOREST.V_LRM_LICENCE
-CREATE TABLE bcts_staging.forest_v_lrm_licence (
+CREATE TABLE lrm_replication.v_lrm_licence (
     manu_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     licn_seq_nbr NUMERIC(15) NOT NULL,
@@ -795,9 +777,11 @@ CREATE TABLE bcts_staging.forest_v_lrm_licence (
     licn_archive_ind VARCHAR(3) NULL,
     licn_archive_date TIMESTAMP NULL
 );
+CREATE VIEW bcts_staging.forest_v_lrm_licence AS
+SELECT * FROM lrm_replication.v_lrm_licence;
 
 -- FOREST.V_LRM_COMMITMENTS
-CREATE TABLE bcts_staging.forest_v_lrm_commitments (
+CREATE TABLE lrm_replication.v_lrm_commitments (
     licn_seq_nbr NUMERIC(15) NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
@@ -813,10 +797,11 @@ CREATE TABLE bcts_staging.forest_v_lrm_commitments (
     manu_seq_nbr NUMERIC(15) NULL,
     copa_commit_lic_type VARCHAR(2) NULL
 );
--- FOREST.CUT_BLOCK_SHAPE_EVW
+CREATE VIEW bcts_staging.forest_v_lrm_commitments AS
+SELECT * FROM lrm_replication.v_lrm_commitments;
 
 -- FOREST.CUT_BLOCK_SHAPE_EVW
-CREATE TABLE bcts_staging.forest_cut_block_shape_evw (
+CREATE TABLE lrm_replication.cut_block_shape_evw (
     objectid NUMERIC(38) NULL,
     transaction_id VARCHAR(32) NULL,
     cutb_seq_nbr NUMERIC(16) NULL,
@@ -842,9 +827,11 @@ CREATE TABLE bcts_staging.forest_cut_block_shape_evw (
     createdusing VARCHAR(30) NULL,
     sde_state_id INTEGER NULL
 );
+CREATE VIEW bcts_staging.forest_cut_block_shape_evw AS
+SELECT * FROM lrm_replication.cut_block_shape_evw;
 
 -- FORESTVIEW.V_LICENCE
-CREATE TABLE bcts_staging.forestview_v_licence (
+CREATE TABLE lrm_replication.v_licence (
     licn_seq_nbr NUMERIC(15) NOT NULL,
     tent_seq_nbr NUMERIC(15) NULL,
     ctor_seq_nbr NUMERIC(15) NULL,
@@ -879,10 +866,11 @@ CREATE TABLE bcts_staging.forestview_v_licence (
     bchh_billing_year VARCHAR(4000) NULL,
     manu_seq_nbr NUMERIC(15) NULL
 );
-
+CREATE VIEW bcts_staging.forestview_v_licence AS
+SELECT * FROM lrm_replication.v_licence;
 
 -- FORESTVIEW.V_BLOCK
-CREATE TABLE bcts_staging.forestview_v_block (
+CREATE TABLE lrm_replication.v_block (
     divi_div_nbr NUMERIC(2) NOT NULL,
     tso_code VARCHAR(15) NULL,
     tso_name VARCHAR(50) NOT NULL,
@@ -967,10 +955,11 @@ CREATE TABLE bcts_staging.forestview_v_block (
     cutb_rc_risk_rating VARCHAR(1) NULL,
     cutb_rc_risk_source VARCHAR(5) NULL
 );
-
+CREATE VIEW bcts_staging.forestview_v_block AS
+SELECT * FROM lrm_replication.v_block;
 
 -- FORESTVIEW.V_BLOCK_ACTIVITY_ALL
-CREATE TABLE bcts_staging.forestview_v_block_activity_all (
+CREATE TABLE lrm_replication.v_block_activity_all (
     tso_code VARCHAR(15) NULL,
     tso_name VARCHAR(50) NOT NULL,
     nav_name VARCHAR(60) NULL,
@@ -1001,8 +990,11 @@ CREATE TABLE bcts_staging.forestview_v_block_activity_all (
     ubi VARCHAR(15) NULL,
     licn_licence_state VARCHAR(20) NULL
 );
+CREATE VIEW bcts_staging.forestview_v_block_activity_all AS
+SELECT * FROM lrm_replication.v_block_activity_all;
+
 -- FORESTVIEW.V_BLOCK_SPATIAL
-CREATE TABLE bcts_staging.forestview_v_block_spatial (
+CREATE TABLE lrm_replication.v_block_spatial (
     tso_code VARCHAR(15) NULL,
     nav_name VARCHAR(60) NULL,
     licence_id VARCHAR(15) NULL,
@@ -1012,11 +1004,11 @@ CREATE TABLE bcts_staging.forestview_v_block_spatial (
     cutb_seq_nbr NUMERIC(15) NOT NULL,
     spatial_flag VARCHAR(3) NULL
 );
-
-
+CREATE VIEW bcts_staging.forestview_v_block_spatial AS
+SELECT * FROM lrm_replication.v_block_spatial;
 
 -- FORESTVIEW.V_LICENCE_ACTIVITY_ALL
-CREATE TABLE bcts_staging.forestview_v_licence_activity_all (
+CREATE TABLE lrm_replication.v_licence_activity_all (
     divi_div_nbr NUMERIC(2) NOT NULL,
     tso_code VARCHAR(15) NULL,
     field_team_desc VARCHAR(150) NULL,
@@ -1044,7 +1036,8 @@ CREATE TABLE bcts_staging.forestview_v_licence_activity_all (
     createdby VARCHAR(120) NULL,
     createdon TIMESTAMP NULL
 );
-
+CREATE VIEW bcts_staging.forestview_v_licence_activity_all AS
+SELECT * FROM lrm_replication.v_licence_activity_all;
 
 CREATE OR REPLACE VIEW bcts_staging.FOREST_OPERATING_AREA AS
 SELECT * FROM lrm_replication.OPERATING_AREA;
