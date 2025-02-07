@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["SD-132828-ODS-MIGRATION-BCTS-PERFORMANCE-REPORT"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
