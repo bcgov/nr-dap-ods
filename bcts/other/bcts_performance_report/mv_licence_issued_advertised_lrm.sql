@@ -113,7 +113,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2021_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2021_FIRE
         FROM
-            BCTS_STAGING.V_BLOCK B
+            BCTS_STAGING.FORESTVIEW_V_BLOCK B
 			INNER JOIN
             (
                 /*
@@ -287,7 +287,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2025_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2025_FIRE
         FROM
-            bcts_staging.V_BLOCK B
+            bcts_staging.FORESTVIEW_V_BLOCK B
             INNER JOIN
             (
                 /*
