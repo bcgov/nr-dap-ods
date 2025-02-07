@@ -151,16 +151,16 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
 # In[10]: Function to load data into Target PostgreSQL using data from Source Oracle
 
 
-def load_into_postgres(table_name,  target_table_name, data, target_schema):
+def load_into_postgres(table_name, data, target_schema):
     postgres_connection = PgresPool.getconn()
     postgres_cursor = postgres_connection.cursor()
     try:
         # Delete existing data in the target table
-        delete_query = f'TRUNCATE TABLE {target_schema}.{target_table_name}'
+        delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
         postgres_cursor.execute(delete_query)
 
         # Build the INSERT query with placeholders
-        insert_query = f'INSERT INTO {target_schema}.{target_table_name} VALUES ({", ".join(["%s"] * len(data[0]))})'
+        insert_query = f'INSERT INTO {target_schema}.{table_name} VALUES ({", ".join(["%s"] * len(data[0]))})'
         # insert_query = f'INSERT INTO {target_schema}.{table_name} VALUES %s'
 
         # Use execute_batch for efficient batch insert
@@ -184,7 +184,7 @@ def load_into_postgres(table_name,  target_table_name, data, target_schema):
 # In[11]: Function to call both extract and load functions
 
 
-def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_ind, customsql_query, target_table_name):
+def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_ind, customsql_query):
     # Extract data from Oracle
     print(f'Source: Thread {table_name} started at ' +
           datetime.now().strftime("%H:%M:%S"))
@@ -196,7 +196,7 @@ def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_i
 
     if oracle_data:
         # Load data into PostgreSQL
-        load_into_postgres(table_name, target_table_name, oracle_data, target_schema)
+        load_into_postgres(table_name, oracle_data, target_schema)
         print(f"Target: Data loaded into table: {table_name}")
         print(f'Target: Thread {table_name} ended at ' +
               datetime.now().strftime("%H:%M:%S"))
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     # Main ETL process
     active_tables_rows = get_active_tables(mstr_schema, app_name)
     # print(active_tables_rows)
-    tables_to_extract = [(row[2], row[1], row[3], row[10], row[11], row[4])
+    tables_to_extract = [(row[2], row[1], row[3], row[10], row[11])
                          for row in active_tables_rows]
 
     print(f"tables to extract are {tables_to_extract}")
@@ -218,8 +218,8 @@ if __name__ == '__main__':
     with concurrent.futures.ThreadPoolExecutor(max_workers=concurrent_tasks) as executor:
         # Submit tasks to the executor
         future_to_table = {executor.submit(
-            load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4], table[5]): table for table in tables_to_extract}
-     
+            load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4]): table for table in tables_to_extract}
+
         # Wait for all tasks to complete
         concurrent.futures.wait(future_to_table)
 
