@@ -57,6 +57,6 @@ SELECT
     Official.FTA_File_Status,
     Official.FTA_File_Status_Date
 FROM
-    bcts_staging.mv_licence_issued_advertised_official AS official
+    bcts_staging.licence_issued_advertised_official AS official
     LEFT JOIN bcts_staging.mv_licence_issued_advertised_lrm AS lrm
     ON official.forest_file_id = lrm.licence_id

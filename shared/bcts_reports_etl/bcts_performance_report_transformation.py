@@ -197,7 +197,7 @@ def publish_datasets():
     DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main;
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
     AS SELECT * 
-    FROM BCTS_STAGING.mv_licence_issued_advertised_lrm;
+    FROM BCTS_STAGING.mv_licence_issued_advertised_main;
 
     """
 
