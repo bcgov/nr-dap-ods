@@ -737,7 +737,7 @@ CREATE TABLE bcts_staging.forest_v_lrm_licence_shape (
     objectid NUMERIC(38) NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     licn_seq_nbr NUMERIC(16) NULL,
-    shape GEOMETRY NULL,
+ --   shape TEXT NULL, Excluded for now due to conversion challenges
     sde_state_id INTEGER NULL,
     v_treefield VARCHAR(31) NULL,
     shape_area NUMERIC(38, 8) NULL,
@@ -818,18 +818,18 @@ CREATE TABLE bcts_staging.forest_v_lrm_commitments (
 -- FOREST.CUT_BLOCK_SHAPE_EVW
 CREATE TABLE bcts_staging.forest_cut_block_shape_evw (
     objectid NUMERIC(38) NULL,
-    transaction_id VARCHAR(4) NULL,
+    transaction_id VARCHAR(32) NULL,
     cutb_seq_nbr NUMERIC(16) NULL,
     bufferdist NUMERIC(38, 8) NULL,
     objectid_1 NUMERIC(10) NULL,
-    transactio VARCHAR(4) NULL,
+    transactio VARCHAR(32) NULL,
     objectid_2 NUMERIC(10) NULL,
     hectares NUMERIC(38, 8) NULL,
     feature_len NUMERIC(38, 8) NULL,
     feature_area NUMERIC(38, 8) NULL,
     shape_len NUMERIC(38, 8) NULL,
     shape_area NUMERIC(38, 8) NULL,
-    shape GEOMETRY NULL,
+    --   shape TEXT NULL, Excluded for now due to conversion challenges
     licn_seq_nbr NUMERIC(16) NULL,
     manu_seq_nbr NUMERIC(16) NULL,
     mark_seq_nbr NUMERIC(16) NULL,
@@ -842,31 +842,7 @@ CREATE TABLE bcts_staging.forest_cut_block_shape_evw (
     createdusing VARCHAR(30) NULL,
     sde_state_id INTEGER NULL
 );
--- FOREST.V_LRM_COMMITMENT_PARTITION
-CREATE TABLE bcts_staging.forest_v_lrm_commitment_partition (
-    copa_seq_nbr NUMERIC(15) NOT NULL,
-    copa_partition VARCHAR(30) NULL,
-    copa_percent NUMERIC(7, 4) NULL,
-    mark_seq_nbr INTEGER NULL,
-    modifiedby VARCHAR(120) NULL,
-    modifiedon TIMESTAMP NULL,
-    modifiedusing VARCHAR(120) NULL,
-    createdby VARCHAR(120) NULL,
-    createdon TIMESTAMP NULL,
-    createdusing VARCHAR(120) NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
-    copa_block_id VARCHAR(150) NULL,
-    copa_cruise_m3_vol INTEGER NULL,
-    copa_partition_type VARCHAR(150) NULL,
-    copa_commit_m3_vol NUMERIC(9) NULL,
-    copa_commit_part_percent NUMERIC(3) NULL,
-    v_copa_commit_part_percent INTEGER NULL,
-    commit_seq_nbr NUMERIC(15) NULL,
-    v_copa_commit_lic_type VARCHAR(2) NULL,
-    v_copa_commit_appo NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
-    v_blal_rw_vol NUMERIC(15, 6) NULL
-);
+
 -- FORESTVIEW.V_LICENCE
 CREATE TABLE bcts_staging.forestview_v_licence (
     licn_seq_nbr NUMERIC(15) NOT NULL,
@@ -906,7 +882,7 @@ CREATE TABLE bcts_staging.forestview_v_licence (
 
 
 -- FORESTVIEW.V_BLOCK
-CREATE TABLE forestview_v_block (
+CREATE TABLE bcts_staging.forestview_v_block (
     divi_div_nbr NUMERIC(2) NOT NULL,
     tso_code VARCHAR(15) NULL,
     tso_name VARCHAR(50) NOT NULL,

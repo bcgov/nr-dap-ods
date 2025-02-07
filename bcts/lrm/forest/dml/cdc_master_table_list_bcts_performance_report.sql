@@ -33,7 +33,7 @@ END $$;
 -- FOREST VIEWS
 DO $$
 DECLARE
-    tables text[] := ARRAY['V_LRM_CUT_BLOCK', 'V_LRM_LICENCE_SHAPE', 'V_LRM_LICENCE', 'V_RES_VT_FDTM_TEAM', 'V_LRM_COMMITMENTS', 'CUT_BLOCK_SHAPE_EVW', 'V_LRM_COMMITMENT_PARTITION'];  
+    tables text[] := ARRAY['V_LRM_CUT_BLOCK','V_LRM_LICENCE', 'V_LRM_COMMITMENTS'];  
     table_name text;
     target_table text;
 BEGIN
@@ -69,7 +69,7 @@ END $$;
 -- FORESTVIEW VIEWS
 DO $$
 DECLARE
-    tables text[] := ARRAY['V_LICENCE', 'V_BLOCK', 'V_LICENCE', 'V_BLOCK_ACTIVITY_ALL', 'V_BLOCK_SPATIAL', 'V_LICENCE_ACTIVITY_ALL', 'V_BLOCK_SPATIAL', 'V_LICENCE_ACTIVITY_ALL'];  
+    tables text[] := ARRAY['V_LICENCE', 'V_BLOCK', 'V_BLOCK_ACTIVITY_ALL', 'V_LICENCE_ACTIVITY_ALL', 'V_BLOCK_SPATIAL'];  
     table_name text;
     target_table text;
 BEGIN
@@ -84,7 +84,7 @@ BEGIN
             NULL,               
             'forestview',
             table_name,               
-            'lrm_replication',
+            'bcts_staging',
             target_table,
             'Y',
             NULL,
@@ -289,6 +289,54 @@ INSERT INTO ods_data_management.cdc_master_table_list
                 createdusing, 
                 fspm_seq_nbr
                 FROM forest.silviculture_prescription',
+            'Oracle'
+        );
+
+
+
+INSERT INTO ods_data_management.cdc_master_table_list 
+        VALUES (
+            NULL,
+            'lrm',
+            NULL,               
+            'forest',
+            'V_LRM_LICENCE_SHAPE',               
+            'bcts_staging',
+            'FOREST_V_LRM_LICENCE_SHAPE',
+            'Y',
+            NULL,
+            NULL,
+            NULL,
+            'Y',
+            1,
+            'N',
+            'Y',
+            'SELECT objectid, manu_seq_nbr, licn_seq_nbr, sde_state_id, v_treefield, shape_area, modifiedby, modifiedon, modifiedusing, createdby, createdon, createdusing
+	FROM forest.V_LRM_LICENCE_SHAPE',
+            'Oracle'
+        );
+
+
+
+INSERT INTO ods_data_management.cdc_master_table_list 
+        VALUES (
+            NULL,
+            'lrm',
+            NULL,               
+            'forest',
+            'CUT_BLOCK_SHAPE_EVW',               
+            'bcts_staging',
+            'FOREST_CUT_BLOCK_SHAPE_EVW',
+            'Y',
+            NULL,
+            NULL,
+            NULL,
+            'Y',
+            1,
+            'N',
+            'Y',
+            'SELECT objectid, transaction_id, cutb_seq_nbr, bufferdist, objectid_1, transactio, objectid_2, hectares, feature_len, feature_area, shape_len, shape_area, licn_seq_nbr, manu_seq_nbr, mark_seq_nbr, perm_seq_nbr, modifiedby, modifiedon, modifiedusing, createdby, createdon, createdusing, sde_state_id
+	FROM forest.CUT_BLOCK_SHAPE_EVW',
             'Oracle'
         );
 
