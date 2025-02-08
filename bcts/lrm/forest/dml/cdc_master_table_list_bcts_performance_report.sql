@@ -361,7 +361,7 @@ INSERT INTO ods_data_management.cdc_master_table_list
             'N',
             'Y',
             'SELECT objectid, transaction_id, licn_seq_nbr, feature_len, feature_area, shape_len, shape_area, manu_seq_nbr, modifiedby, modifiedon, modifiedusing, createdby, createdon, createdusing, sde_state_id
-	FROM forest.licence_shape_evw;',
+	FROM forest.licence_shape_evw',
             'Oracle'
         );
 

@@ -633,7 +633,7 @@ COMMENT ON TABLE lrm_replication.licensee IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence_shape_evw (
     objectid NUMERIC(38) NULL,
-    transaction_id VARCHAR(8) NULL,
+    transaction_id VARCHAR(30) NULL,
     licn_seq_nbr NUMERIC(16) NULL,
     feature_len NUMERIC(38, 8) NULL,
     feature_area NUMERIC(38, 8) NULL,
