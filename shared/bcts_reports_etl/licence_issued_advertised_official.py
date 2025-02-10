@@ -579,7 +579,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
 
 
         from
-            mofclient_replication.the_org_unit ou
+            bcts_staging.the_org_unit ou
 
         where
             /* BCTS Business Area org unit numbers in the org_unit table */
