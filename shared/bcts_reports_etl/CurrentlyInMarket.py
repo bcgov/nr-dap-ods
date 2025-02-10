@@ -225,7 +225,7 @@ def get_currently_in_market(end_date):
             Sum(B.BLAL_RW_VOL) AS LRM_RW_VOLUME,  -- Right of Way volume
             Sum(COALESCE(CRUISE_VOL, 0) + COALESCE(BLAL_RW_VOL, 0)) AS LRM_TOTAL_VOLUME  -- LRM Total Volume is the sum of cruise and right-of-way volumes.
         FROM
-            BCTS_STAGING.V_BLOCK B
+            BCTS_STAGING.FORESTVIEW_V_BLOCK B
         GROUP BY
             B.LICN_SEQ_NBR
         ORDER BY
@@ -304,7 +304,7 @@ def get_currently_in_market(end_date):
 
     from
         bcts_staging.forest_division d
-    LEFT JOIN BCTS_STAGING.V_LICENCE L
+    LEFT JOIN BCTS_STAGING.FORESTVIEW_V_LICENCE L
     ON d.divi_short_code = L.TSO_CODE
     LEFT JOIN TENPOST
     ON L.LICN_SEQ_NBR = TENPOST.LICN_SEQ_NBR 

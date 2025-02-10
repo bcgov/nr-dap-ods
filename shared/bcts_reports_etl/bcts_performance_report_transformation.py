@@ -213,15 +213,21 @@ def fetch_fta_tables():
 
     sql_statement = \
     """
-    
-    CREATE OR REPLACE TABLE bcts_staging.fta_tenure_term AS
-    SELECT * FROM fta_replication.pmt_tenure_term_vw;
+    INSERT INTO bcts_staging.fta_tenure_term(
+	forest_file_id, tenure_term, legal_effective_dt, initial_expiry_dt, current_expiry_dt, tenure_extend_cnt, tenr_extend_rsn_st, entry_timestamp, update_timestamp, revision_count)
+    SELECT forest_file_id, tenure_term, legal_effective_dt, initial_expiry_dt, current_expiry_dt, tenure_extend_cnt, tenr_extend_rsn_st, entry_timestamp, update_timestamp, revision_count 
+    FROM fta_replication.pmt_tenure_term_vw;
 
-    CREATE OR REPLACE TABLE bcts_staging.fta_prov_forest_use AS
-    SELECT * FROM fta_replication.pmt_prov_forest_use_vw;
+    INSERT INTO bcts_staging.fta_prov_forest_use(
+	forest_file_id, file_type_code, forest_region, file_status_st, file_status_date, bcts_org_unit, sb_funded_ind, district_admin_zone, mgmt_unit_type, mgmt_unit_id, revision_count, entry_timestamp, update_timestamp, forest_tenure_guid)
+	
+    SELECT forest_file_id, file_type_code, forest_region, file_status_st, file_status_date, bcts_org_unit, sb_funded_ind, district_admin_zone, mgmt_unit_type, mgmt_unit_id, revision_count, entry_timestamp, update_timestamp, forest_tenure_guid
+    FROM fta_replication.pmt_prov_forest_use_vw;
 
-    CREATE OR REPLACE TABLE bcts_staging.fta_tenure_file_status_code AS
-    SELECT * FROM fta_replication.pmt_tenure_file_status_code_vw;
+    INSERT INTO bcts_staging.fta_tenure_file_status_code(
+	tenure_file_status_code, description, effective_date, expiry_date, update_timestamp)
+    SELECT tenure_file_status_code, description, effective_date, expiry_date, update_timestamp
+    FROM fta_replication.pmt_tenure_file_status_code_vw;
 
     """
 
