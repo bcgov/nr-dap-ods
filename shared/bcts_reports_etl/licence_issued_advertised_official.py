@@ -72,8 +72,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
 
 
             from
-                bctsadmin_replication.bcts_timber_sale ts0
-            inner join bctsadmin_replication.bcts_tenure_bidder tb
+                bcts_staging.the_bcts_timber_sale ts0
+            inner join bcts_staging.the_bcts_tenure_bidder tb
             on ts0.forest_file_id = tb.forest_file_id
                 and ts0.auction_date = tb.auction_date
                 and ts0.no_sale_rationale_code is null
@@ -94,7 +94,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                 AND tt.legal_effective_dt
                     between To_Date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of reporting period
                     and To_Date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
-            inner join mofclient_replication.the_v_client_public fc
+            inner join bcts_staging.the_v_client_public fc
             on tb.client_number = fc.client_number
 
         ),
@@ -207,8 +207,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                         ts.sale_volume
                     end as original_cat_A_and_1_readvertised_cat_2_and_4_volume
             from
-                bctsadmin_replication.bcts_timber_sale ts
-                left join bctsadmin_replication.no_sale_rationale_code nsrc
+                bcts_staging.the_bcts_timber_sale ts
+                left join bcts_staging.the_no_sale_rationale_code nsrc
                 on ts.no_sale_rationale_code = nsrc.no_sale_rationale_code 
                 inner join
                 (
@@ -218,7 +218,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                         min(ts.auction_date) as first_auction_date,
                         max(ts.auction_date) as last_auction_date
                     from
-                        bctsadmin_replication.bcts_timber_sale ts
+                        bcts_staging.the_bcts_timber_sale ts
                     where
                         coalesce(no_sale_rationale_code, ' ') <> 'TB'
                         and ts.auction_date <= To_Date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
@@ -235,7 +235,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                         bcts_category_code,
                         sale_volume
                     from
-                        bctsadmin_replication.bcts_timber_sale ts
+                        bcts_staging.the_bcts_timber_sale ts
                 ) first_auction
             on ts.forest_file_id = first_auction.forest_file_id
                 and all_auctions_to_date.first_auction_date = first_auction.auction_date
@@ -247,7 +247,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
             select distinct
                 forest_file_id
             from
-                bctsadmin_replication.bcts_timber_sale
+                bcts_staging.the_bcts_timber_sale
             where
                 auction_date
                     between to_date('{start_date}', 'YYYY-MM-DD')  -- Date: beginning of reporting period
@@ -450,9 +450,9 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
     END AS fiscal_year
 
     FROM bcts_staging.fta_prov_forest_use pfu
-        INNER JOIN mofclient_replication.the_org_unit ou
+        INNER JOIN bcts_staging.the_org_unit ou
         ON pfu.bcts_org_unit = ou.org_unit_no
-        LEFT JOIN bctsadmin_replication.bcts_timber_sale ts
+        LEFT JOIN bcts_staging.the_bcts_timber_sale ts
         ON  pfu.forest_file_id = ts.forest_file_id
         AND  ts.forest_file_id is not null
         LEFT JOIN bcts_staging.fta_tenure_term tt
