@@ -65,9 +65,9 @@ def get_currently_in_market(end_date):
 
 
         FROM
-            lrm_replication.forest_activity_class ac,
-            lrm_replication.forest_activity_type atype,
-            lrm_replication.forest_activity a
+            bcts_staging.forest_activity_class ac,
+            bcts_staging.forest_activity_type atype,
+            bcts_staging.forest_activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -124,9 +124,9 @@ def get_currently_in_market(end_date):
 
 
         FROM
-            lrm_replication.forest_activity_class ac,
-            lrm_replication.forest_activity_type atype,
-            lrm_replication.forest_activity a
+            bcts_staging.forest_activity_class ac,
+            bcts_staging.forest_activity_type atype,
+            bcts_staging.forest_activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -184,9 +184,9 @@ def get_currently_in_market(end_date):
 
 
         FROM
-            lrm_replication.forest_activity_class ac,
-            lrm_replication.forest_activity_type atype,
-            lrm_replication.forest_activity a
+            bcts_staging.forest_activity_class ac,
+            bcts_staging.forest_activity_type atype,
+            bcts_staging.forest_activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -303,7 +303,7 @@ def get_currently_in_market(end_date):
     '{end_date}'::date as report_end_date
 
     from
-        lrm_replication.forest_division d
+        bcts_staging.forest_division d
     LEFT JOIN BCTS_STAGING.V_LICENCE L
     ON d.divi_short_code = L.TSO_CODE
     LEFT JOIN TENPOST
@@ -387,7 +387,7 @@ def get_currently_in_market(end_date):
         '{end_date}'::date as report_end_date
 
     from
-        lrm_replication.forest_division d
+        bcts_staging.forest_division d
 
     ORDER BY
         BUSINESS_AREA_REGION_CATEGORY desc,
