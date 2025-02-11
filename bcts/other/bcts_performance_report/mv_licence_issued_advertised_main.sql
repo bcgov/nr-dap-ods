@@ -55,7 +55,11 @@ SELECT
     official.Advertised_in_Report_Period,
     round(lrm.LRM_Total_Volume_Salvage_All_Fire_Years) AS Total_Volume_Salvage_All_Fire_Year_LRM,
     Official.FTA_File_Status,
-    Official.FTA_File_Status_Date
+    Official.FTA_File_Status_Date,
+    Official.report_frequency,
+    Official.report_start_date,
+    Official.report_end_date,
+    Official.fiscal_year
 FROM
     bcts_staging.licence_issued_advertised_official AS official
     LEFT JOIN bcts_staging.mv_licence_issued_advertised_lrm AS lrm
