@@ -1,48 +1,3 @@
-CREATE OR REPLACE VIEW bcts_staging.DIVISION AS
-    SELECT * FROM lrm_replication.DIVISION;
-
-CREATE OR REPLACE VIEW bcts_staging.BLOCK_ALLOCATION AS
-    SELECT * FROM lrm_replication.BLOCK_ALLOCATION;
-
-CREATE OR REPLACE VIEW bcts_staging.MANAGEMENT_UNIT AS
-    SELECT * FROM lrm_replication.MANAGEMENT_UNIT;
-
-CREATE OR REPLACE VIEW bcts_staging.LICENCE AS
-    SELECT * FROM lrm_replication.LICENCE;
-
-CREATE OR REPLACE VIEW bcts_staging.BLOCK_ADMIN_ZONE AS
-    SELECT * FROM lrm_replication.BLOCK_ADMIN_ZONE;
-
-CREATE OR REPLACE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
-    SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
-
-CREATE OR REPLACE VIEW bcts_staging.CODE_LOOKUP AS
-    SELECT * FROM lrm_replication.CODE_LOOKUP;
-
-CREATE OR REPLACE VIEW bcts_staging.TENURE_TYPE AS
-    SELECT * FROM lrm_replication.TENURE_TYPE;
-
-CREATE OR REPLACE VIEW bcts_staging.CUT_PERMIT AS
-    SELECT * FROM lrm_replication.CUT_PERMIT;
-
-CREATE OR REPLACE VIEW bcts_staging.MARK AS
-    SELECT * FROM lrm_replication.MARK;
-
-CREATE OR REPLACE VIEW bcts_staging.DIVISION_CODE_LOOKUP AS
-    SELECT * FROM lrm_replication.DIVISION_CODE_LOOKUP;
-
-CREATE OR REPLACE VIEW bcts_staging.CUT_BLOCK AS
-    SELECT * FROM lrm_replication.CUT_BLOCK;
-
-CREATE OR REPLACE VIEW bcts_staging.ACTIVITY_CLASS AS
-    SELECT * FROM lrm_replication.ACTIVITY_CLASS;
-
-CREATE OR REPLACE VIEW bcts_staging.ACTIVITY_TYPE AS
-    SELECT * FROM lrm_replication.ACTIVITY_TYPE;
-
-CREATE OR REPLACE VIEW bcts_staging.ACTIVITY AS
-    SELECT * FROM lrm_replication.ACTIVITY;
-
 
 CREATE OR REPLACE VIEW bcts_staging.annual_developed_volume AS
 WITH annual_developed_volume AS
@@ -91,32 +46,32 @@ WITH annual_developed_volume AS
         EXTRACT(YEAR FROM (actb.dvc_done + INTERVAL '9 months')) AS dvc_done_fiscal,
         b.cutb_seq_nbr
     FROM
-        lrm_replication.division             d
-        INNER JOIN bcts_staging.block_allocation     ba
+        bcts_staging.forest_division             d
+        INNER JOIN bcts_staging.forest_block_allocation     ba
             ON d.divi_div_nbr = ba.divi_div_nbr
-        INNER JOIN bcts_staging.management_unit      mu
+        INNER JOIN bcts_staging.forest_management_unit      mu
             ON ba.manu_seq_nbr = mu.manu_seq_nbr
-        INNER JOIN bcts_staging.licence              l
+        INNER JOIN bcts_staging.forest_licence              l
             ON ba.licn_seq_nbr = l.licn_seq_nbr
-        LEFT OUTER JOIN bcts_staging.block_admin_zone     z
+        LEFT OUTER JOIN bcts_staging.forest_block_admin_zone     z
             ON l.divi_div_nbr = z.divi_div_nbr 
             AND l.blaz_admin_zone_id = z.blaz_admin_zone_id 
             AND ba.licn_seq_nbr = l.licn_seq_nbr
             AND l.divi_div_nbr = z.divi_div_nbr 
             AND l.blaz_admin_zone_id = z.blaz_admin_zone_id 
-        LEFT OUTER JOIN bcts_staging.division_code_lookup dcl
+        LEFT OUTER JOIN bcts_staging.forest_division_code_lookup dcl
             ON l.licn_field_team_id = dcl.colu_lookup_id 
             AND l.divi_div_nbr = dcl.divi_div_nbr 
-        LEFT OUTER JOIN bcts_staging.code_lookup          cl
+        LEFT OUTER JOIN bcts_staging.forest_code_lookup          cl
             ON  dcl.colu_lookup_type = cl.colu_lookup_type 
             AND dcl.colu_lookup_id = cl.colu_lookup_id 
-        LEFT JOIN bcts_staging.tenure_type tn
+        LEFT JOIN bcts_staging.forest_tenure_type tn
             ON l.tent_seq_nbr = tn.tent_seq_nbr
-        LEFT OUTER JOIN bcts_staging.cut_permit           cp
+        LEFT OUTER JOIN bcts_staging.forest_cut_permit           cp
             ON ba.perm_seq_nbr = cp.perm_seq_nbr 
-        LEFT JOIN bcts_staging.mark                 m
+        LEFT JOIN bcts_staging.forest_mark                 m
             ON ba.mark_seq_nbr = m.mark_seq_nbr 
-        INNER JOIN  bcts_staging.cut_block            b
+        INNER JOIN  bcts_staging.forest_cut_block            b
             ON ba.cutb_seq_nbr = b.cutb_seq_nbr
         INNER JOIN
         (
@@ -127,9 +82,9 @@ WITH annual_developed_volume AS
                     MAX(CASE WHEN ACTT_KEY_IND = 'DVS' THEN DATE_TRUNC('DAY',ACTI_STATUS_DATE) END)::DATE AS DVS_Done,
                     MAX(CASE WHEN ACTT_KEY_IND = 'DVC' THEN DATE_TRUNC('DAY',ACTI_STATUS_DATE) END)::DATE AS DVC_Done
                 FROM
-                    bcts_staging.ACTIVITY_CLASS C,
-                    bcts_staging.ACTIVITY_TYPE T,
-                    bcts_staging.ACTIVITY A
+                    bcts_staging.forest_ACTIVITY_CLASS C,
+                    bcts_staging.forest_ACTIVITY_TYPE T,
+                    bcts_staging.forest_ACTIVITY A
                 WHERE
                     C.ACCL_SEQ_NBR = T.ACCL_SEQ_NBR
                     AND T.ACTT_SEQ_NBR = A.ACTT_SEQ_NBR
