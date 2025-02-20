@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS lrm_replication.division (
 COMMENT ON TABLE lrm_replication.division IS 'Contains information about BC Timber Sales business areas, including their name, code, and office location.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.block_allocation (
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     blal_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     mark_seq_nbr NUMERIC(15) NULL,
     blal_gross_ha_area NUMERIC(11, 6) NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.management_unit (
 COMMENT ON TABLE lrm_replication.management_unit IS 'Represents management units used in LRM to organize objects within the navigation tree, each with an associated annual allowable cut and linked to provincial Timber Supply Units defined by the Chief Forester.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence (
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     licn_licence_id VARCHAR(15) NOT NULL,
     licn_licence_desc VARCHAR(53) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.mark (
 COMMENT ON TABLE lrm_replication.mark IS 'Individual timber mark identification information.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block (
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     cutb_block_id VARCHAR(20) NOT NULL,
     cutb_block_number VARCHAR(15) NULL,
     divi_div_nbr NUMERIC(2) NULL,
@@ -496,7 +496,7 @@ COMMENT ON TABLE lrm_replication.activity_type IS 'Defines the types of activiti
 
 CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     acti_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
+    cutb_seq_nbr bigint NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     actt_seq_nbr NUMERIC(15) NOT NULL,
     ctor_seq_nbr NUMERIC(15) NULL,
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     acti_fdp_reason VARCHAR(40) NULL,
     acti_target_cost NUMERIC(15, 2) NULL,
     plan_seq_nbr NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     mark_seq_nbr NUMERIC(15) NULL,
     cloc_seq_nbr NUMERIC(15) NULL,
     acti_digitized_ind VARCHAR(4) NULL,
@@ -531,3 +531,38 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
 
 COMMENT ON TABLE lrm_replication.activity IS 'Individual activities associated with objects including date and status information. Objects include block, licence, cutting permit, contractor, mark, forest plan.';
 
+
+-- DROP TABLE IF EXISTS bcts_staging.annual_developed_volume_hist;
+
+CREATE TABLE IF NOT EXISTS bcts_staging.annual_developed_volume_hist
+(
+    id SERIAL PRIMARY KEY,
+    business_area_region_category text COLLATE pg_catalog."default",
+    business_area_region text COLLATE pg_catalog."default",
+    business_area text COLLATE pg_catalog."default",
+    business_area_code character varying(15) COLLATE pg_catalog."default",
+    "Field Team" character varying(150) COLLATE pg_catalog."default",
+    manu_id character varying(60) COLLATE pg_catalog."default",
+    licence character varying(15) COLLATE pg_catalog."default",
+    "File Type" character varying(40) COLLATE pg_catalog."default",
+    agreement_type_code character varying(10) COLLATE pg_catalog."default",
+    agreement_type character varying(200) COLLATE pg_catalog."default",
+    permit character varying(40) COLLATE pg_catalog."default",
+    mark character varying(15) COLLATE pg_catalog."default",
+    block character varying(20) COLLATE pg_catalog."default",
+    ubi character varying(15) COLLATE pg_catalog."default",
+    block_state character varying(20) COLLATE pg_catalog."default",
+    cruise_volume numeric(15,6),
+    rw_volume numeric(15,6),
+    rc_done date,
+    rc_done_fiscal numeric,
+    dr_done date,
+    dr_done_fiscal numeric,
+    dvs_done date,
+    dvs_done_fiscal numeric,
+    dvc_done date,
+    dvc_done_fiscal numeric,
+    cutb_seq_nbr bigint,
+    fiscal_year_start_date date,
+    report_end_date date
+)

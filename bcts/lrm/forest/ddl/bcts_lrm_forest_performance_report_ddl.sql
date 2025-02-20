@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.permit_allocation (
     perm_seq_nbr NUMERIC(15) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     modifiedby VARCHAR(120) NULL,
     modifiedon TIMESTAMP NULL,
     modifiedusing VARCHAR(120) NULL,
@@ -78,7 +78,7 @@ COMMENT ON TABLE lrm_replication.ctor_contractor_location IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block_silv_regime (
     cbsr_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     treg_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
     modifiedon TIMESTAMP NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.commitment_partition (
     createdby VARCHAR(120) NULL,
     createdon TIMESTAMP NULL,
     createdusing VARCHAR(120) NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
+    cutb_seq_nbr bigint NULL,
     copa_block_id VARCHAR(150) NULL,
     copa_cruise_m3_vol NUMERIC(9) NULL,
     copa_partition_type VARCHAR(150) NULL,
@@ -130,7 +130,7 @@ COMMENT ON TABLE lrm_replication.commitment_partition IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.block_seed_zone (
     blsz_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     blsz_class_id VARCHAR(80) NOT NULL,
     blsz_species_id VARCHAR(40) NOT NULL,
     blsz_zone_id VARCHAR(80) NOT NULL,
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.bcts_harvest_history (
 COMMENT ON TABLE lrm_replication.bcts_harvest_history IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.commitments (
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
     copa_commit_appo NUMERIC(15) NULL,
@@ -347,7 +347,7 @@ COMMENT ON TABLE lrm_replication.commitments IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.ecology_unit (
     ecou_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     ecou_name VARCHAR(50) NOT NULL,
     bioz_zone_id VARCHAR(10) NULL,
     bios_subzone_id VARCHAR(10) NULL,
@@ -449,7 +449,7 @@ COMMENT ON TABLE lrm_replication.sub_operating_area IS '';
 CREATE TABLE IF NOT EXISTS lrm_replication.mark_allocation (
     mark_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor (
 COMMENT ON TABLE lrm_replication.ctor_contractor IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence_allocation (
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
@@ -528,7 +528,7 @@ COMMENT ON TABLE lrm_replication.licence_allocation IS '';
 CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     silp_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     silp_lterm_man_obj VARCHAR(4000) NULL,
     silp_wildlife VARCHAR(4000) NULL,
     silp_sensitive_areas VARCHAR(4000) NULL,
@@ -657,10 +657,10 @@ COMMENT ON TABLE lrm_replication.licence_shape_evw IS '';
 -- FOREST.V_LRM_CUT_BLOCK
 CREATE TABLE lrm_replication.v_lrm_cut_block (
     manu_seq_nbr NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     mark_seq_nbr NUMERIC(15) NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     cutb_block_id VARCHAR(20) NOT NULL,
     divi_div_nbr NUMERIC(2) NULL,
     cutb_gross_ha_area NUMERIC(11, 6) NULL,
@@ -734,7 +734,7 @@ SELECT * FROM lrm_replication.v_lrm_licence_shape;
 CREATE TABLE lrm_replication.v_lrm_licence (
     manu_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     licn_digi_ind VARCHAR(1) NULL,
     licn_licence_id VARCHAR(15) NOT NULL,
     licn_category_id VARCHAR(10) NULL,
@@ -782,7 +782,7 @@ SELECT * FROM lrm_replication.v_lrm_licence;
 
 -- FOREST.V_LRM_COMMITMENTS
 CREATE TABLE lrm_replication.v_lrm_commitments (
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
     copa_commit_appo NUMERIC(15) NULL,
@@ -829,215 +829,6 @@ CREATE TABLE lrm_replication.cut_block_shape_evw (
 );
 CREATE VIEW bcts_staging.forest_cut_block_shape_evw AS
 SELECT * FROM lrm_replication.cut_block_shape_evw;
-
--- FORESTVIEW.V_LICENCE
-CREATE TABLE lrm_replication.v_licence (
-    licn_seq_nbr NUMERIC(15) NOT NULL,
-    tent_seq_nbr NUMERIC(15) NULL,
-    ctor_seq_nbr NUMERIC(15) NULL,
-    cloc_seq_nbr NUMERIC(15) NULL,
-    tso_code VARCHAR(15) NULL,
-    tso_name VARCHAR(50) NOT NULL,
-    nav_name VARCHAR(60) NULL,
-    licence_id VARCHAR(15) NOT NULL,
-    category VARCHAR(150) NULL,
-    tenure VARCHAR(40) NULL,
-    licensee VARCHAR(10) NULL,
-    registrant VARCHAR(60) NULL,
-    registrant_city VARCHAR(200) NULL,
-    field_team VARCHAR(150) NULL,
-    district_name VARCHAR(60) NULL,
-    divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_category_id VARCHAR(10) NULL,
-    blaz_admin_zone_id VARCHAR(10) NULL,
-    blaz_admin_zone_desc VARCHAR(200) NULL,
-    licn_licence_state VARCHAR(20) NULL,
-    licn_licence_desc VARCHAR(53) NULL,
-    licn_licence_to_cut_code VARCHAR(10) NULL,
-    linc_cert_level_id VARCHAR(10) NULL,
-    licn_digi_ind VARCHAR(1) NULL,
-    licn_salvage_ind VARCHAR(1) NULL,
-    licn_apportion_tenure_type VARCHAR(30) NULL,
-    apportion_type VARCHAR(221) NULL,
-    partition_type VARCHAR(150) NULL,
-    commit_licence_type VARCHAR(50) NULL,
-    commit_volume INTEGER NULL,
-    remain_commit_volume INTEGER NULL,
-    bchh_billing_year VARCHAR(4000) NULL,
-    manu_seq_nbr NUMERIC(15) NULL
-);
-CREATE VIEW bcts_staging.forestview_v_licence AS
-SELECT * FROM lrm_replication.v_licence;
-
--- FORESTVIEW.V_BLOCK
-CREATE TABLE lrm_replication.v_block (
-    divi_div_nbr NUMERIC(2) NOT NULL,
-    tso_code VARCHAR(15) NULL,
-    tso_name VARCHAR(50) NOT NULL,
-    field_team_desc VARCHAR(150) NULL,
-    nav_name VARCHAR(60) NULL,
-    tenure VARCHAR(40) NULL,
-    licence_id VARCHAR(15) NULL,
-    permit_id VARCHAR(40) NULL,
-    mark_id VARCHAR(15) NULL,
-    block_id VARCHAR(20) NOT NULL,
-    block_nbr VARCHAR(15) NULL,
-    ubi VARCHAR(15) NULL,
-    opening VARCHAR(15) NULL,
-    op_area VARCHAR(10) NULL,
-    opar_operating_area_name VARCHAR(30) NULL,
-    ozon_operating_zone_id VARCHAR(10) NULL,
-    supply_block VARCHAR(10) NULL,
-    ebm_indicator VARCHAR(4) NULL,
-    photo VARCHAR(800) NULL,
-    latitude VARCHAR(40) NULL,
-    longitude VARCHAR(40) NULL,
-    prov_frst_conflict VARCHAR(40) NULL,
-    mapsheet_id VARCHAR(120) NULL,
-    landscape_unit VARCHAR(40) NULL,
-    sp_exempt VARCHAR(4) NULL,
-    stand_type VARCHAR(40) NULL,
-    age_class VARCHAR(40) NULL,
-    hgt_class VARCHAR(40) NULL,
-    stk_class VARCHAR(40) NULL,
-    site_index INTEGER NULL,
-    source VARCHAR(40) NULL,
-    fdp_status VARCHAR(10) NULL,
-    funding_code VARCHAR(15) NULL,
-    cutb_block_memo VARCHAR(4000) NULL,
-    gross_area NUMERIC(11, 6) NULL,
-    est_area NUMERIC(7, 2) NULL,
-    merch_area NUMERIC(11, 6) NULL,
-    harvest_area NUMERIC(11, 6) NULL,
-    remaining_area INTEGER NULL,
-    cruise_vol NUMERIC(15, 6) NULL,
-    data_source VARCHAR(120) NULL,
-    harvest_vol NUMERIC(15, 6) NULL,
-    remaining_vol INTEGER NULL,
-    blal_usr_cruise_m3_vol NUMERIC(15, 6) NULL,
-    rw_area NUMERIC(11, 6) NULL,
-    blal_rw_vol NUMERIC(15, 6) NULL,
-    cutb_forma_print_date TIMESTAMP NULL,
-    cutb_forma_printed VARCHAR(4) NULL,
-    cutb_block_state VARCHAR(20) NULL,
-    pmod_modifier_id VARCHAR(40) NULL,
-    cutb_location VARCHAR(800) NULL,
-    suop_subop_area_id VARCHAR(40) NULL,
-    suop_subop_area_name VARCHAR(120) NULL,
-    cutb_opening_id NUMERIC(10) NULL,
-    licn_licence_state VARCHAR(20) NULL,
-    seed_zone VARCHAR(4000) NULL,
-    cutb_file_id VARCHAR(72) NULL,
-    min_elevation INTEGER NULL,
-    max_elevation INTEGER NULL,
-    bcat_category_code VARCHAR(40) NULL,
-    cutb_access_restriction VARCHAR(4000) NULL,
-    regime_created_by VARCHAR(50) NULL,
-    treg_regime_id VARCHAR(40) NULL,
-    treg_regime_name VARCHAR(200) NULL,
-    treg_create_date TIMESTAMP NULL,
-    treg_active_ind VARCHAR(4) NULL,
-    treg_def_ind VARCHAR(4) NULL,
-    nav_id VARCHAR(200) NULL,
-    fiz VARCHAR(40) NULL,
-    hvs_status VARCHAR(30) NULL,
-    hvs_target_date TIMESTAMP NULL,
-    hvs_status_date TIMESTAMP NULL,
-    hvc_status VARCHAR(30) NULL,
-    hvc_target_date TIMESTAMP NULL,
-    hvc_status_date TIMESTAMP NULL,
-    manu_seq_nbr NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
-    perm_seq_nbr NUMERIC(15) NULL,
-    mark_seq_nbr NUMERIC(15) NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_cprp_protection_ind VARCHAR(1) NULL,
-    cutb_rc_risk_rating VARCHAR(1) NULL,
-    cutb_rc_risk_source VARCHAR(5) NULL
-);
-CREATE VIEW bcts_staging.forestview_v_block AS
-SELECT * FROM lrm_replication.v_block;
-
--- FORESTVIEW.V_BLOCK_ACTIVITY_ALL
-CREATE TABLE lrm_replication.v_block_activity_all (
-    tso_code VARCHAR(15) NULL,
-    tso_name VARCHAR(50) NOT NULL,
-    nav_name VARCHAR(60) NULL,
-    tenure VARCHAR(40) NULL,
-    licence_id VARCHAR(15) NULL,
-    permit_id VARCHAR(40) NULL,
-    mark_id VARCHAR(15) NULL,
-    block_id VARCHAR(20) NOT NULL,
-    block_nbr VARCHAR(15) NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
-    acti_seq_nbr NUMERIC(15) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
-    actt_seq_nbr NUMERIC(15) NOT NULL,
-    activity_class VARCHAR(40) NULL,
-    activity_type VARCHAR(200) NULL,
-    actt_key_ind VARCHAR(10) NULL,
-    activity_date TIMESTAMP NULL,
-    acti_status_ind VARCHAR(30) NULL,
-    accl_object_type VARCHAR(1) NULL,
-    acti_responsibility VARCHAR(160) NULL,
-    ctor_name VARCHAR(60) NULL,
-    acti_cost NUMERIC(15, 2) NULL,
-    acti_target_date TIMESTAMP NULL,
-    acti_target_cost NUMERIC(15, 2) NULL,
-    acti_comments VARCHAR(2000) NULL,
-    divi_div_nbr NUMERIC(2) NOT NULL,
-    field_team_desc VARCHAR(150) NULL,
-    ubi VARCHAR(15) NULL,
-    licn_licence_state VARCHAR(20) NULL
-);
-CREATE VIEW bcts_staging.forestview_v_block_activity_all AS
-SELECT * FROM lrm_replication.v_block_activity_all;
-
--- FORESTVIEW.V_BLOCK_SPATIAL
-CREATE TABLE lrm_replication.v_block_spatial (
-    tso_code VARCHAR(15) NULL,
-    nav_name VARCHAR(60) NULL,
-    licence_id VARCHAR(15) NULL,
-    permit_id VARCHAR(40) NULL,
-    mark_id VARCHAR(15) NULL,
-    block_id VARCHAR(20) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
-    spatial_flag VARCHAR(3) NULL
-);
-CREATE VIEW bcts_staging.forestview_v_block_spatial AS
-SELECT * FROM lrm_replication.v_block_spatial;
-
--- FORESTVIEW.V_LICENCE_ACTIVITY_ALL
-CREATE TABLE lrm_replication.v_licence_activity_all (
-    divi_div_nbr NUMERIC(2) NOT NULL,
-    tso_code VARCHAR(15) NULL,
-    field_team_desc VARCHAR(150) NULL,
-    nav_name VARCHAR(60) NULL,
-    tenure VARCHAR(40) NULL,
-    licence_id VARCHAR(15) NOT NULL,
-    licn_licence_state VARCHAR(20) NULL,
-    activity_class VARCHAR(40) NULL,
-    activity_type VARCHAR(200) NULL,
-    actt_key_ind VARCHAR(10) NULL,
-    accl_object_type VARCHAR(1) NULL,
-    acti_responsibility VARCHAR(160) NULL,
-    acti_status_ind VARCHAR(30) NULL,
-    acti_target_date TIMESTAMP NULL,
-    acti_target_cost NUMERIC(15, 2) NULL,
-    activity_date TIMESTAMP NULL,
-    acti_status_date TIMESTAMP NULL,
-    acti_cost NUMERIC(15, 2) NULL,
-    acti_comments VARCHAR(2000) NULL,
-    licensee VARCHAR(60) NULL,
-    acti_seq_nbr NUMERIC(15) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
-    modifiedby VARCHAR(120) NULL,
-    modifiedon TIMESTAMP NULL,
-    createdby VARCHAR(120) NULL,
-    createdon TIMESTAMP NULL
-);
-CREATE VIEW bcts_staging.forestview_v_licence_activity_all AS
-SELECT * FROM lrm_replication.v_licence_activity_all;
 
 CREATE OR REPLACE VIEW bcts_staging.FOREST_OPERATING_AREA AS
 SELECT * FROM lrm_replication.OPERATING_AREA;

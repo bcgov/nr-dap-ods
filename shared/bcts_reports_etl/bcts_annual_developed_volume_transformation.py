@@ -11,7 +11,7 @@ from datetime import datetime, date, timedelta
 import pytz
 
 
-from timber_inventory_ready_to_sell import get_timber_inventory_ready_to_sell_query
+from annual_developed_volume import get_annual_developed_volume_query
 
 start = time.time()
 
@@ -57,13 +57,18 @@ def get_last_days_of_months(start_year = 2025):
             if year == current_year and month > current_month:
                 return dates
             else:
-                dates.append(date(year, month, 1) - timedelta (days=1))
+                if month < 4:
+                    fiscal_year_start = datetime(year - 1, 4, 1)
+                else:
+                    fiscal_year_start = datetime(year, 4, 1)
+
+                dates.append((fiscal_year_start, date(year, month, 1) - timedelta (days=1)))
 
 def get_existing_dates():
     sql_statement = \
     f"""
     select distinct report_end_date
-    from bcts_staging.timber_inventory_ready_to_sell_hist;
+    from bcts_staging.annual_developed_volume_hist;
 
     """
 
@@ -81,9 +86,9 @@ def get_existing_dates():
         sys.exit(1)
 
 
-def run_timber_inventory_ready_to_sell_report(connection, cursor, end_date):
+def run_report(connection, cursor, start_date, end_date):
 
-    sql_statement = get_timber_inventory_ready_to_sell_query(end_date)
+    sql_statement = get_annual_developed_volume_query(start_date, end_date)
 
     try:
         cursor.execute(sql_statement)
@@ -96,28 +101,30 @@ def run_timber_inventory_ready_to_sell_report(connection, cursor, end_date):
 
 
 def publish_datasets():
+    """
+    Publish the latest report from the historic records
+    """
 
     sql_statement = \
     """
-    
-    DROP TABLE IF EXISTS BCTS_STAGING.timber_inventory_ready_to_sell;
-    CREATE TABLE BCTS_STAGING.timber_inventory_ready_to_sell
+    DROP TABLE IF EXISTS BCTS_STAGING.annual_developed_volume;
+    CREATE TABLE BCTS_STAGING.annual_developed_volume
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
+    FROM BCTS_STAGING.annual_developed_volume_hist
     WHERE report_end_date = (
-        SELECT MAX(report_end_date)
-        FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
-	);
+	    SELECT MAX(report_end_date)
+	    FROM BCTS_STAGING.annual_developed_volume_hist
+    );
 
-    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell_hist;
-    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell_hist
+    DROP TABLE IF EXISTS BCTS_REPORTING.annual_developed_volume_hist;
+    CREATE TABLE BCTS_REPORTING.annual_developed_volume_hist
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist;
+    FROM BCTS_STAGING.annual_developed_volume_hist;
 
-    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell;
-    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
+    DROP TABLE IF EXISTS BCTS_REPORTING.annual_developed_volume;
+    CREATE TABLE BCTS_REPORTING.annual_developed_volume
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell;
+    FROM BCTS_STAGING.annual_developed_volume;
 
     """
 
@@ -138,21 +145,21 @@ if __name__ == "__main__":
     # Fetch the start and end dates for the report periods
     end_dates = get_last_days_of_months()
     report_exists_dates = get_existing_dates()
-    report_required_dates = [dt for dt in end_dates if dt not in report_exists_dates]
+    report_required_dates = [dt for dt in end_dates if dt[1] not in report_exists_dates]
 
     if len(report_required_dates) == 0:
-        logging.info("BCTS timber inventory ready to sell report is already up-to-date! ")
+        logging.info("BCTS annual developed volume report is already up-to-date! ")
         # Publish reporting objects to the reporting layer
         logging.info("Updating datasets to the reporting layer...")
         publish_datasets()
         logging.info("Datasets in the reporting layer have been updated!")
         sys.exit(0)
 
-    for end_date in report_required_dates:
+    for start_date, end_date in report_required_dates:
        
         # Run each report
-        logging.info(f"Running BCTS timber inventory ready to sell report for the reporting end date {end_date}...")
-        run_timber_inventory_ready_to_sell_report(connection, cursor, end_date)
+        logging.info(f"Running BCTS annual developed volume report for the reporting start_date {start_date} and end date {end_date}...")
+        run_report(connection, cursor, start_date, end_date)
 
     # Publish reporting objects to the reporting layer
     logging.info("Updating datasets to the reporting layer...")

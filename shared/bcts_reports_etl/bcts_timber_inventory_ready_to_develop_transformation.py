@@ -11,7 +11,7 @@ from datetime import datetime, date, timedelta
 import pytz
 
 
-from timber_inventory_ready_to_sell import get_timber_inventory_ready_to_sell_query
+from timber_inventory_ready_to_develop import get_timber_inventory_ready_to_develop_query
 
 start = time.time()
 
@@ -63,7 +63,7 @@ def get_existing_dates():
     sql_statement = \
     f"""
     select distinct report_end_date
-    from bcts_staging.timber_inventory_ready_to_sell_hist;
+    from bcts_staging.timber_inventory_ready_to_develop_hist;
 
     """
 
@@ -81,9 +81,9 @@ def get_existing_dates():
         sys.exit(1)
 
 
-def run_timber_inventory_ready_to_sell_report(connection, cursor, end_date):
+def run_timber_inventory_ready_to_develop_report(connection, cursor, end_date):
 
-    sql_statement = get_timber_inventory_ready_to_sell_query(end_date)
+    sql_statement = get_timber_inventory_ready_to_develop_query(end_date)
 
     try:
         cursor.execute(sql_statement)
@@ -100,24 +100,24 @@ def publish_datasets():
     sql_statement = \
     """
     
-    DROP TABLE IF EXISTS BCTS_STAGING.timber_inventory_ready_to_sell;
-    CREATE TABLE BCTS_STAGING.timber_inventory_ready_to_sell
+    DROP TABLE IF EXISTS BCTS_STAGING.timber_inventory_ready_to_develop;
+    CREATE TABLE BCTS_STAGING.timber_inventory_ready_to_develop
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
+    FROM BCTS_STAGING.timber_inventory_ready_to_develop_hist
     WHERE report_end_date = (
-        SELECT MAX(report_end_date)
-        FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
-	);
+	SELECT MAX(report_end_date)
+	FROM BCTS_STAGING.timber_inventory_ready_to_develop_hist
+    );
 
-    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell_hist;
-    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell_hist
+    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_develop_hist;
+    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_develop_hist
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist;
+    FROM BCTS_STAGING.timber_inventory_ready_to_develop_hist;
 
-    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell;
-    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
+    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_develop;
+    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_develop
     AS SELECT * 
-    FROM BCTS_STAGING.timber_inventory_ready_to_sell;
+    FROM BCTS_STAGING.timber_inventory_ready_to_develop;
 
     """
 
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     report_required_dates = [dt for dt in end_dates if dt not in report_exists_dates]
 
     if len(report_required_dates) == 0:
-        logging.info("BCTS timber inventory ready to sell report is already up-to-date! ")
+        logging.info("BCTS timber inventory ready to develop report is already up-to-date! ")
         # Publish reporting objects to the reporting layer
         logging.info("Updating datasets to the reporting layer...")
         publish_datasets()
@@ -151,8 +151,8 @@ if __name__ == "__main__":
     for end_date in report_required_dates:
        
         # Run each report
-        logging.info(f"Running BCTS timber inventory ready to sell report for the reporting end date {end_date}...")
-        run_timber_inventory_ready_to_sell_report(connection, cursor, end_date)
+        logging.info(f"Running BCTS timber inventory ready to develop report for the reporting end date {end_date}...")
+        run_timber_inventory_ready_to_develop_report(connection, cursor, end_date)
 
     # Publish reporting objects to the reporting layer
     logging.info("Updating datasets to the reporting layer...")

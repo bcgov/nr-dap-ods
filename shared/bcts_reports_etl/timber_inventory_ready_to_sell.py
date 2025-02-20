@@ -1,7 +1,7 @@
 def get_timber_inventory_ready_to_sell_query(end_date):
     sql_statement = \
     f"""    
-    INSERT INTO bcts_staging.timber_inventory_ready_to_sell(
+    INSERT INTO bcts_staging.timber_inventory_ready_to_sell_hist(
     	business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, cutb_seq_nbr, report_end_date
     )
 
@@ -40,7 +40,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
                     A0.ACTT_KEY_IND,
                     A0.ACTIVITY_DATE
                 FROM
-                    BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A0
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL A0
                 WHERE
                     (
                         (
@@ -89,7 +89,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             A2.CUTB_SEQ_NBR,
             Max(A2.ACTIVITY_DATE) AS LATEST_DEF
         FROM
-            BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A2
+            LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL A2
         WHERE
             A2.ACTIVITY_CLASS = 'CSB'  -- Corporate Standard Block (CSB) activity class
             AND A2.ACTT_KEY_IND In (
@@ -117,7 +117,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             A4.CUTB_SEQ_NBR,
             MAX(A4.ACTIVITY_DATE) AS LATEST_OGS_REACTIVATED
         FROM
-            BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A4
+            LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL A4
         WHERE
             A4.ACTIVITY_CLASS = 'CSB'  -- Corporate Standard Block (CSB) activity class
             AND A4.ACTT_KEY_IND IN (
@@ -144,7 +144,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             LA1.ACTIVITY_DATE,
             LA1.ACTI_STATUS_IND
         FROM
-            BCTS_STAGING.FORESTVIEW_V_LICENCE_ACTIVITY_ALL LA1
+            LRM_REPLICATION.V_LICENCE_ACTIVITY_ALL LA1
         WHERE
             LA1.ACTIVITY_CLASS = 'CML'  -- Corporate Mandatory Licence (CML) activity class
             AND LA1.ACTT_KEY_IND = 'AUC'  -- Auction
@@ -156,7 +156,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
         SELECT
             LA2.LICN_SEQ_NBR
         FROM
-            BCTS_STAGING.FORESTVIEW_V_LICENCE_ACTIVITY_ALL LA2
+            LRM_REPLICATION.V_LICENCE_ACTIVITY_ALL LA2
         WHERE
             LA2.ACTIVITY_CLASS = 'CML'  -- Corporate Mandatory Licence (CML) activity class
             AND LA2.ACTT_KEY_IND = 'HI'  -- Licence Issued
@@ -171,7 +171,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             cutb_seq_nbr
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            LRM_REPLICATION.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -188,7 +188,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            LRM_REPLICATION.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -206,7 +206,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            LRM_REPLICATION.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -223,7 +223,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            LRM_REPLICATION.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -240,7 +240,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            LRM_REPLICATION.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -399,28 +399,21 @@ select distinct
     '{end_date}'::date
 
 FROM
-    BCTS_STAGING.FORESTVIEW_V_BLOCK B
+    LRM_REPLICATION.V_BLOCK B
 	INNER JOIN A_D
 	ON B.CUTB_SEQ_NBR = A_D.CUTB_SEQ_NBR
-	AND A_D.RC_Date Is Not Null
-    AND A_D.DR_Date Is Not Null
-    AND A_D.DVC_Date Is Not Null
-    AND A_D.Deletion_Approval_Date Is Null
-    AND A_D.Write_Off_Date Is Null
 	LEFT JOIN LDF
 	ON B.CUTB_SEQ_NBR = LDF.CUTB_SEQ_NBR 
 	LEFT JOIN LRCT
 	ON B.CUTB_SEQ_NBR = LRCT.CUTB_SEQ_NBR 
-	LEFT JOIN BCTS_STAGING.FORESTVIEW_V_BLOCK_SPATIAL BS
+	LEFT JOIN LRM_REPLICATION.V_BLOCK_SPATIAL BS
 	ON B.CUTB_SEQ_NBR = BS.CUTB_SEQ_NBR 
-	LEFT JOIN BCTS_STAGING.FORESTVIEW_V_LICENCE L
+	LEFT JOIN LRM_REPLICATION.V_LICENCE L
 	ON B.LICN_SEQ_NBR = L.LICN_SEQ_NBR 
-	AND COALESCE(L.TENURE,' ') <> 'B07'
 	LEFT JOIN AUC
 	ON L.LICN_SEQ_NBR = AUC.LICN_SEQ_NBR 
 	LEFT JOIN HI
 	ON L.LICN_SEQ_NBR = HI.LICN_SEQ_NBR 
-	AND HI.LICN_SEQ_NBR Is Null
 	LEFT JOIN SALVAGE_ANY_FIRE_YEAR
 	ON b.cutb_seq_nbr = SALVAGE_ANY_FIRE_YEAR.cutb_seq_nbr 
 	LEFT JOIN salvage21
@@ -431,6 +424,14 @@ FROM
 	ON b.cutb_seq_nbr = salvage23.cutb_seq_nbr 
 	LEFT JOIN salvage24
 	ON b.cutb_seq_nbr = salvage24.cutb_seq_nbr
+WHERE 1 = 1
+    AND COALESCE(L.TENURE,' ') <> 'B07'
+    AND A_D.RC_Date Is Not Null
+    AND A_D.DR_Date Is Not Null
+    AND A_D.DVC_Date Is Not Null
+    AND A_D.Deletion_Approval_Date Is Null
+    AND A_D.Write_Off_Date Is Null
+    AND HI.LICN_SEQ_NBR Is Null
 
 ORDER BY
     -- LEN(BUSINESS_AREA_REGION) desc,

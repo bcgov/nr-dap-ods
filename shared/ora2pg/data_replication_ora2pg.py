@@ -78,13 +78,14 @@ def del_audit_entries_rerun(current_date):
 # Function to insert the audit batch status entry
 
 
-def audit_batch_status_insert(table_name, status):
+def audit_batch_status_insert(table_name, status, error='None'):
     postgres_connection = PgresPool.getconn()
     postgres_cursor = postgres_connection.cursor()
     try:
-        audit_batch_status_query = f"""INSERT INTO {mstr_schema}.{audit_table} VALUES ('{table_name}','{app_name}','replication','{status}',current_date)"""
-        print(audit_batch_status_query)
-        postgres_cursor.execute(audit_batch_status_query)
+        audit_batch_status_query = f"""INSERT INTO {mstr_schema}.{audit_table} (object_name, application_name, etl_layer, object_execution_status, batch_run_date, error_message) VALUES (%s, %s, %s, %s, current_date, %s)"""
+        values = (table_name, app_name, 'replication', status, error)
+        print(audit_batch_status_query, values)
+        postgres_cursor.execute(audit_batch_status_query, values)
         postgres_connection.commit()
         print("Record inserted into audit batch status table")
         return None
@@ -174,7 +175,7 @@ def load_into_postgres(table_name, data, target_schema):
 
     except Exception as e:
         print(f"Error loading data into PostgreSQL: {str(e)}")
-        audit_batch_status_insert(table_name, 'failed')
+        audit_batch_status_insert(table_name, 'failed', str(e))
     finally:
         # Return the connection to the pool
         if postgres_connection:
@@ -232,7 +233,7 @@ if __name__ == '__main__':
             except Exception as e:
                 # Handle exceptions that occurred during the task
                 print(f"Error replicating {table_name}: {e}")
-                audit_batch_status_insert(table_name[0], 'failed')
+                audit_batch_status_insert(table_name[0], 'failed', str(e))
 
     # record end time
     end = time.time()
