@@ -23,6 +23,7 @@ BEGIN
             'Y',
             1,
             'N',
+            'N',
             NULL,
             'Oracle'
         );
