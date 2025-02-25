@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["SD-138729-TIMBER-INVENTORY-READY-TO-DEVELOP"]
 
 env:
   REGISTRY: ghcr.io
