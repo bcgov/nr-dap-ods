@@ -306,7 +306,8 @@ SELECT DISTINCT
     ACTB_S.OGS_Reactivated_Re_Engineered_Status,
     ACTB.OGS_Reactivated_Re_Engineered,
     BS.SPATIAL_FLAG,
-    BLOCK.CUTB_SEQ_NBR
+    BLOCK.CUTB_SEQ_NBR,
+    '{end_date}'::date
 
 FROM
     BCTS_STAGING.FORESTVIEW_V_BLOCK BLOCK
