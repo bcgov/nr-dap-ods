@@ -84,7 +84,6 @@ def get_existing_dates():
 def run_timber_inventory_ready_to_develop_report(connection, cursor, end_date):
 
     sql_statement = get_timber_inventory_ready_to_develop_query(end_date)
-    print(sql_statement)
 
     try:
         cursor.execute(sql_statement)
@@ -102,7 +101,7 @@ def publish_datasets():
     """
     
     DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_develop;
-    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
+    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_develop
     AS SELECT * 
     FROM BCTS_STAGING.timber_inventory_ready_to_develop;
 
