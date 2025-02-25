@@ -84,7 +84,6 @@ def get_existing_dates():
 def run_timber_inventory_ready_to_sell_report(connection, cursor, end_date):
 
     sql_statement = get_timber_inventory_ready_to_sell_query(end_date)
-    print(sql_statement)
 
     try:
         cursor.execute(sql_statement)
@@ -129,6 +128,10 @@ if __name__ == "__main__":
 
     if len(report_required_dates) == 0:
         logging.info("BCTS timber inventory ready to sell report is already up-to-date! ")
+        # Publish reporting objects to the reporting layer
+        logging.info("Updating datasets to the reporting layer...")
+        publish_datasets()
+        logging.info("Datasets in the reporting layer have been updated!")
         sys.exit(0)
 
     for end_date in report_required_dates:
