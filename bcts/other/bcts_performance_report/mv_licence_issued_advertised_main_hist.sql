@@ -61,6 +61,6 @@ SELECT
     Official.report_end_date,
     Official.fiscal_year
 FROM
-    bcts_staging.licence_issued_advertised_official AS official
+    bcts_staging.licence_issued_advertised_official_hist AS official
     LEFT JOIN bcts_staging.mv_licence_issued_advertised_lrm AS lrm
     ON official.forest_file_id = lrm.licence_id
