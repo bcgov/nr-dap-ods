@@ -68,7 +68,7 @@ def get_existing_dates():
     sql_statement = \
     f"""
     select distinct report_end_date
-    from bcts_staging.annual_development_ready;
+    from bcts_staging.annual_development_ready_hist;
 
     """
 
@@ -101,10 +101,21 @@ def run_report(connection, cursor, start_date, end_date):
 
 
 def publish_datasets():
+    """
+    Publish the latest report from the historic records
+    """
 
     sql_statement = \
     """
-    
+    DROP TABLE IF EXISTS BCTS_STAGING.annual_development_ready;
+    CREATE TABLE BCTS_STAGING.annual_development_ready
+    AS SELECT * 
+    FROM BCTS_STAGING.annual_development_ready_hist
+    WHERE report_end_date = (
+	    SELECT MAX(report_end_date)
+	    FROM BCTS_STAGING.annual_development_ready_hist
+    );
+
     DROP TABLE IF EXISTS BCTS_REPORTING.annual_development_ready;
     CREATE TABLE BCTS_REPORTING.annual_development_ready
     AS SELECT * 

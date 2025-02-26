@@ -1,8 +1,8 @@
 -- Table: bcts_staging.licence_issued_advertised_official
 
-DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_official;
+DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_official_hist;
 
-CREATE TABLE bcts_staging.licence_issued_advertised_official
+CREATE TABLE bcts_staging.licence_issued_advertised_official_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",

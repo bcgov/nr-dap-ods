@@ -1,8 +1,8 @@
 -- Table: bcts_staging.annual_development_ready
 
--- DROP TABLE IF EXISTS bcts_staging.annual_development_ready;
+-- DROP TABLE IF EXISTS bcts_staging.annual_development_ready_hist;
 
-CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready
+CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",

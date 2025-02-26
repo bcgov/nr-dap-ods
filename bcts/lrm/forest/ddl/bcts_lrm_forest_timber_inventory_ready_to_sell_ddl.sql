@@ -1,8 +1,8 @@
 -- Table: bcts_staging.timber_inventory_ready_to_sell
 
--- DROP TABLE IF EXISTS bcts_staging.timber_inventory_ready_to_sell;
+-- DROP TABLE IF EXISTS bcts_staging.timber_inventory_ready_to_sell_hist;
 
-CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_sell
+CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_sell_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",

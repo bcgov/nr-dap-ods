@@ -1,4 +1,4 @@
-create materialized view bcts_staging.mv_licence_issued_advertised_main as
+create materialized view bcts_staging.mv_licence_issued_advertised_main_hist as
 SELECT
     official.Business_Area_Region_Category,
     official.Business_Area_Region,

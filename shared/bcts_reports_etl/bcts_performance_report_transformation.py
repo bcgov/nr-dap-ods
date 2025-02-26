@@ -93,7 +93,7 @@ def truncate_licence_issued_advertised_official_report(connection, cursor, start
 
     sql_statement = \
     f"""
-    delete from bcts_staging.licence_issued_advertised_official
+    delete from bcts_staging.licence_issued_advertised_official_hist
     where report_start_date = '{start_date}'
     and report_end_date = '{end_date}'
     and report_frequency = '{report_frequency}';
@@ -128,7 +128,7 @@ def licence_issued_advertised_official_report_exists(start_date, end_date, repor
     sql_statement = \
     f"""
 
-    select exists (select * from bcts_staging.licence_issued_advertised_official
+    select exists (select * from bcts_staging.licence_issued_advertised_official_hist
     where report_start_date = '{start_date}'
     and report_end_date = '{end_date}'
     and report_frequency = '{report_frequency}') as report_exists;
@@ -167,7 +167,7 @@ def refresh_mat_views():
     sql_statement = \
     """
     refresh materialized view bcts_staging.mv_licence_issued_advertised_lrm;
-    refresh materialized view bcts_staging.mv_licence_issued_advertised_main;
+    refresh materialized view bcts_staging.mv_licence_issued_advertised_main_hist;
 
     """
 
@@ -185,10 +185,30 @@ def publish_datasets():
     sql_statement = \
     """
     
+    DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_official;
+    CREATE TABLE BCTS_STAGING.licence_issued_advertised_official
+    AS SELECT * 
+    FROM BCTS_STAGING.licence_issued_advertised_official_hist
+    WHERE report_frequency = 'Fiscal Year to Date'
+    AND report_end_date = (
+        SELECT MAX(report_end_date)
+        FROM BCTS_STAGING.licence_issued_advertised_official_hist
+    );
+
     DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_official;
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_official
     AS SELECT * 
     FROM BCTS_STAGING.licence_issued_advertised_official;
+
+
+    DROP TABLE IF EXISTS BCTS_STAGING.currently_in_market;
+    CREATE TABLE BCTS_STAGING.currently_in_market
+    AS SELECT * 
+    FROM BCTS_STAGING.currently_in_market_hist
+    WHERE report_end_date = (
+	SELECT MAX(report_end_date)
+	FROM BCTS_STAGING.currently_in_market_hist
+    );
 
     DROP TABLE IF EXISTS BCTS_REPORTING.currently_in_market;
     CREATE TABLE BCTS_REPORTING.currently_in_market
@@ -198,12 +218,23 @@ def publish_datasets():
     DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_lrm;
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_lrm
     AS SELECT * 
-    FROM BCTS_STAGING.mv_licence_issued_advertised_lrm;
+    FROM BCTS_STAGING.licence_issued_advertised_lrm;
+
+    DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_main;
+    CREATE TABLE BCTS_STAGING.licence_issued_advertised_main
+    AS SELECT * 
+    FROM BCTS_STAGING.mv_licence_issued_advertised_main_hist
+    WHERE report_frequency = 'Fiscal Year to Date'
+        AND report_end_date = (
+        SELECT MAX(report_end_date)
+        FROM BCTS_STAGING.mv_licence_issued_advertised_main_hist
+	);
 
     DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main;
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
     AS SELECT * 
-    FROM BCTS_STAGING.mv_licence_issued_advertised_main;
+    FROM BCTS_STAGING.licence_issued_advertised_main;
+
 
     """
 

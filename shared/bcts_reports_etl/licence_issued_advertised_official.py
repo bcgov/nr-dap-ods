@@ -4,7 +4,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
     f"""
 
     /* qLicenceIssuedAdvertised_Official */
-    INSERT INTO BCTS_STAGING.licence_issued_advertised_official 
+    INSERT INTO BCTS_STAGING.licence_issued_advertised_official_hist 
     SELECT * FROM 
     (with issued as
     /* Issued Licence Details (Licences issued within reporting period) */

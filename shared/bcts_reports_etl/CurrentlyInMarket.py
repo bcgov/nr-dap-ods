@@ -33,7 +33,7 @@ Manually include or exclude results accordingly.
 def get_currently_in_market(end_date):
     sql_statement = \
     f"""    
-    INSERT INTO bcts_staging.currently_in_market
+    INSERT INTO bcts_staging.currently_in_market_hist
     /* Tender Posted Activity Done Date (TENPOST) */
     SELECT *
     FROM

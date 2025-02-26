@@ -63,7 +63,7 @@ def get_existing_dates():
     sql_statement = \
     f"""
     select distinct report_end_date
-    from bcts_staging.timber_inventory_ready_to_sell;
+    from bcts_staging.timber_inventory_ready_to_sell_hist;
 
     """
 
@@ -100,6 +100,15 @@ def publish_datasets():
     sql_statement = \
     """
     
+    DROP TABLE IF EXISTS BCTS_STAGING.timber_inventory_ready_to_sell;
+    CREATE TABLE BCTS_STAGING.timber_inventory_ready_to_sell
+    AS SELECT * 
+    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
+    WHERE report_end_date = (
+        SELECT MAX(report_end_date)
+        FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
+	)
+
     DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell;
     CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
     AS SELECT * 

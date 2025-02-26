@@ -1,8 +1,8 @@
 -- Table: bcts_staging.currently_in_market
 
-DROP TABLE IF EXISTS bcts_staging.currently_in_market;
+DROP TABLE IF EXISTS bcts_staging.currently_in_market_hist;
 
-CREATE TABLE bcts_staging.currently_in_market
+CREATE TABLE bcts_staging.currently_in_market_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
