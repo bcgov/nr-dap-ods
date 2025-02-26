@@ -32,7 +32,3 @@ CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready
     report_end_date date
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS bcts_staging.annual_development_ready
-    OWNER to bcts_etl_user;
