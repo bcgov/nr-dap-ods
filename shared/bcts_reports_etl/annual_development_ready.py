@@ -2,7 +2,7 @@ def get_annual_development_ready_query(start_date, end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.annual_development_ready(
-    	business_area_region_category, business_area_region, business_area, business_area_code, field_team, manu_id, licence, tenure, perm, mark, block_id, ubi, block_state, cruise_volume, rw_volume, dr_done, rc_status, rc_status_date, dvs_status, dvs_status_date, dvc_status, dvc_status_date, licn_seq_nbr, cutb_seq_nbr, fiscal_year_start_date, report_end_date)
+    	business_area_region_category, business_area_region, business_area, business_area_code, field_team, manu_id, licence, tenure, perm, mark, block_id, ubi, block_state, cruise_volume, rw_volume, dr_done, rc_status, rc_status_date, dvs_status, dvs_status_date, dvc_status, dvc_status_date, licn_seq_nbr, cutb_seq_nbr, fiscal_year_start_date, report_end_date
     )
 
     WITH ACTB AS
