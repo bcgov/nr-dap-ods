@@ -62,7 +62,7 @@ def get_last_days_of_months(start_year = 2025):
                 else:
                     fiscal_year_start = datetime(year, 4, 1)
 
-                dates.append(fiscal_year_start, date(year, month, 1) - timedelta (days=1))
+                dates.append((fiscal_year_start, date(year, month, 1) - timedelta (days=1)))
 
 def get_existing_dates():
     sql_statement = \
