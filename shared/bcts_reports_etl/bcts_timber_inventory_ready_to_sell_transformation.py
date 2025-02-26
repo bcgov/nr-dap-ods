@@ -107,7 +107,7 @@ def publish_datasets():
     WHERE report_end_date = (
         SELECT MAX(report_end_date)
         FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
-	)
+	);
 
     DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell;
     CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
