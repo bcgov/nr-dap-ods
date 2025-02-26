@@ -68,7 +68,7 @@ def get_existing_dates():
     sql_statement = \
     f"""
     select distinct report_end_date
-    from bcts_staging.annual_evelopment_ready;
+    from bcts_staging.annual_development_ready;
 
     """
 
@@ -105,10 +105,10 @@ def publish_datasets():
     sql_statement = \
     """
     
-    DROP TABLE IF EXISTS BCTS_REPORTING.annual_evelopment_ready;
-    CREATE TABLE BCTS_REPORTING.annual_evelopment_ready
+    DROP TABLE IF EXISTS BCTS_REPORTING.annual_development_ready;
+    CREATE TABLE BCTS_REPORTING.annual_development_ready
     AS SELECT * 
-    FROM BCTS_STAGING.annual_evelopment_ready;
+    FROM BCTS_STAGING.annual_development_ready;
 
     """
 
