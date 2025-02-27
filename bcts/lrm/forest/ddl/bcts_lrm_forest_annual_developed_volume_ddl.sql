@@ -531,3 +531,37 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
 
 COMMENT ON TABLE lrm_replication.activity IS 'Individual activities associated with objects including date and status information. Objects include block, licence, cutting permit, contractor, mark, forest plan.';
 
+
+-- DROP TABLE IF EXISTS bcts_staging.annual_developed_volume;
+
+CREATE TABLE IF NOT EXISTS bcts_staging.annual_developed_volume_hist
+(
+    business_area_region_category text COLLATE pg_catalog."default",
+    business_area_region text COLLATE pg_catalog."default",
+    business_area text COLLATE pg_catalog."default",
+    business_area_code character varying(15) COLLATE pg_catalog."default",
+    "Field Team" character varying(150) COLLATE pg_catalog."default",
+    manu_id character varying(60) COLLATE pg_catalog."default",
+    licence character varying(15) COLLATE pg_catalog."default",
+    "File Type" character varying(40) COLLATE pg_catalog."default",
+    agreement_type_code character varying(10) COLLATE pg_catalog."default",
+    agreement_type character varying(200) COLLATE pg_catalog."default",
+    permit character varying(40) COLLATE pg_catalog."default",
+    mark character varying(15) COLLATE pg_catalog."default",
+    block character varying(20) COLLATE pg_catalog."default",
+    ubi character varying(15) COLLATE pg_catalog."default",
+    block_state character varying(20) COLLATE pg_catalog."default",
+    cruise_volume numeric(15,6),
+    rw_volume numeric(15,6),
+    rc_done date,
+    rc_done_fiscal numeric,
+    dr_done date,
+    dr_done_fiscal numeric,
+    dvs_done date,
+    dvs_done_fiscal numeric,
+    dvc_done date,
+    dvc_done_fiscal numeric,
+    cutb_seq_nbr numeric(15,0),
+    fiscal_year_start_date date,
+    report_end_date date
+)
