@@ -1,7 +1,7 @@
 def get_annual_developed_volume_query(start_date, end_date):
     sql_statement = \
     f"""    
-    INSERT INTO bcts_staging.annual_development_ready_hist(
+    INSERT INTO bcts_staging.annual_developed_volume_hist(
     business_area_region_category, business_area_region, business_area, business_area_code, "Field Team", manu_id, licence, "File Type", agreement_type_code, agreement_type, permit, mark, block, ubi, block_state, cruise_volume, rw_volume, rc_done, rc_done_fiscal, dr_done, dr_done_fiscal, dvs_done, dvs_done_fiscal, dvc_done, dvc_done_fiscal, cutb_seq_nbr, fiscal_year_start_date, report_end_date   
     )
         WITH annual_developed_volume AS
