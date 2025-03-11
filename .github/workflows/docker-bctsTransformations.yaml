@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["SD-137267-Timber-Inventory-Ready-to-Sell-Report"]
+    branches: ["SD-140653-REPLICATE-LRM-FORESTVIEW-VIEWS"]
 
 env:
   REGISTRY: ghcr.io
