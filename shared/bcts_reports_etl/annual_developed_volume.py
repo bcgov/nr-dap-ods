@@ -95,8 +95,8 @@ def get_annual_developed_volume_query(start_date, end_date):
                     GROUP BY  A.CUTB_SEQ_NBR
             ) ACTB
             ON ba.cutb_seq_nbr = actb.cutb_seq_nbr
-                AND actb.dvc_done BETWEEN TO_DATE('2024-04-01', 'YYYY-MM-DD')  -- Date: beginning of current fiscal
-                AND TO_DATE('2024-09-30', 'YYYY-MM-DD')  -- Date: end of reporting period
+                AND actb.dvc_done BETWEEN  '{start_date}'  -- Date: beginning of current fiscal
+                AND '{end_date}' -- Date: end of reporting period
     )
 
     SELECT *,
