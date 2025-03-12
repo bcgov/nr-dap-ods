@@ -95,7 +95,7 @@ def get_annual_developed_volume_query(start_date, end_date):
                         AND C.ACCL_DESCRIPTION = 'CMB'
                         AND T.ACTT_KEY_IND In ('RC', 'DR', 'DVS', 'DVC')
                         AND A.ACTI_STATUS_IND = 'D'
-                    GROUP BY  A.CUTB_SEQ_NBR, T.ACTT_KEY_IND
+                    GROUP BY  A.CUTB_SEQ_NBR
             ) ACTB
             ON ba.cutb_seq_nbr = actb.cutb_seq_nbr
                 AND actb.dvc_done BETWEEN TO_DATE('2024-04-01', 'YYYY-MM-DD')  -- Date: beginning of current fiscal
