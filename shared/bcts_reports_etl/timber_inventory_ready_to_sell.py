@@ -402,11 +402,6 @@ FROM
     BCTS_STAGING.FORESTVIEW_V_BLOCK B
 	INNER JOIN A_D
 	ON B.CUTB_SEQ_NBR = A_D.CUTB_SEQ_NBR
-	AND A_D.RC_Date Is Not Null
-    AND A_D.DR_Date Is Not Null
-    AND A_D.DVC_Date Is Not Null
-    AND A_D.Deletion_Approval_Date Is Null
-    AND A_D.Write_Off_Date Is Null
 	LEFT JOIN LDF
 	ON B.CUTB_SEQ_NBR = LDF.CUTB_SEQ_NBR 
 	LEFT JOIN LRCT
@@ -415,12 +410,10 @@ FROM
 	ON B.CUTB_SEQ_NBR = BS.CUTB_SEQ_NBR 
 	LEFT JOIN BCTS_STAGING.FORESTVIEW_V_LICENCE L
 	ON B.LICN_SEQ_NBR = L.LICN_SEQ_NBR 
-	AND COALESCE(L.TENURE,' ') <> 'B07'
 	LEFT JOIN AUC
 	ON L.LICN_SEQ_NBR = AUC.LICN_SEQ_NBR 
 	LEFT JOIN HI
 	ON L.LICN_SEQ_NBR = HI.LICN_SEQ_NBR 
-	AND HI.LICN_SEQ_NBR Is Null
 	LEFT JOIN SALVAGE_ANY_FIRE_YEAR
 	ON b.cutb_seq_nbr = SALVAGE_ANY_FIRE_YEAR.cutb_seq_nbr 
 	LEFT JOIN salvage21
@@ -431,6 +424,14 @@ FROM
 	ON b.cutb_seq_nbr = salvage23.cutb_seq_nbr 
 	LEFT JOIN salvage24
 	ON b.cutb_seq_nbr = salvage24.cutb_seq_nbr
+WHERE 1 = 1
+    AND COALESCE(L.TENURE,' ') <> 'B07'
+    AND A_D.RC_Date Is Not Null
+    AND A_D.DR_Date Is Not Null
+    AND A_D.DVC_Date Is Not Null
+    AND A_D.Deletion_Approval_Date Is Null
+    AND A_D.Write_Off_Date Is Null
+    AND HI.LICN_SEQ_NBR Is Null
 
 ORDER BY
     -- LEN(BUSINESS_AREA_REGION) desc,

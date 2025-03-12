@@ -454,7 +454,6 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         ON pfu.bcts_org_unit = ou.org_unit_no
         LEFT JOIN bcts_staging.the_bcts_timber_sale ts
         ON  pfu.forest_file_id = ts.forest_file_id
-        AND  ts.forest_file_id is not null
         LEFT JOIN bcts_staging.fta_tenure_term tt
         ON pfu.forest_file_id = tt.forest_file_id
         LEFT JOIN bcts_staging.fta_tenure_file_status_code tfsc
@@ -465,15 +464,14 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         ON ts.forest_file_id = advertised.forest_file_id
         LEFT JOIN advertised_in_report_period
         ON ts.forest_file_id = advertised_in_report_period.forest_file_id
-    WHERE (
+    WHERE 1 = 1
+        AND (
             /* Criteria for Licences Issued in reporting period*/
             issued.forest_file_id is not null
             /* Criteria for auctions within the reporting period */
             or advertised_in_report_period.forest_file_id is not null
         )
-
-
-    
+        AND  ts.forest_file_id is not null
 
     union 
 
