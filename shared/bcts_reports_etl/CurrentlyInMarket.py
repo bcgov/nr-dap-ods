@@ -308,25 +308,26 @@ def get_currently_in_market(end_date):
     ON d.divi_short_code = L.TSO_CODE
     LEFT JOIN TENPOST
     ON L.LICN_SEQ_NBR = TENPOST.LICN_SEQ_NBR 
-        AND TENPOST.licn_seq_nbr is not null  -- TENPOST (CML) must be Done. If a licence does not sell at auction, TENPOST must be set back to Planned.
-        AND tenpost.LRM_Tender_Posted_Done_Date <= '{end_date}'  -- Date: report period end. Tender posted before the time of interest.
     LEFT JOIN HA
     ON L.LICN_SEQ_NBR = HA.LICN_SEQ_NBR
+    LEFT JOIN AUC
+    ON l.LICN_SEQ_NBR = AUC.licn_seq_nbr
+    LEFT JOIN LV
+    ON L.LICN_SEQ_NBR = LV.LICN_SEQ_NBR
+
+    WHERE 1 = 1
+    AND TENPOST.licn_seq_nbr is not null  -- TENPOST (CML) must be Done. If a licence does not sell at auction, TENPOST must be set back to Planned.
+        AND tenpost.LRM_Tender_Posted_Done_Date <= '{end_date}'  -- Date: report period end. Tender posted before the time of interest.
     AND (
             HA.LICN_SEQ_NBR is null  -- HA (CML) must not be Done; the licence has not been awarded.
             OR HA.LRM_Licence_Awarded_Done_Date >  '{end_date}'  -- Date: report period end. Licences not yet awarded at time of interest.
         )
-    LEFT JOIN AUC
-    ON l.LICN_SEQ_NBR = AUC.licn_seq_nbr
     AND (
             NOT AUC.LRM_Auction_Done_Date
                 BETWEEN tenpost.LRM_Tender_Posted_Done_Date
                 AND  '{end_date}'  -- Date: report period end. Auction date not done after the tender is posted and before the end of the report period.
             OR AUC.LRM_Auction_Done_Date is null
         )
-    LEFT JOIN LV
-    ON L.LICN_SEQ_NBR = LV.LICN_SEQ_NBR
-    
         
     /*
     This union select adds a blank row
