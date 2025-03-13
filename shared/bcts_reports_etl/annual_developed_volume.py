@@ -59,10 +59,13 @@ def get_annual_developed_volume_query(start_date, end_date):
                 ON ba.licn_seq_nbr = l.licn_seq_nbr
             LEFT OUTER JOIN bcts_staging.forest_block_admin_zone     z
                 ON l.divi_div_nbr = z.divi_div_nbr  
+                AND l.blaz_admin_zone_id = z.blaz_admin_zone_id
             LEFT OUTER JOIN bcts_staging.forest_division_code_lookup dcl
-                ON l.licn_field_team_id = dcl.colu_lookup_id  
+                ON l.licn_field_team_id = dcl.colu_lookup_id
+                AND l.divi_div_nbr = dcl.divi_div_nbr
             LEFT OUTER JOIN bcts_staging.forest_code_lookup          cl
                 ON  dcl.colu_lookup_type = cl.colu_lookup_type 
+                AND dcl.colu_lookup_id = cl.colu_lookup_id
             LEFT JOIN bcts_staging.forest_tenure_type tn
                 ON l.tent_seq_nbr = tn.tent_seq_nbr
             LEFT OUTER JOIN bcts_staging.forest_cut_permit           cp
@@ -95,9 +98,6 @@ def get_annual_developed_volume_query(start_date, end_date):
     WHERE 1 = 1
         AND actb.dvc_done BETWEEN  '{start_date}'  -- Date: beginning of current fiscal
         AND '{end_date}' -- Date: end of reporting period
-        AND l.blaz_admin_zone_id = z.blaz_admin_zone_id
-        AND l.divi_div_nbr = dcl.divi_div_nbr
-        AND dcl.colu_lookup_id = cl.colu_lookup_id 
     )
 
     SELECT *,
