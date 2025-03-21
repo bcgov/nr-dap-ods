@@ -215,7 +215,7 @@ if __name__ == '__main__':
     # Delete audit entries for rerun on same day
     del_audit_entries_rerun(current_date)
     # Using ThreadPoolExecutor to run tasks concurrently
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
         # Submit tasks to the executor
         future_to_table = {executor.submit(
             load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4]): table for table in tables_to_extract}
