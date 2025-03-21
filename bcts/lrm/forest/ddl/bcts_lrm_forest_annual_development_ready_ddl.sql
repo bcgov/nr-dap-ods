@@ -4,6 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready_hist
 (
+    id SERIAL PRIMARY KEY,
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
     business_area text COLLATE pg_catalog."default",

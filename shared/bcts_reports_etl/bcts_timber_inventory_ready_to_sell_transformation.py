@@ -109,6 +109,11 @@ def publish_datasets():
         FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist
 	);
 
+    DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell_hist;
+    CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.timber_inventory_ready_to_sell_hist;
+
     DROP TABLE IF EXISTS BCTS_REPORTING.timber_inventory_ready_to_sell;
     CREATE TABLE BCTS_REPORTING.timber_inventory_ready_to_sell
     AS SELECT * 

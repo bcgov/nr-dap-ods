@@ -532,10 +532,11 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
 COMMENT ON TABLE lrm_replication.activity IS 'Individual activities associated with objects including date and status information. Objects include block, licence, cutting permit, contractor, mark, forest plan.';
 
 
--- DROP TABLE IF EXISTS bcts_staging.annual_developed_volume;
+-- DROP TABLE IF EXISTS bcts_staging.annual_developed_volume_hist;
 
 CREATE TABLE IF NOT EXISTS bcts_staging.annual_developed_volume_hist
 (
+    id SERIAL PRIMARY KEY,
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
     business_area text COLLATE pg_catalog."default",

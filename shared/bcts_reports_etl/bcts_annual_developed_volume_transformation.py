@@ -116,6 +116,11 @@ def publish_datasets():
 	    FROM BCTS_STAGING.annual_developed_volume_hist
     );
 
+    DROP TABLE IF EXISTS BCTS_REPORTING.annual_developed_volume_hist;
+    CREATE TABLE BCTS_REPORTING.annual_developed_volume_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.annual_developed_volume_hist;
+
     DROP TABLE IF EXISTS BCTS_REPORTING.annual_developed_volume;
     CREATE TABLE BCTS_REPORTING.annual_developed_volume
     AS SELECT * 
