@@ -39,7 +39,8 @@ postgres_database = os.environ['ODS_DATABASE']
 # In[5]: Script parameters
 mstr_schema = os.environ['MSTR_SCHEMA']
 app_name = os.environ['APP_NAME']
-concurrent_tasks = int(os.environ['CONCUR_TASKS'])
+# concurrent_tasks = int(os.environ['CONCUR_TASKS'])
+concurrent_tasks = 10
 audit_table = 'audit_batch_status'
 current_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -215,7 +216,7 @@ if __name__ == '__main__':
     # Delete audit entries for rerun on same day
     del_audit_entries_rerun(current_date)
     # Using ThreadPoolExecutor to run tasks concurrently
-    with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=concurrent_tasks) as executor:
         # Submit tasks to the executor
         future_to_table = {executor.submit(
             load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4]): table for table in tables_to_extract}
