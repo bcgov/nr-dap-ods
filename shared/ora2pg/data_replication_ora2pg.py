@@ -39,8 +39,7 @@ postgres_database = os.environ['ODS_DATABASE']
 # In[5]: Script parameters
 mstr_schema = os.environ['MSTR_SCHEMA']
 app_name = os.environ['APP_NAME']
-# concurrent_tasks = int(os.environ['CONCUR_TASKS'])
-concurrent_tasks = 10
+concurrent_tasks = int(os.environ['CONCUR_TASKS'])
 audit_table = 'audit_batch_status'
 current_date = datetime.now().strftime('%Y-%m-%d')
 
