@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["SD-140653-REPLICATE-LRM-FORESTVIEW-VIEWS"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
