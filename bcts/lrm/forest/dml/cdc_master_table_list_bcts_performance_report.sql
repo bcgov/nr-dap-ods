@@ -63,39 +63,6 @@ BEGIN
 END $$;
 
 
-
--- FORESTVIEW VIEWS
-DO $$
-DECLARE
-    tables text[] := ARRAY['V_LICENCE', 'V_BLOCK', 'V_BLOCK_ACTIVITY_ALL', 'V_LICENCE_ACTIVITY_ALL', 'V_BLOCK_SPATIAL'];  
-    table_name text;
-BEGIN
-    -- Loop through the list of table names
-    FOREACH table_name IN ARRAY tables
-    LOOP
-        INSERT INTO ods_data_management.cdc_master_table_list 
-        VALUES (
-            NULL,
-            'lrm',
-            NULL,               
-            'forestview',
-            table_name,               
-            'lrm_replication',
-            table_name,
-            'Y',
-            NULL,
-            NULL,
-            NULL,
-            'Y',
-            1,
-            'N',
-            'N',
-            NULL,
-            'Oracle'
-        );
-    END LOOP;
-END $$;
-
 -- Tables with custom SQL
 INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
