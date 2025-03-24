@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.permit_allocation (
     perm_seq_nbr NUMERIC(15) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     modifiedby VARCHAR(120) NULL,
     modifiedon TIMESTAMP NULL,
     modifiedusing VARCHAR(120) NULL,
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.bcts_harvest_history (
 COMMENT ON TABLE lrm_replication.bcts_harvest_history IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.commitments (
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
     copa_commit_appo NUMERIC(15) NULL,
@@ -449,7 +449,7 @@ COMMENT ON TABLE lrm_replication.sub_operating_area IS '';
 CREATE TABLE IF NOT EXISTS lrm_replication.mark_allocation (
     mark_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.ctor_contractor (
 COMMENT ON TABLE lrm_replication.ctor_contractor IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence_allocation (
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     manu_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
@@ -657,7 +657,7 @@ COMMENT ON TABLE lrm_replication.licence_shape_evw IS '';
 -- FOREST.V_LRM_CUT_BLOCK
 CREATE TABLE lrm_replication.v_lrm_cut_block (
     manu_seq_nbr NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     mark_seq_nbr NUMERIC(15) NULL,
     cutb_seq_nbr bigint NOT NULL,
@@ -734,7 +734,7 @@ SELECT * FROM lrm_replication.v_lrm_licence_shape;
 CREATE TABLE lrm_replication.v_lrm_licence (
     manu_seq_nbr NUMERIC(15) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     licn_digi_ind VARCHAR(1) NULL,
     licn_licence_id VARCHAR(15) NOT NULL,
     licn_category_id VARCHAR(10) NULL,
@@ -782,7 +782,7 @@ SELECT * FROM lrm_replication.v_lrm_licence;
 
 -- FOREST.V_LRM_COMMITMENTS
 CREATE TABLE lrm_replication.v_lrm_commitments (
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     commit_seq_nbr NUMERIC(15) NOT NULL,
     copa_partition VARCHAR(150) NULL,
     copa_commit_appo NUMERIC(15) NULL,

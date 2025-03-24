@@ -184,7 +184,7 @@ CREATE TABLE lrm_replication.v_block (
     hvc_target_date text,
     hvc_status_date text,
     manu_seq_nbr text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     perm_seq_nbr text,
     mark_seq_nbr text,
     cutb_seq_nbr bigint,
@@ -269,12 +269,12 @@ CREATE TABLE lrm_replication.v_block (
 CREATE TABLE bcts_reporting.forestview_v_block AS SELECT * FROM lrm_replication.v_block;
 
 CREATE TABLE lrm_replication.v_block_activity_all (
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     actt_seq_nbr text,
     activity_class text,
     activity_type text,
     actt_key_ind text,
-    activity_date text,
+    activity_date timestamp without time zone,
     acti_status_ind text,
     accl_object_type text,
     acti_responsibility text,
@@ -539,7 +539,7 @@ CREATE TABLE lrm_replication.v_block_old (
     harvest_completed text,
     cutb_location text,
     divi_div_nbr text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     perm_seq_nbr text,
     mark_seq_nbr text,
     cutb_seq_nbr bigint,
@@ -850,7 +850,7 @@ CREATE TABLE lrm_replication.v_ems_action_plan (
     emsi_seq_nbr double precision,
     eins_seq_nbr text,
     emsp_seq_nbr double precision,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     lems_seq_nbr double precision
 
 );
@@ -920,7 +920,7 @@ CREATE TABLE lrm_replication.v_ems_inspection (
     lems_epea_status text,
     contract_location text,
     emsp_seq_nbr bigint,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     eins_seq_nbr bigint,
     epea_seq_nbr bigint,
     lems_seq_nbr text,
@@ -976,7 +976,7 @@ CREATE TABLE lrm_replication.v_ems_inspection_test_drill (
     project_name timestamp without time zone,
     geo_location timestamp without time zone,
     contractor text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     emsc_seq_nbr text,
     lems_seq_nbr text,
     epea_seq_nbr text,
@@ -1016,7 +1016,7 @@ CREATE TABLE lrm_replication.v_ems_issue (
     detailed_description text,
     root_cause text,
     environmental_impact text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     sdom_seq_nbr text,
     emsi_seq_nbr text,
     divi_div_nbr text,
@@ -1071,7 +1071,7 @@ CREATE TABLE lrm_replication.v_ems_plan_vs_complete_insp (
     emsc_ctor_location text,
     eifr_seq_nbr text,
     eins_seq_nbr text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     emsc_seq_nbr text,
     manu_seq_nbr text,
     lems_seq_nbr text,
@@ -1292,7 +1292,7 @@ CREATE TABLE lrm_replication.v_gis_acts_status (
     cutb_seq_nbr bigint,
     actt_key_ind bigint,
     status_ind text,
-    licn_seq_nbr text
+    licn_seq_nbr BIGINT
 
 );
 
@@ -1328,7 +1328,7 @@ CREATE TABLE lrm_replication.v_harvest_history (
     bchh_update_timestamp text,
     site_name text,
     site_location text,
-    licn_seq_nbr timestamp without time zone,
+    licn_seq_nbr BIGINT,
     mark_seq_nbr text,
     tso_code text,
     licn_licence_id text,
@@ -1528,7 +1528,7 @@ CREATE TABLE lrm_replication.v_mark (
     appraisal_volume bigint,
     field_team_desc text,
     licn_licence_state text,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     perm_seq_nbr text,
     mark_seq_nbr text,
     tso_code text,
@@ -2978,7 +2978,7 @@ CREATE TABLE lrm_replication.v_silviculture_activity (
     sila_seq_nbr text,
     sica_seq_nbr text,
     cutb_seq_nbr bigint,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     divi_div_nbr text,
     tso_code text,
     field_team text,
@@ -3008,7 +3008,7 @@ CREATE TABLE bcts_reporting.forestview_v_silviculture_activity AS SELECT * FROM 
 CREATE TABLE lrm_replication.v_silviculture_activity_test1 (
     sica_seq_nbr bigint,
     cutb_seq_nbr bigint,
-    licn_seq_nbr text,
+    licn_seq_nbr BIGINT,
     field_team text,
     manu_id text,
     operating_zone text,
@@ -3605,7 +3605,7 @@ CREATE TABLE lrm_replication.v_timber_inventory_dip (
     dsc_flag text,
     dvc_flag text,
     count_of_blocks text,
-    licn_seq_nbr double precision,
+    licn_seq_nbr BIGINT,
     mark_seq_nbr double precision,
     cutb_seq_nbr bigint,
     objectid text,

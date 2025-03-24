@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.block_allocation (
     cutb_seq_nbr bigint NOT NULL,
     blal_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     mark_seq_nbr NUMERIC(15) NULL,
     blal_gross_ha_area NUMERIC(11, 6) NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.management_unit (
 COMMENT ON TABLE lrm_replication.management_unit IS 'Represents management units used in LRM to organize objects within the navigation tree, each with an associated annual allowable cut and linked to provincial Timber Supply Units defined by the Chief Forester.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.licence (
-    licn_seq_nbr NUMERIC(15) NOT NULL,
+    licn_seq_nbr BIGINT NOT NULL,
     licn_licence_id VARCHAR(15) NOT NULL,
     licn_licence_desc VARCHAR(53) NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     acti_fdp_reason VARCHAR(40) NULL,
     acti_target_cost NUMERIC(15, 2) NULL,
     plan_seq_nbr NUMERIC(15) NULL,
-    licn_seq_nbr NUMERIC(15) NULL,
+    licn_seq_nbr BIGINT NULL,
     mark_seq_nbr NUMERIC(15) NULL,
     cloc_seq_nbr NUMERIC(15) NULL,
     acti_digitized_ind VARCHAR(4) NULL,
