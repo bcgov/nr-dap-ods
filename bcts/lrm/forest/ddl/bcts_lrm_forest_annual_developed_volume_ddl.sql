@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.division (
 COMMENT ON TABLE lrm_replication.division IS 'Contains information about BC Timber Sales business areas, including their name, code, and office location.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.block_allocation (
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     blal_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
     licn_seq_nbr NUMERIC(15) NULL,
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.mark (
 COMMENT ON TABLE lrm_replication.mark IS 'Individual timber mark identification information.';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block (
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     cutb_block_id VARCHAR(20) NOT NULL,
     cutb_block_number VARCHAR(15) NULL,
     divi_div_nbr NUMERIC(2) NULL,
@@ -496,7 +496,7 @@ COMMENT ON TABLE lrm_replication.activity_type IS 'Defines the types of activiti
 
 CREATE TABLE IF NOT EXISTS lrm_replication.activity (
     acti_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
+    cutb_seq_nbr bigint NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     actt_seq_nbr NUMERIC(15) NOT NULL,
     ctor_seq_nbr NUMERIC(15) NULL,
@@ -562,7 +562,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.annual_developed_volume_hist
     dvs_done_fiscal numeric,
     dvc_done date,
     dvc_done_fiscal numeric,
-    cutb_seq_nbr numeric(15,0),
+    cutb_seq_nbr bigint,
     fiscal_year_start_date date,
     report_end_date date
 )

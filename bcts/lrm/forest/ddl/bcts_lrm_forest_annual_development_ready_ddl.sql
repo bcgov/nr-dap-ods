@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready_hist
     dvc_status text COLLATE pg_catalog."default",
     dvc_status_date date,
     licn_seq_nbr numeric(15,0),
-    cutb_seq_nbr numeric(15,0),
+    cutb_seq_nbr bigint,
     fiscal_year_start_date date,
     report_end_date date
 )

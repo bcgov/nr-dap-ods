@@ -78,7 +78,7 @@ COMMENT ON TABLE lrm_replication.ctor_contractor_location IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.cut_block_silv_regime (
     cbsr_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     treg_seq_nbr NUMERIC(15) NULL,
     modifiedby VARCHAR(120) NULL,
     modifiedon TIMESTAMP NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS lrm_replication.commitment_partition (
     createdby VARCHAR(120) NULL,
     createdon TIMESTAMP NULL,
     createdusing VARCHAR(120) NULL,
-    cutb_seq_nbr NUMERIC(15) NULL,
+    cutb_seq_nbr bigint NULL,
     copa_block_id VARCHAR(150) NULL,
     copa_cruise_m3_vol NUMERIC(9) NULL,
     copa_partition_type VARCHAR(150) NULL,
@@ -130,7 +130,7 @@ COMMENT ON TABLE lrm_replication.commitment_partition IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.block_seed_zone (
     blsz_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     blsz_class_id VARCHAR(80) NOT NULL,
     blsz_species_id VARCHAR(40) NOT NULL,
     blsz_zone_id VARCHAR(80) NOT NULL,
@@ -347,7 +347,7 @@ COMMENT ON TABLE lrm_replication.commitments IS '';
 
 CREATE TABLE IF NOT EXISTS lrm_replication.ecology_unit (
     ecou_seq_nbr NUMERIC(15) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     ecou_name VARCHAR(50) NOT NULL,
     bioz_zone_id VARCHAR(10) NULL,
     bios_subzone_id VARCHAR(10) NULL,
@@ -528,7 +528,7 @@ COMMENT ON TABLE lrm_replication.licence_allocation IS '';
 CREATE TABLE IF NOT EXISTS lrm_replication.silviculture_prescription (
     silp_seq_nbr NUMERIC(15) NOT NULL,
     divi_div_nbr NUMERIC(2) NOT NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     silp_lterm_man_obj VARCHAR(4000) NULL,
     silp_wildlife VARCHAR(4000) NULL,
     silp_sensitive_areas VARCHAR(4000) NULL,
@@ -660,7 +660,7 @@ CREATE TABLE lrm_replication.v_lrm_cut_block (
     licn_seq_nbr NUMERIC(15) NULL,
     perm_seq_nbr NUMERIC(15) NULL,
     mark_seq_nbr NUMERIC(15) NULL,
-    cutb_seq_nbr NUMERIC(15) NOT NULL,
+    cutb_seq_nbr bigint NOT NULL,
     cutb_block_id VARCHAR(20) NOT NULL,
     divi_div_nbr NUMERIC(2) NULL,
     cutb_gross_ha_area NUMERIC(11, 6) NULL,

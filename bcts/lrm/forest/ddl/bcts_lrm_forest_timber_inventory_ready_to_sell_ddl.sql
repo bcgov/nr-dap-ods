@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_sell_hist
     ogs_reactivated_minor date,
     ogs_reactivated_road date,
     ogs_reactivated_re_engineered date,
-    cutb_seq_nbr numeric(15,0),
+    cutb_seq_nbr bigint,
     report_end_date date
 );
 

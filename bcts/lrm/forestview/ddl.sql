@@ -69,7 +69,7 @@ CREATE TABLE lrm_replication.v_appr_culvert_tab_cost (
     proj_seq_nbr text,
     prjv_version_nbr double precision,
     pver_version_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     ctab_seq_nbr text,
     road_seq_nbr text,
     ctab_seq_nbr_lng text,
@@ -187,7 +187,7 @@ CREATE TABLE lrm_replication.v_block (
     licn_seq_nbr text,
     perm_seq_nbr text,
     mark_seq_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     cutb_cprp_protection_ind text,
     cutb_rc_risk_rating text,
     cutb_rc_risk_source text,
@@ -296,7 +296,7 @@ CREATE TABLE lrm_replication.v_block_activity_all (
     mark_id text,
     block_id bigint,
     block_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     acti_seq_nbr text
 
 );
@@ -328,7 +328,7 @@ CREATE TABLE lrm_replication.v_block_cruise (
     finz_forest_inventory_zone_id text,
     divi_div_nbr text,
     blkc_seq_nbr double precision,
-    cutb_seq_nbr double precision,
+    cutb_seq_nbr bigint,
     perm_seq_nbr double precision,
     blkc_system_nbr double precision,
     blkc_plot_nbr double precision,
@@ -412,7 +412,7 @@ CREATE TABLE lrm_replication.v_block_cruise_all_coni_deci (
     d_insect_damage_grey_pct double precision,
     d_burn_damage_pct double precision,
     d_m3_per_lineal_m double precision,
-    cutb_seq_nbr double precision,
+    cutb_seq_nbr bigint,
     a_blkc_area_ha double precision,
     a_spec_species_id double precision,
     a_gross_merch_m3 double precision,
@@ -542,7 +542,7 @@ CREATE TABLE lrm_replication.v_block_old (
     licn_seq_nbr text,
     perm_seq_nbr text,
     mark_seq_nbr text,
-    cutb_seq_nbr double precision,
+    cutb_seq_nbr bigint,
     tso_code text,
     tso_name text,
     nav_name text,
@@ -765,7 +765,7 @@ CREATE TABLE bcts_reporting.forestview_v_cp AS SELECT * FROM lrm_replication.v_c
 CREATE TABLE lrm_replication.v_detailed_site_assessment (
     dsa_stock_species bigint,
     dsa_site_series bigint,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     sila_seq_nbr double precision,
     dsas_chemical text,
     dsas_active text,
@@ -1194,7 +1194,7 @@ CREATE TABLE lrm_replication.v_frpa_results_strategies (
     asses_desc text,
     fsrl_comment text,
     fsrc_comment_rs text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     fdu_seq_nbr text,
     plan_seq_nbr text,
     divi_div_nbr text,
@@ -1289,7 +1289,7 @@ CREATE TABLE lrm_replication.v_gis_acts (
 CREATE TABLE bcts_reporting.forestview_v_gis_acts AS SELECT * FROM lrm_replication.v_gis_acts;
 
 CREATE TABLE lrm_replication.v_gis_acts_status (
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     actt_key_ind bigint,
     status_ind text,
     licn_seq_nbr text
@@ -1631,7 +1631,7 @@ CREATE TABLE lrm_replication.v_planting_species (
     sirk_request_key bigint,
     plsp_seed_weight text,
     plsp_price_per_tree text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     sirk_stock_type text,
     cc_percentage text,
     plsp_trees_outside_zone text,
@@ -1658,7 +1658,7 @@ CREATE TABLE bcts_reporting.forestview_v_planting_species AS SELECT * FROM lrm_r
 
 CREATE TABLE lrm_replication.v_qb_valuation (
     mark_seq_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     user_id text,
     estim_date text,
     lcst_seq_nbr text,
@@ -2393,7 +2393,7 @@ CREATE TABLE bcts_reporting.forestview_v_road_mapsheet AS SELECT * FROM lrm_repl
 CREATE TABLE lrm_replication.v_road_on_block (
     licn_seq_nbr bigint,
     mark_seq_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     ronb_seq_nbr_lng text,
     divi_div_nbr text,
     tso_code text,
@@ -2977,7 +2977,7 @@ CREATE TABLE lrm_replication.v_silviculture_activity (
     plun_seq_nbr text,
     sila_seq_nbr text,
     sica_seq_nbr text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     licn_seq_nbr text,
     divi_div_nbr text,
     tso_code text,
@@ -3007,7 +3007,7 @@ CREATE TABLE bcts_reporting.forestview_v_silviculture_activity AS SELECT * FROM 
 
 CREATE TABLE lrm_replication.v_silviculture_activity_test1 (
     sica_seq_nbr bigint,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     licn_seq_nbr text,
     field_team text,
     manu_id text,
@@ -3189,7 +3189,7 @@ CREATE TABLE lrm_replication.v_silviculture_prescription (
     silp_other_resources text,
     silp_trapper_registration text,
     silp_guide_registration text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     silp_seq_nbr text,
     divi_div_nbr text,
     prescription_prepared_by text,
@@ -3503,7 +3503,7 @@ CREATE TABLE lrm_replication.v_su (
     stun_depth_unfavourable_max text,
     stun_depth_unfavourable_min text,
     silp_sp_report_format text,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     stun_seq_nbr text,
     stun_id text,
     su_regen_obligation text,
@@ -3607,7 +3607,7 @@ CREATE TABLE lrm_replication.v_timber_inventory_dip (
     count_of_blocks text,
     licn_seq_nbr double precision,
     mark_seq_nbr double precision,
-    cutb_seq_nbr text,
+    cutb_seq_nbr bigint,
     objectid text,
     business_area_region_category timestamp without time zone,
     business_area_region bigint,
