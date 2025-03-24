@@ -40,7 +40,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
                     A0.ACTT_KEY_IND,
                     A0.ACTIVITY_DATE
                 FROM
-                    BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A0
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL A0
                 WHERE
                     (
                         (
@@ -89,7 +89,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             A2.CUTB_SEQ_NBR,
             Max(A2.ACTIVITY_DATE) AS LATEST_DEF
         FROM
-            BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A2
+            LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL A2
         WHERE
             A2.ACTIVITY_CLASS = 'CSB'  -- Corporate Standard Block (CSB) activity class
             AND A2.ACTT_KEY_IND In (
@@ -117,7 +117,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             A4.CUTB_SEQ_NBR,
             MAX(A4.ACTIVITY_DATE) AS LATEST_OGS_REACTIVATED
         FROM
-            BCTS_STAGING.FORESTVIEW_V_BLOCK_ACTIVITY_ALL A4
+            BCTS_REPORTING.V_BLOCK_ACTIVITY_ALL A4
         WHERE
             A4.ACTIVITY_CLASS = 'CSB'  -- Corporate Standard Block (CSB) activity class
             AND A4.ACTT_KEY_IND IN (
@@ -144,7 +144,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             LA1.ACTIVITY_DATE,
             LA1.ACTI_STATUS_IND
         FROM
-            BCTS_STAGING.FORESTVIEW_V_LICENCE_ACTIVITY_ALL LA1
+            BCTS_REPORTING.V_LICENCE_ACTIVITY_ALL LA1
         WHERE
             LA1.ACTIVITY_CLASS = 'CML'  -- Corporate Mandatory Licence (CML) activity class
             AND LA1.ACTT_KEY_IND = 'AUC'  -- Auction
@@ -156,7 +156,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
         SELECT
             LA2.LICN_SEQ_NBR
         FROM
-            BCTS_STAGING.FORESTVIEW_V_LICENCE_ACTIVITY_ALL LA2
+            BCTS_REPORTING.V_LICENCE_ACTIVITY_ALL LA2
         WHERE
             LA2.ACTIVITY_CLASS = 'CML'  -- Corporate Mandatory Licence (CML) activity class
             AND LA2.ACTT_KEY_IND = 'HI'  -- Licence Issued
@@ -171,7 +171,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             cutb_seq_nbr
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            BCTS_REPORTING.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -188,7 +188,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            BCTS_REPORTING.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -206,7 +206,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            BCTS_REPORTING.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -223,7 +223,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            BCTS_REPORTING.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -240,7 +240,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             activity_type
 
         from
-            BCTS_STAGING.forestview_v_block_activity_all
+            BCTS_REPORTING.v_block_activity_all
 
         where
             activity_class = 'CSB'
@@ -399,16 +399,16 @@ select distinct
     '{end_date}'::date
 
 FROM
-    BCTS_STAGING.FORESTVIEW_V_BLOCK B
+    BCTS_REPORTING.V_BLOCK B
 	INNER JOIN A_D
 	ON B.CUTB_SEQ_NBR = A_D.CUTB_SEQ_NBR
 	LEFT JOIN LDF
 	ON B.CUTB_SEQ_NBR = LDF.CUTB_SEQ_NBR 
 	LEFT JOIN LRCT
 	ON B.CUTB_SEQ_NBR = LRCT.CUTB_SEQ_NBR 
-	LEFT JOIN BCTS_STAGING.FORESTVIEW_V_BLOCK_SPATIAL BS
+	LEFT JOIN BCTS_REPORTING.V_BLOCK_SPATIAL BS
 	ON B.CUTB_SEQ_NBR = BS.CUTB_SEQ_NBR 
-	LEFT JOIN BCTS_STAGING.FORESTVIEW_V_LICENCE L
+	LEFT JOIN BCTS_REPORTING.V_LICENCE L
 	ON B.LICN_SEQ_NBR = L.LICN_SEQ_NBR 
 	LEFT JOIN AUC
 	ON L.LICN_SEQ_NBR = AUC.LICN_SEQ_NBR 
