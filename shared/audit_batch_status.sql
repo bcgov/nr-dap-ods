@@ -23,3 +23,5 @@ COMMENT ON COLUMN ods_data_management.audit_batch_status.batch_run_date IS 'Most
 -- Update 2025-03-25 Added a new column to log the errors
 ALTER TABLE ods_data_management.audit_batch_status
 ADD COLUMN error_message text NULL;
+COMMENT ON COLUMN ods_data_management.audit_batch_status.error_message IS 'Error message if the replication task is failed.';
+

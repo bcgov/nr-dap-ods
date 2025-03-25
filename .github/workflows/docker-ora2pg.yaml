@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["BCTS-ORA2PG-LOG-ERROR-IN-AUDIT-BATCH-STATUS-TABLE"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
