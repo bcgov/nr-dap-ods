@@ -19,3 +19,7 @@ COMMENT ON COLUMN ods_data_management.audit_batch_status.application_name IS 'Na
 COMMENT ON COLUMN ods_data_management.audit_batch_status.etl_layer IS 'Layer of the ELT process (e.g., replication, transformation).';
 COMMENT ON COLUMN ods_data_management.audit_batch_status.object_execution_status IS 'Status of the ELT execution (e.g., success, failure).';
 COMMENT ON COLUMN ods_data_management.audit_batch_status.batch_run_date IS 'Most recent date that the batch ELT process took place.';
+
+-- Update 2025-03-25 Added a new column to log the errors
+ALTER TABLE ods_data_management.audit_batch_status
+ADD COLUMN error_message text NULL;
