@@ -57,14 +57,6 @@ CREATE TABLE lrm_replication.v_appr_bridge_tab_cost (
 );
 CREATE TABLE bcts_reporting.forestview_v_appr_bridge_tab_cost AS SELECT * FROM lrm_replication.v_appr_bridge_tab_cost;
 CREATE TABLE lrm_replication.v_appr_culvert_tab_cost (
-    culs_status_id VARCHAR(40),
-    proj_seq_nbr NUMERIC(15),
-    prjv_version_nbr NUMERIC,
-    pver_version_nbr NUMERIC(3),
-    cutb_seq_nbr NUMERIC(15),
-    ctab_seq_nbr NUMERIC(15),
-    road_seq_nbr NUMERIC,
-    ctab_seq_nbr_lng NUMERIC(10),
     divi_div_nbr NUMERIC(2),
     ctab_road_name VARCHAR(200),
     ctab_station_nbr NUMERIC(13, 4),
@@ -79,7 +71,15 @@ CREATE TABLE lrm_replication.v_appr_culvert_tab_cost (
     ctab_applicable_vol NUMERIC(9),
     ctab_crown_portion_pct NUMERIC(7, 4),
     ctab_appraisal_year NUMERIC(4),
-    ctab_comment VARCHAR(4000)
+    ctab_comment VARCHAR(4000),
+    culs_status_id VARCHAR(40),
+    proj_seq_nbr NUMERIC(15),
+    prjv_version_nbr NUMERIC,
+    pver_version_nbr NUMERIC(3),
+    cutb_seq_nbr NUMERIC(15),
+    ctab_seq_nbr NUMERIC(15),
+    road_seq_nbr NUMERIC,
+    ctab_seq_nbr_lng NUMERIC(10)
 );
 CREATE TABLE bcts_reporting.forestview_v_appr_culvert_tab_cost AS SELECT * FROM lrm_replication.v_appr_culvert_tab_cost;
 CREATE TABLE lrm_replication.v_appr_internal_rate (
@@ -157,17 +157,6 @@ CREATE TABLE lrm_replication.v_attachment (
 );
 CREATE TABLE bcts_reporting.forestview_v_attachment AS SELECT * FROM lrm_replication.v_attachment;
 CREATE TABLE lrm_replication.v_block (
-    hvc_status VARCHAR(30),
-    hvc_target_date TIMESTAMP,
-    hvc_status_date TIMESTAMP,
-    manu_seq_nbr NUMERIC(15),
-    licn_seq_nbr NUMERIC(15),
-    perm_seq_nbr NUMERIC(15),
-    mark_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    cutb_cprp_protection_ind VARCHAR(1),
-    cutb_rc_risk_rating VARCHAR(1),
-    cutb_rc_risk_source VARCHAR(5),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -239,10 +228,32 @@ CREATE TABLE lrm_replication.v_block (
     fiz VARCHAR(40),
     hvs_status VARCHAR(30),
     hvs_target_date TIMESTAMP,
-    hvs_status_date TIMESTAMP
+    hvs_status_date TIMESTAMP,
+    hvc_status VARCHAR(30),
+    hvc_target_date TIMESTAMP,
+    hvc_status_date TIMESTAMP,
+    manu_seq_nbr NUMERIC(15),
+    licn_seq_nbr NUMERIC(15),
+    perm_seq_nbr NUMERIC(15),
+    mark_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15),
+    cutb_cprp_protection_ind VARCHAR(1),
+    cutb_rc_risk_rating VARCHAR(1),
+    cutb_rc_risk_source VARCHAR(5)
 );
 CREATE TABLE bcts_reporting.forestview_v_block AS SELECT * FROM lrm_replication.v_block;
 CREATE TABLE lrm_replication.v_block_activity_all (
+    tso_code VARCHAR(15),
+    tso_name VARCHAR(50),
+    nav_name VARCHAR(60),
+    tenure VARCHAR(40),
+    licence_id VARCHAR(15),
+    permit_id VARCHAR(40),
+    mark_id VARCHAR(15),
+    block_id VARCHAR(20),
+    block_nbr VARCHAR(15),
+    cutb_seq_nbr NUMERIC(15),
+    acti_seq_nbr NUMERIC(15),
     licn_seq_nbr NUMERIC(15),
     actt_seq_nbr NUMERIC(15),
     activity_class VARCHAR(40),
@@ -260,18 +271,7 @@ CREATE TABLE lrm_replication.v_block_activity_all (
     divi_div_nbr NUMERIC(2),
     field_team_desc VARCHAR(150),
     ubi VARCHAR(15),
-    licn_licence_state VARCHAR(20),
-    tso_code VARCHAR(15),
-    tso_name VARCHAR(50),
-    nav_name VARCHAR(60),
-    tenure VARCHAR(40),
-    licence_id VARCHAR(15),
-    permit_id VARCHAR(40),
-    mark_id VARCHAR(15),
-    block_id VARCHAR(20),
-    block_nbr VARCHAR(15),
-    cutb_seq_nbr NUMERIC(15),
-    acti_seq_nbr NUMERIC(15)
+    licn_licence_state VARCHAR(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_block_activity_all AS SELECT * FROM lrm_replication.v_block_activity_all;
 CREATE TABLE lrm_replication.v_block_area (
@@ -287,14 +287,6 @@ CREATE TABLE lrm_replication.v_block_area (
 );
 CREATE TABLE bcts_reporting.forestview_v_block_area AS SELECT * FROM lrm_replication.v_block_area;
 CREATE TABLE lrm_replication.v_block_cruise (
-    blkc_pulp_m3_per_ha NUMERIC(15, 7),
-    blkc_sawlog_m3_per_ha NUMERIC(15, 7),
-    blkc_sawlog_m3_per_tree NUMERIC(15, 7),
-    blkc_pulp_net_m3_per_tree NUMERIC(15, 7),
-    blkc_burn_damage_pct NUMERIC,
-    specie_pct NUMERIC,
-    finz_forest_inventory_zone_id VARCHAR(40),
-    divi_div_nbr NUMERIC(2),
     blkc_seq_nbr NUMERIC(15),
     cutb_seq_nbr NUMERIC(15),
     perm_seq_nbr NUMERIC(15),
@@ -332,51 +324,18 @@ CREATE TABLE lrm_replication.v_block_cruise (
     blkc_large_log_pct NUMERIC(15, 7),
     blkc_lrf_bdft_per_m3 NUMERIC(15, 7),
     blkc_m3_per_lineal_m NUMERIC(15, 7),
-    blkc_gross_m3_per_ha NUMERIC(15, 7)
+    blkc_gross_m3_per_ha NUMERIC(15, 7),
+    blkc_pulp_m3_per_ha NUMERIC(15, 7),
+    blkc_sawlog_m3_per_ha NUMERIC(15, 7),
+    blkc_sawlog_m3_per_tree NUMERIC(15, 7),
+    blkc_pulp_net_m3_per_tree NUMERIC(15, 7),
+    blkc_burn_damage_pct NUMERIC,
+    specie_pct NUMERIC,
+    finz_forest_inventory_zone_id VARCHAR(40),
+    divi_div_nbr NUMERIC(2)
 );
 CREATE TABLE bcts_reporting.forestview_v_block_cruise AS SELECT * FROM lrm_replication.v_block_cruise;
 CREATE TABLE lrm_replication.v_block_cruise_all_coni_deci (
-    c_avg_merch_ht_m NUMERIC(15, 7),
-    c_basal_area NUMERIC(15, 7),
-    c_sampling_error_pct NUMERIC(15, 7),
-    c_blowdown_pct NUMERIC(15, 7),
-    c_stud_pct NUMERIC(15, 7),
-    c_small_log_pct NUMERIC(15, 7),
-    c_large_log_pct NUMERIC(15, 7),
-    c_lrf_bdft_per_m3 NUMERIC(15, 7),
-    c_insect_damage_green_pct NUMERIC,
-    c_insect_damage_red_pct NUMERIC,
-    c_insect_damage_grey_pct NUMERIC,
-    c_burn_damage_pct NUMERIC,
-    c_m3_per_lineal_m NUMERIC(15, 7),
-    d_spec_species_id CHAR(4),
-    d_gross_merch_m3 NUMERIC,
-    d_net_merch_m3 NUMERIC,
-    d_net_merch_m3_per_ha NUMERIC,
-    d_dp_m3_per_ha NUMERIC,
-    d_distrib_pct NUMERIC,
-    d_gross_decay_pct NUMERIC,
-    d_gross_waste_pct NUMERIC,
-    d_gross_breakage_pct NUMERIC,
-    d_gross_dwb_pct NUMERIC,
-    d_stems_per_ha NUMERIC,
-    d_avg_dbh_cm NUMERIC,
-    d_snags_per_ha NUMERIC,
-    d_gross_vol_per_tree_m3 NUMERIC,
-    d_net_vol_per_tree_m3 NUMERIC,
-    d_avg_merch_ht_m NUMERIC,
-    d_basal_area NUMERIC,
-    d_sampling_error_pct NUMERIC,
-    d_blowdown_pct NUMERIC,
-    d_stud_pct NUMERIC,
-    d_small_log_pct NUMERIC,
-    d_large_log_pct NUMERIC,
-    d_lrf_bdft_per_m3 NUMERIC,
-    d_insect_damage_green_pct NUMERIC,
-    d_insect_damage_red_pct NUMERIC,
-    d_insect_damage_grey_pct NUMERIC,
-    d_burn_damage_pct NUMERIC,
-    d_m3_per_lineal_m NUMERIC,
     cutb_seq_nbr NUMERIC(15),
     a_blkc_area_ha NUMERIC(15, 7),
     a_spec_species_id CHAR(3),
@@ -421,7 +380,48 @@ CREATE TABLE lrm_replication.v_block_cruise_all_coni_deci (
     c_avg_dbh_cm NUMERIC(15, 7),
     c_snags_per_ha NUMERIC(15, 7),
     c_gross_vol_per_tree_m3 NUMERIC(15, 7),
-    c_net_vol_per_tree_m3 NUMERIC(15, 7)
+    c_net_vol_per_tree_m3 NUMERIC(15, 7),
+    c_avg_merch_ht_m NUMERIC(15, 7),
+    c_basal_area NUMERIC(15, 7),
+    c_sampling_error_pct NUMERIC(15, 7),
+    c_blowdown_pct NUMERIC(15, 7),
+    c_stud_pct NUMERIC(15, 7),
+    c_small_log_pct NUMERIC(15, 7),
+    c_large_log_pct NUMERIC(15, 7),
+    c_lrf_bdft_per_m3 NUMERIC(15, 7),
+    c_insect_damage_green_pct NUMERIC,
+    c_insect_damage_red_pct NUMERIC,
+    c_insect_damage_grey_pct NUMERIC,
+    c_burn_damage_pct NUMERIC,
+    c_m3_per_lineal_m NUMERIC(15, 7),
+    d_spec_species_id CHAR(4),
+    d_gross_merch_m3 NUMERIC,
+    d_net_merch_m3 NUMERIC,
+    d_net_merch_m3_per_ha NUMERIC,
+    d_dp_m3_per_ha NUMERIC,
+    d_distrib_pct NUMERIC,
+    d_gross_decay_pct NUMERIC,
+    d_gross_waste_pct NUMERIC,
+    d_gross_breakage_pct NUMERIC,
+    d_gross_dwb_pct NUMERIC,
+    d_stems_per_ha NUMERIC,
+    d_avg_dbh_cm NUMERIC,
+    d_snags_per_ha NUMERIC,
+    d_gross_vol_per_tree_m3 NUMERIC,
+    d_net_vol_per_tree_m3 NUMERIC,
+    d_avg_merch_ht_m NUMERIC,
+    d_basal_area NUMERIC,
+    d_sampling_error_pct NUMERIC,
+    d_blowdown_pct NUMERIC,
+    d_stud_pct NUMERIC,
+    d_small_log_pct NUMERIC,
+    d_large_log_pct NUMERIC,
+    d_lrf_bdft_per_m3 NUMERIC,
+    d_insect_damage_green_pct NUMERIC,
+    d_insect_damage_red_pct NUMERIC,
+    d_insect_damage_grey_pct NUMERIC,
+    d_burn_damage_pct NUMERIC,
+    d_m3_per_lineal_m NUMERIC
 );
 CREATE TABLE bcts_reporting.forestview_v_block_cruise_all_coni_deci AS SELECT * FROM lrm_replication.v_block_cruise_all_coni_deci;
 CREATE TABLE lrm_replication.v_block_depletion_stage (
@@ -468,6 +468,30 @@ CREATE TABLE lrm_replication.v_block_nmar (
 );
 CREATE TABLE bcts_reporting.forestview_v_block_nmar AS SELECT * FROM lrm_replication.v_block_nmar;
 CREATE TABLE lrm_replication.v_block_old (
+    tso_code VARCHAR(15),
+    tso_name VARCHAR(50),
+    nav_name VARCHAR(60),
+    tenure VARCHAR(40),
+    licence_id VARCHAR(15),
+    permit_id VARCHAR(40),
+    mark_id VARCHAR(15),
+    block_id VARCHAR(20),
+    block_nbr VARCHAR(15),
+    ubi VARCHAR(15),
+    opening VARCHAR(15),
+    op_area VARCHAR(10),
+    supply_block VARCHAR(10),
+    photo VARCHAR(800),
+    latitude VARCHAR(40),
+    longitude VARCHAR(40),
+    prov_frst_conflict VARCHAR(40),
+    mapsheet_id VARCHAR(120),
+    landscape_unit VARCHAR(40),
+    sp_exempt VARCHAR(4),
+    stand_type VARCHAR(40),
+    age_class VARCHAR(40),
+    hgt_class VARCHAR(40),
+    stk_class VARCHAR(40),
     site_index NUMERIC(5),
     source VARCHAR(40),
     fdp_status VARCHAR(10),
@@ -492,31 +516,7 @@ CREATE TABLE lrm_replication.v_block_old (
     licn_seq_nbr NUMERIC(15),
     perm_seq_nbr NUMERIC(15),
     mark_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    tso_code VARCHAR(15),
-    tso_name VARCHAR(50),
-    nav_name VARCHAR(60),
-    tenure VARCHAR(40),
-    licence_id VARCHAR(15),
-    permit_id VARCHAR(40),
-    mark_id VARCHAR(15),
-    block_id VARCHAR(20),
-    block_nbr VARCHAR(15),
-    ubi VARCHAR(15),
-    opening VARCHAR(15),
-    op_area VARCHAR(10),
-    supply_block VARCHAR(10),
-    photo VARCHAR(800),
-    latitude VARCHAR(40),
-    longitude VARCHAR(40),
-    prov_frst_conflict VARCHAR(40),
-    mapsheet_id VARCHAR(120),
-    landscape_unit VARCHAR(40),
-    sp_exempt VARCHAR(4),
-    stand_type VARCHAR(40),
-    age_class VARCHAR(40),
-    hgt_class VARCHAR(40),
-    stk_class VARCHAR(40)
+    cutb_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_block_old AS SELECT * FROM lrm_replication.v_block_old;
 CREATE TABLE lrm_replication.v_block_spatial (
@@ -683,8 +683,6 @@ CREATE TABLE lrm_replication.v_cp (
 );
 CREATE TABLE bcts_reporting.forestview_v_cp AS SELECT * FROM lrm_replication.v_cp;
 CREATE TABLE lrm_replication.v_detailed_site_assessment (
-    dsa_stock_species VARCHAR(4000),
-    dsa_site_series VARCHAR(4000),
     cutb_seq_nbr NUMERIC(15),
     sila_seq_nbr NUMERIC(15),
     dsas_chemical VARCHAR(200),
@@ -700,7 +698,9 @@ CREATE TABLE lrm_replication.v_detailed_site_assessment (
     dsas_water_bodies VARCHAR(4),
     dsas_fish_habitat VARCHAR(4),
     dsas_community_watershed VARCHAR(4),
-    dsas_wildlife_habitat VARCHAR(4)
+    dsas_wildlife_habitat VARCHAR(4),
+    dsa_stock_species VARCHAR(4000),
+    dsa_site_series VARCHAR(4000)
 );
 CREATE TABLE bcts_reporting.forestview_v_detailed_site_assessment AS SELECT * FROM lrm_replication.v_detailed_site_assessment;
 CREATE TABLE lrm_replication.v_ecology (
@@ -858,6 +858,11 @@ CREATE TABLE lrm_replication.v_ems_inspection_frequency (
 );
 CREATE TABLE bcts_reporting.forestview_v_ems_inspection_frequency AS SELECT * FROM lrm_replication.v_ems_inspection_frequency;
 CREATE TABLE lrm_replication.v_ems_inspection_test_drill (
+    divi_div_nbr NUMERIC,
+    tso_code VARCHAR(15),
+    tso_name VARCHAR(50),
+    field_team VARCHAR(150),
+    projectid_licence VARCHAR(120),
     road_permit VARCHAR(40),
     log_dump_permit VARCHAR(40),
     inspection_date TIMESTAMP,
@@ -877,15 +882,14 @@ CREATE TABLE lrm_replication.v_ems_inspection_test_drill (
     lems_seq_nbr NUMERIC(10),
     epea_seq_nbr NUMERIC(15),
     emsp_seq_nbr NUMERIC(15),
-    eins_seq_nbr NUMERIC(15),
-    divi_div_nbr NUMERIC,
-    tso_code VARCHAR(15),
-    tso_name VARCHAR(50),
-    field_team VARCHAR(150),
-    projectid_licence VARCHAR(120)
+    eins_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_ems_inspection_test_drill AS SELECT * FROM lrm_replication.v_ems_inspection_test_drill;
 CREATE TABLE lrm_replication.v_ems_issue (
+    divi_div_nbr NUMERIC(2),
+    tso VARCHAR(15),
+    business_area VARCHAR(50),
+    field_team VARCHAR(150),
     issue_project_name VARCHAR(120),
     issue_id VARCHAR(120),
     entered_by VARCHAR(50),
@@ -911,11 +915,7 @@ CREATE TABLE lrm_replication.v_ems_issue (
     environmental_impact VARCHAR(150),
     licn_seq_nbr NUMERIC(15),
     sdom_seq_nbr NUMERIC(15),
-    emsi_seq_nbr NUMERIC(15),
-    divi_div_nbr NUMERIC(2),
-    tso VARCHAR(15),
-    business_area VARCHAR(50),
-    field_team VARCHAR(150)
+    emsi_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_ems_issue AS SELECT * FROM lrm_replication.v_ems_issue;
 CREATE TABLE lrm_replication.v_ems_issue_government (
@@ -934,6 +934,13 @@ CREATE TABLE lrm_replication.v_ems_issue_investigation (
 );
 CREATE TABLE bcts_reporting.forestview_v_ems_issue_investigation AS SELECT * FROM lrm_replication.v_ems_issue_investigation;
 CREATE TABLE lrm_replication.v_ems_plan_vs_complete_insp (
+    divi_div_nbr NUMERIC,
+    tso VARCHAR(15),
+    division VARCHAR(50),
+    project_licence_id VARCHAR(244),
+    licence_state VARCHAR(800),
+    ems_class VARCHAR(800),
+    ems_type VARCHAR(800),
     ems_subtype VARCHAR(19),
     contractor VARCHAR(60),
     project_risk_ranking VARCHAR(150),
@@ -961,14 +968,7 @@ CREATE TABLE lrm_replication.v_ems_plan_vs_complete_insp (
     lems_seq_nbr NUMERIC,
     epea_seq_nbr NUMERIC,
     ctor_seq_nbr NUMERIC(15),
-    emsp_seq_nbr NUMERIC,
-    divi_div_nbr NUMERIC,
-    tso VARCHAR(15),
-    division VARCHAR(50),
-    project_licence_id VARCHAR(244),
-    licence_state VARCHAR(800),
-    ems_class VARCHAR(800),
-    ems_type VARCHAR(800)
+    emsp_seq_nbr NUMERIC
 );
 CREATE TABLE bcts_reporting.forestview_v_ems_plan_vs_complete_insp AS SELECT * FROM lrm_replication.v_ems_plan_vs_complete_insp;
 CREATE TABLE lrm_replication.v_ems_plan_vs_compl_prework (
@@ -1059,13 +1059,6 @@ CREATE TABLE lrm_replication.v_forest_comment (
 );
 CREATE TABLE bcts_reporting.forestview_v_forest_comment AS SELECT * FROM lrm_replication.v_forest_comment;
 CREATE TABLE lrm_replication.v_frpa_results_strategies (
-    actt_seq_nbr NUMERIC,
-    asses_desc VARCHAR(400),
-    fsrl_comment VARCHAR(4000),
-    fsrc_comment_rs VARCHAR(4000),
-    cutb_seq_nbr NUMERIC(15),
-    fdu_seq_nbr NUMERIC(15),
-    plan_seq_nbr NUMERIC(15),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -1103,7 +1096,14 @@ CREATE TABLE lrm_replication.v_frpa_results_strategies (
     fsrs_id VARCHAR(200),
     applies CHAR(4),
     fsrs_description VARCHAR(1000),
-    fsrs_comment VARCHAR(4000)
+    fsrs_comment VARCHAR(4000),
+    actt_seq_nbr NUMERIC,
+    asses_desc VARCHAR(400),
+    fsrl_comment VARCHAR(4000),
+    fsrc_comment_rs VARCHAR(4000),
+    cutb_seq_nbr NUMERIC(15),
+    fdu_seq_nbr NUMERIC(15),
+    plan_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_frpa_results_strategies AS SELECT * FROM lrm_replication.v_frpa_results_strategies;
 CREATE TABLE lrm_replication.v_gis_actd (
@@ -1146,10 +1146,10 @@ CREATE TABLE lrm_replication.v_gis_acts (
 );
 CREATE TABLE bcts_reporting.forestview_v_gis_acts AS SELECT * FROM lrm_replication.v_gis_acts;
 CREATE TABLE lrm_replication.v_gis_acts_status (
+    licn_seq_nbr NUMERIC(15),
     cutb_seq_nbr NUMERIC(15),
     actt_key_ind VARCHAR(10),
-    status_ind VARCHAR(30),
-    licn_seq_nbr NUMERIC(15)
+    status_ind VARCHAR(30)
 );
 CREATE TABLE bcts_reporting.forestview_v_gis_acts_status AS SELECT * FROM lrm_replication.v_gis_acts_status;
 CREATE TABLE lrm_replication.v_harvested_block_status (
@@ -1176,6 +1176,10 @@ CREATE TABLE lrm_replication.v_harvested_block_status (
 );
 CREATE TABLE bcts_reporting.forestview_v_harvested_block_status AS SELECT * FROM lrm_replication.v_harvested_block_status;
 CREATE TABLE lrm_replication.v_harvest_history (
+    tso_code VARCHAR(15),
+    licn_licence_id VARCHAR(15),
+    mark_mark_id VARCHAR(15),
+    bchh_billing_period TIMESTAMP,
     bchh_hdbs_tree_species VARCHAR(2),
     bchh_forest_product_code VARCHAR(8),
     bchh_log_grade VARCHAR(1),
@@ -1189,11 +1193,7 @@ CREATE TABLE lrm_replication.v_harvest_history (
     bchh_dev_levy_amount NUMERIC(9, 2),
     bchh_update_timestamp TIMESTAMP,
     licn_seq_nbr NUMERIC(15),
-    mark_seq_nbr NUMERIC(15),
-    tso_code VARCHAR(15),
-    licn_licence_id VARCHAR(15),
-    mark_mark_id VARCHAR(15),
-    bchh_billing_period TIMESTAMP
+    mark_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_harvest_history AS SELECT * FROM lrm_replication.v_harvest_history;
 CREATE TABLE lrm_replication.v_harvest_unit (
@@ -1230,15 +1230,6 @@ CREATE TABLE lrm_replication.v_interior_cost_survey_culv (
 );
 CREATE TABLE bcts_reporting.forestview_v_interior_cost_survey_culv AS SELECT * FROM lrm_replication.v_interior_cost_survey_culv;
 CREATE TABLE lrm_replication.v_interior_cost_survey_roads (
-    csur_sg_overland_cost NUMERIC(15, 2),
-    csur_sg_other_eng_cost NUMERIC(15, 2),
-    csur_end_haul_distance_m NUMERIC(13, 4),
-    csur_end_haul_volume_m3 NUMERIC(15, 6),
-    csur_overland_distance_m NUMERIC(13, 4),
-    csur_overland_volume_m3 NUMERIC(15, 6),
-    csur_seq_nbr NUMERIC(15),
-    road_seq_nbr NUMERIC(16),
-    csur_seq_nbr_lng NUMERIC(10),
     tso_code VARCHAR(15),
     construction_fiscal NUMERIC(4),
     manu_id VARCHAR(60),
@@ -1285,7 +1276,16 @@ CREATE TABLE lrm_replication.v_interior_cost_survey_roads (
     csur_sg_other_transfer_cost NUMERIC(15, 2),
     sub_grade_cost NUMERIC,
     csur_sg_landing_cost NUMERIC(15, 2),
-    csur_sg_end_haul_cost NUMERIC(15, 2)
+    csur_sg_end_haul_cost NUMERIC(15, 2),
+    csur_sg_overland_cost NUMERIC(15, 2),
+    csur_sg_other_eng_cost NUMERIC(15, 2),
+    csur_end_haul_distance_m NUMERIC(13, 4),
+    csur_end_haul_volume_m3 NUMERIC(15, 6),
+    csur_overland_distance_m NUMERIC(13, 4),
+    csur_overland_volume_m3 NUMERIC(15, 6),
+    csur_seq_nbr NUMERIC(15),
+    road_seq_nbr NUMERIC(16),
+    csur_seq_nbr_lng NUMERIC(10)
 );
 CREATE TABLE bcts_reporting.forestview_v_interior_cost_survey_roads AS SELECT * FROM lrm_replication.v_interior_cost_survey_roads;
 CREATE TABLE lrm_replication.v_licence (
@@ -1354,11 +1354,6 @@ CREATE TABLE lrm_replication.v_licence_activity_all (
 );
 CREATE TABLE bcts_reporting.forestview_v_licence_activity_all AS SELECT * FROM lrm_replication.v_licence_activity_all;
 CREATE TABLE lrm_replication.v_mark (
-    hbs_update_timestamp TIMESTAMP,
-    mark_rw_volume_m3 NUMERIC,
-    appraisal_volume NUMERIC,
-    field_team_desc VARCHAR(150),
-    licn_licence_state VARCHAR(20),
     licn_seq_nbr NUMERIC(15),
     perm_seq_nbr NUMERIC(15),
     mark_seq_nbr NUMERIC(15),
@@ -1373,7 +1368,12 @@ CREATE TABLE lrm_replication.v_mark (
     mark_cruise_volume_m3 NUMERIC,
     hbs_volume_billed NUMERIC,
     mark_state VARCHAR(80),
-    mark_description VARCHAR(160)
+    mark_description VARCHAR(160),
+    hbs_update_timestamp TIMESTAMP,
+    mark_rw_volume_m3 NUMERIC,
+    appraisal_volume NUMERIC,
+    field_team_desc VARCHAR(150),
+    licn_licence_state VARCHAR(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_mark AS SELECT * FROM lrm_replication.v_mark;
 CREATE TABLE lrm_replication.v_mark_activity (
@@ -1435,11 +1435,6 @@ CREATE TABLE lrm_replication.v_planting (
 );
 CREATE TABLE bcts_reporting.forestview_v_planting AS SELECT * FROM lrm_replication.v_planting;
 CREATE TABLE lrm_replication.v_planting_species (
-    sisl_comments VARCHAR(4000),
-    sisl_viability_pct NUMERIC(5, 2),
-    ssuc_seed_use_code VARCHAR(40),
-    sisl_active_ind VARCHAR(1),
-    bioz_zone_id VARCHAR(40),
     plun_seq_nbr NUMERIC(15),
     sisp_species_id VARCHAR(15),
     plsp_number_trees NUMERIC(10),
@@ -1466,12 +1461,58 @@ CREATE TABLE lrm_replication.v_planting_species (
     sisl_longitude NUMERIC,
     sisl_number_trees NUMERIC(10),
     sisl_kilograms NUMERIC(12, 4),
-    sisl_owner_name VARCHAR(200)
+    sisl_owner_name VARCHAR(200),
+    sisl_comments VARCHAR(4000),
+    sisl_viability_pct NUMERIC(5, 2),
+    ssuc_seed_use_code VARCHAR(40),
+    sisl_active_ind VARCHAR(1),
+    bioz_zone_id VARCHAR(40)
 );
 CREATE TABLE bcts_reporting.forestview_v_planting_species AS SELECT * FROM lrm_replication.v_planting_species;
 CREATE TABLE lrm_replication.v_qb_valuation (
-    mark_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
+    tso_code VARCHAR(15),
+    nav_name VARCHAR(60),
+    tenure VARCHAR(40),
+    licence_id VARCHAR(15),
+    permit_id VARCHAR(40),
+    mark_id VARCHAR(15),
+    block_id VARCHAR(20),
+    block_nbr VARCHAR(15),
+    sppr_effective_date TIMESTAMP,
+    hauling_source VARCHAR(4),
+    hauling_cost NUMERIC,
+    silviculture_source VARCHAR(4),
+    silviculture_cost NUMERIC,
+    stumpage_source VARCHAR(4),
+    stumpage_cost NUMERIC,
+    indirect_source VARCHAR(4),
+    indirect_cost NUMERIC,
+    roads_source VARCHAR(4),
+    roads_cost NUMERIC,
+    tree_to_truck_source VARCHAR(4),
+    tree_to_truck_cost NUMERIC,
+    item1_source VARCHAR(4),
+    item1 NUMERIC,
+    item2_source VARCHAR(4),
+    item2 NUMERIC,
+    item3_source VARCHAR(4),
+    item3 NUMERIC,
+    item4_source VARCHAR(4),
+    item4 NUMERIC,
+    item5_source VARCHAR(4),
+    item5 NUMERIC,
+    item6_source VARCHAR(4),
+    item6 NUMERIC,
+    item7_source VARCHAR(4),
+    item7 NUMERIC,
+    item8_source VARCHAR(4),
+    item8 NUMERIC,
+    item9_source VARCHAR(4),
+    item9 NUMERIC,
+    item10_source VARCHAR(4),
+    item10 NUMERIC,
+    mill_mill_id VARCHAR(80),
+    mill_id VARCHAR,
     user_id VARCHAR(80),
     estim_date TIMESTAMP,
     lcst_seq_nbr NUMERIC(15),
@@ -1524,49 +1565,8 @@ CREATE TABLE lrm_replication.v_qb_valuation (
     item10_comment_cnt NUMERIC,
     licn_seq_nbr NUMERIC(15),
     perm_seq_nbr NUMERIC(15),
-    tso_code VARCHAR(15),
-    nav_name VARCHAR(60),
-    tenure VARCHAR(40),
-    licence_id VARCHAR(15),
-    permit_id VARCHAR(40),
-    mark_id VARCHAR(15),
-    block_id VARCHAR(20),
-    block_nbr VARCHAR(15),
-    sppr_effective_date TIMESTAMP,
-    hauling_source VARCHAR(4),
-    hauling_cost NUMERIC,
-    silviculture_source VARCHAR(4),
-    silviculture_cost NUMERIC,
-    stumpage_source VARCHAR(4),
-    stumpage_cost NUMERIC,
-    indirect_source VARCHAR(4),
-    indirect_cost NUMERIC,
-    roads_source VARCHAR(4),
-    roads_cost NUMERIC,
-    tree_to_truck_source VARCHAR(4),
-    tree_to_truck_cost NUMERIC,
-    item1_source VARCHAR(4),
-    item1 NUMERIC,
-    item2_source VARCHAR(4),
-    item2 NUMERIC,
-    item3_source VARCHAR(4),
-    item3 NUMERIC,
-    item4_source VARCHAR(4),
-    item4 NUMERIC,
-    item5_source VARCHAR(4),
-    item5 NUMERIC,
-    item6_source VARCHAR(4),
-    item6 NUMERIC,
-    item7_source VARCHAR(4),
-    item7 NUMERIC,
-    item8_source VARCHAR(4),
-    item8 NUMERIC,
-    item9_source VARCHAR(4),
-    item9 NUMERIC,
-    item10_source VARCHAR(4),
-    item10 NUMERIC,
-    mill_mill_id VARCHAR(80),
-    mill_id VARCHAR
+    mark_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_qb_valuation AS SELECT * FROM lrm_replication.v_qb_valuation;
 CREATE TABLE lrm_replication.v_riparian_zone (
@@ -1625,6 +1625,10 @@ CREATE TABLE lrm_replication.v_road (
 );
 CREATE TABLE bcts_reporting.forestview_v_road AS SELECT * FROM lrm_replication.v_road;
 CREATE TABLE lrm_replication.v_road_activity (
+    divi_div_nbr NUMERIC(2),
+    tso_code VARCHAR(15),
+    tso_name VARCHAR(50),
+    field_team_desc VARCHAR(150),
     road_road_name VARCHAR(204),
     road_road_desc VARCHAR(164),
     uri VARCHAR(30),
@@ -1664,16 +1668,10 @@ CREATE TABLE lrm_replication.v_road_activity (
     rass_planned_date TIMESTAMP,
     rass_completion_date TIMESTAMP,
     rass_type VARCHAR(320),
-    road_seq_nbr NUMERIC(16),
-    divi_div_nbr NUMERIC(2),
-    tso_code VARCHAR(15),
-    tso_name VARCHAR(50),
-    field_team_desc VARCHAR(150)
+    road_seq_nbr NUMERIC(16)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_activity AS SELECT * FROM lrm_replication.v_road_activity;
 CREATE TABLE lrm_replication.v_road_activity_cost (
-    repl_seq_nbr NUMERIC(15),
-    rstr_seq_nbr NUMERIC(15, 2),
     divi_div_nbr NUMERIC(2),
     racm_activity_type VARCHAR(20),
     csti_cost_item_id VARCHAR(40),
@@ -1689,11 +1687,12 @@ CREATE TABLE lrm_replication.v_road_activity_cost (
     acon_seq_nbr NUMERIC(15),
     rass_seq_nbr NUMERIC(15),
     insp_seq_nbr NUMERIC(15),
-    main_seq_nbr NUMERIC(15)
+    main_seq_nbr NUMERIC(15),
+    repl_seq_nbr NUMERIC(15),
+    rstr_seq_nbr NUMERIC(15, 2)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_activity_cost AS SELECT * FROM lrm_replication.v_road_activity_cost;
 CREATE TABLE lrm_replication.v_road_activity_cost_row (
-    ract_seq_nbr NUMERIC,
     divi_div_nbr NUMERIC(2),
     racm_activity_type VARCHAR(20),
     csti_cost_item_id VARCHAR(40),
@@ -1704,7 +1703,8 @@ CREATE TABLE lrm_replication.v_road_activity_cost_row (
     raco_comment VARCHAR(4000),
     raco_seq_nbr NUMERIC(15),
     racm_seq_nbr NUMERIC(15),
-    ract_seq_id VARCHAR(12)
+    ract_seq_id VARCHAR(12),
+    ract_seq_nbr NUMERIC
 );
 CREATE TABLE bcts_reporting.forestview_v_road_activity_cost_row AS SELECT * FROM lrm_replication.v_road_activity_cost_row;
 CREATE TABLE lrm_replication.v_road_activity_row (
@@ -1887,7 +1887,6 @@ CREATE TABLE lrm_replication.v_road_cut_block (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_cut_block AS SELECT * FROM lrm_replication.v_road_cut_block;
 CREATE TABLE lrm_replication.v_road_deactivation (
-    deac_seq_nbr_lng NUMERIC(20),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -1929,7 +1928,8 @@ CREATE TABLE lrm_replication.v_road_deactivation (
     createdon TEXT,
     createdusing VARCHAR(120),
     road_seq_nbr NUMERIC(16),
-    deac_seq_nbr NUMERIC(15)
+    deac_seq_nbr NUMERIC(15),
+    deac_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_deactivation AS SELECT * FROM lrm_replication.v_road_deactivation;
 CREATE TABLE lrm_replication.v_road_event_mapping (
@@ -1954,11 +1954,6 @@ CREATE TABLE lrm_replication.v_road_event_mapping (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_event_mapping AS SELECT * FROM lrm_replication.v_road_event_mapping;
 CREATE TABLE lrm_replication.v_road_gap_analysis (
-    deac_planned_date TIMESTAMP,
-    deac_end_date TIMESTAMP,
-    deac_method_type VARCHAR(60),
-    deac_level_type VARCHAR(96),
-    deac_budgeted_cost NUMERIC(15, 2),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     divi_division_name VARCHAR(50),
@@ -1992,7 +1987,12 @@ CREATE TABLE lrm_replication.v_road_gap_analysis (
     rcom_completion_date TIMESTAMP,
     rcom_budgeted_cost NUMERIC(15, 2),
     rcom_method VARCHAR(60),
-    deac_seq_nbr NUMERIC(15)
+    deac_seq_nbr NUMERIC(15),
+    deac_planned_date TIMESTAMP,
+    deac_end_date TIMESTAMP,
+    deac_method_type VARCHAR(60),
+    deac_level_type VARCHAR(96),
+    deac_budgeted_cost NUMERIC(15, 2)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_gap_analysis AS SELECT * FROM lrm_replication.v_road_gap_analysis;
 CREATE TABLE lrm_replication.v_road_inspection (
@@ -2123,8 +2123,6 @@ CREATE TABLE lrm_replication.v_road_management_unit (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_management_unit AS SELECT * FROM lrm_replication.v_road_management_unit;
 CREATE TABLE lrm_replication.v_road_mapsheet (
-    road_seq_nbr NUMERIC(16),
-    rmap_seq_nbr_lng NUMERIC(20),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -2140,14 +2138,12 @@ CREATE TABLE lrm_replication.v_road_mapsheet (
     modifiedusing VARCHAR(120),
     createdby VARCHAR(120),
     createdon TEXT,
-    createdusing VARCHAR(120)
+    createdusing VARCHAR(120),
+    road_seq_nbr NUMERIC(16),
+    rmap_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_mapsheet AS SELECT * FROM lrm_replication.v_road_mapsheet;
 CREATE TABLE lrm_replication.v_road_on_block (
-    licn_seq_nbr NUMERIC(15),
-    mark_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    ronb_seq_nbr_lng NUMERIC(20),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -2169,7 +2165,11 @@ CREATE TABLE lrm_replication.v_road_on_block (
     createdon TEXT,
     createdusing VARCHAR(120),
     ronb_seq_nbr NUMERIC(15),
-    road_seq_nbr NUMERIC(16)
+    road_seq_nbr NUMERIC(16),
+    licn_seq_nbr NUMERIC(15),
+    mark_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15),
+    ronb_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_on_block AS SELECT * FROM lrm_replication.v_road_on_block;
 CREATE TABLE lrm_replication.v_road_op_area (
@@ -2210,19 +2210,6 @@ CREATE TABLE lrm_replication.v_road_organic_mat (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_organic_mat AS SELECT * FROM lrm_replication.v_road_organic_mat;
 CREATE TABLE lrm_replication.v_road_permit (
-    modifiedby VARCHAR(120),
-    modifiedon TIMESTAMP,
-    modifiedusing VARCHAR(120),
-    createdby VARCHAR(120),
-    createdon TIMESTAMP,
-    createdusing VARCHAR(120),
-    road_amendment_reason VARCHAR(8),
-    rdpm_cascade_split_code VARCHAR(40),
-    rdpm_mgmt_unit_type VARCHAR(4),
-    rdpm_mgmt_unit_id VARCHAR(16),
-    rdpm_amendment_type VARCHAR(40),
-    rdpm_application_desc VARCHAR(1020),
-    rdpm_deemed_owner_ind VARCHAR(4),
     rdpm_seq_nbr NUMERIC(15),
     tso_code VARCHAR(15),
     dsct_district_name VARCHAR(240),
@@ -2238,7 +2225,20 @@ CREATE TABLE lrm_replication.v_road_permit (
     rdpm_timber_mark_id VARCHAR(60),
     rdpm_parent_perm_id VARCHAR(96),
     road_initial_road_length NUMERIC(11, 2),
-    road_current_road_length NUMERIC(11, 2)
+    road_current_road_length NUMERIC(11, 2),
+    road_amendment_reason VARCHAR(8),
+    rdpm_cascade_split_code VARCHAR(40),
+    rdpm_mgmt_unit_type VARCHAR(4),
+    rdpm_mgmt_unit_id VARCHAR(16),
+    rdpm_amendment_type VARCHAR(40),
+    rdpm_application_desc VARCHAR(1020),
+    rdpm_deemed_owner_ind VARCHAR(4),
+    modifiedby VARCHAR(120),
+    modifiedon TIMESTAMP,
+    modifiedusing VARCHAR(120),
+    createdby VARCHAR(120),
+    createdon TIMESTAMP,
+    createdusing VARCHAR(120)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_permit AS SELECT * FROM lrm_replication.v_road_permit;
 CREATE TABLE lrm_replication.v_road_prov_forest (
@@ -2261,13 +2261,6 @@ CREATE TABLE lrm_replication.v_road_prov_forest (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_prov_forest AS SELECT * FROM lrm_replication.v_road_prov_forest;
 CREATE TABLE lrm_replication.v_road_radio (
-    modifiedusing VARCHAR(120),
-    createdby VARCHAR(120),
-    createdon TEXT,
-    createdusing VARCHAR(120),
-    road_seq_nbr NUMERIC(16),
-    rrad_seq_nbr NUMERIC(15),
-    rrad_seq_nbr_lng NUMERIC(20),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -2281,7 +2274,14 @@ CREATE TABLE lrm_replication.v_road_radio (
     rrad_transmit_nbr NUMERIC(15, 6),
     rrad_receive_nbr NUMERIC(15, 6),
     modifiedby VARCHAR(120),
-    modifiedon TEXT
+    modifiedon TEXT,
+    modifiedusing VARCHAR(120),
+    createdby VARCHAR(120),
+    createdon TEXT,
+    createdusing VARCHAR(120),
+    road_seq_nbr NUMERIC(16),
+    rrad_seq_nbr NUMERIC(15),
+    rrad_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_radio AS SELECT * FROM lrm_replication.v_road_radio;
 CREATE TABLE lrm_replication.v_road_risk (
@@ -2342,6 +2342,7 @@ CREATE TABLE lrm_replication.v_road_spatial_meta (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_spatial_meta AS SELECT * FROM lrm_replication.v_road_spatial_meta;
 CREATE TABLE lrm_replication.v_road_status (
+    divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
     nav_name VARCHAR(60),
@@ -2362,8 +2363,7 @@ CREATE TABLE lrm_replication.v_road_status (
     createdusing VARCHAR(120),
     road_seq_nbr NUMERIC(16),
     rsta_seq_nbr_lng NUMERIC(20),
-    rsta_cprp_protection_ind VARCHAR(1),
-    divi_div_nbr NUMERIC(2)
+    rsta_cprp_protection_ind VARCHAR(1)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_status AS SELECT * FROM lrm_replication.v_road_status;
 CREATE TABLE lrm_replication.v_road_steward (
@@ -2389,7 +2389,6 @@ CREATE TABLE lrm_replication.v_road_steward (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_steward AS SELECT * FROM lrm_replication.v_road_steward;
 CREATE TABLE lrm_replication.v_road_structure (
-    rstr_seq_nbr_lng NUMERIC(20),
     division_number NUMERIC(2),
     tso_code VARCHAR(15),
     tso_name VARCHAR(50),
@@ -2424,7 +2423,8 @@ CREATE TABLE lrm_replication.v_road_structure (
     createdon TEXT,
     createdusing VARCHAR(120),
     road_seq_nbr NUMERIC(16),
-    rstr_seq_nbr NUMERIC(15)
+    rstr_seq_nbr NUMERIC(15),
+    rstr_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_structure AS SELECT * FROM lrm_replication.v_road_structure;
 CREATE TABLE lrm_replication.v_road_structure_attr (
@@ -2474,13 +2474,6 @@ CREATE TABLE lrm_replication.v_road_structure_culvert (
 );
 CREATE TABLE bcts_reporting.forestview_v_road_structure_culvert AS SELECT * FROM lrm_replication.v_road_structure_culvert;
 CREATE TABLE lrm_replication.v_road_structure_inspection (
-    modifiedusing VARCHAR(120),
-    createdby VARCHAR(120),
-    createdon TIMESTAMP,
-    createdusing VARCHAR(120),
-    insp_seq_nbr_lng NUMERIC(20),
-    modifiedon TIMESTAMP,
-    modifiedby VARCHAR(120),
     rstr_seq_nbr NUMERIC(15),
     insp_seq_nbr NUMERIC(15),
     meth_method_type VARCHAR(60),
@@ -2494,16 +2487,17 @@ CREATE TABLE lrm_replication.v_road_structure_inspection (
     variance NUMERIC,
     responsibility VARCHAR(50),
     insp_condition_desc VARCHAR(160),
-    insp_inspection_memo VARCHAR(4000)
-);
-CREATE TABLE bcts_reporting.forestview_v_road_structure_inspection AS SELECT * FROM lrm_replication.v_road_structure_inspection;
-CREATE TABLE lrm_replication.v_road_structure_maintenance (
-    createdon TIMESTAMP,
-    createdusing VARCHAR(120),
-    main_seq_nbr_lng NUMERIC(20),
+    insp_inspection_memo VARCHAR(4000),
+    modifiedby VARCHAR(120),
     modifiedon TIMESTAMP,
     modifiedusing VARCHAR(120),
     createdby VARCHAR(120),
+    createdon TIMESTAMP,
+    createdusing VARCHAR(120),
+    insp_seq_nbr_lng NUMERIC(20)
+);
+CREATE TABLE bcts_reporting.forestview_v_road_structure_inspection AS SELECT * FROM lrm_replication.v_road_structure_inspection;
+CREATE TABLE lrm_replication.v_road_structure_maintenance (
     rstr_seq_nbr NUMERIC(15),
     main_seq_nbr NUMERIC(15),
     insp_seq_nbr NUMERIC(15),
@@ -2519,7 +2513,13 @@ CREATE TABLE lrm_replication.v_road_structure_maintenance (
     main_activity_memo VARCHAR(4000),
     main_activity_type VARCHAR(60),
     main_method_type VARCHAR(60),
-    modifiedby VARCHAR(120)
+    modifiedby VARCHAR(120),
+    modifiedon TIMESTAMP,
+    modifiedusing VARCHAR(120),
+    createdby VARCHAR(120),
+    createdon TIMESTAMP,
+    createdusing VARCHAR(120),
+    main_seq_nbr_lng NUMERIC(20)
 );
 CREATE TABLE bcts_reporting.forestview_v_road_structure_maintenance AS SELECT * FROM lrm_replication.v_road_structure_maintenance;
 CREATE TABLE lrm_replication.v_road_use_permit (
@@ -2607,101 +2607,8 @@ CREATE TABLE lrm_replication.v_silvicultural_system (
 );
 CREATE TABLE bcts_reporting.forestview_v_silvicultural_system AS SELECT * FROM lrm_replication.v_silvicultural_system;
 CREATE TABLE lrm_replication.v_silviculture_activity (
-    hvc_date TIMESTAMP,
-    hvc_fiscal NUMERIC,
-    treatment_unit VARCHAR(40),
-    block_funding VARCHAR(15),
-    activity_funding VARCHAR(10),
-    base VARCHAR(15),
-    technique VARCHAR(15),
-    method VARCHAR(15),
-    activity VARCHAR(50),
-    status VARCHAR(30),
-    start_date TIMESTAMP,
-    start_fiscal NUMERIC,
-    complete_date TIMESTAMP,
-    complete_fiscal NUMERIC,
-    sila_season VARCHAR(60),
-    treatment_area NUMERIC,
-    sila_gross_area_char VARCHAR(40),
-    cost_per_ha_plan NUMERIC,
-    cost_per_ha NUMERIC,
-    planned_total_cost NUMERIC,
-    actual_total_cost NUMERIC,
-    planned_service_line VARCHAR(200),
-    planned_sl_description VARCHAR(200),
-    items_planned_total_cost NUMERIC,
-    actual_service_line VARCHAR(200),
-    actual_sl_description VARCHAR(200),
-    items_actual_total_cost NUMERIC,
-    planting_unit NUMERIC(3),
-    plun_digitised_ind VARCHAR(1),
-    plun_planned_total_cost NUMERIC(15, 5),
-    plun_item_planned_total_cost NUMERIC,
-    plun_actual_total_cost NUMERIC(15, 5),
-    plun_item_actual_total_cost NUMERIC,
-    plun_ha_area NUMERIC(11, 6),
-    plun_net_area NUMERIC(11, 6),
-    plun_density NUMERIC(7, 2),
-    total_trees NUMERIC(12),
-    sica_key_ind VARCHAR(3),
-    objective1 VARCHAR(60),
-    objective2 VARCHAR(60),
-    objective3 VARCHAR(60),
-    responsibility VARCHAR(40),
-    target_species VARCHAR(4000),
-    apply_rate NUMERIC(13, 4),
-    pmp_nbr VARCHAR(72),
-    comments VARCHAR(4000),
-    sila_formb_date TIMESTAMP,
-    sila_formb_printed VARCHAR(1),
-    project VARCHAR(120),
-    project_start_date TIMESTAMP,
-    project_end_date TIMESTAMP,
-    contract VARCHAR(120),
-    contractor VARCHAR(60),
-    contract_start_date TIMESTAMP,
-    contract_end_date TIMESTAMP,
-    plun_modifiedby VARCHAR(120),
-    plun_modifiedon TIMESTAMP,
-    plun_modifiedusing VARCHAR(120),
-    modifiedby VARCHAR(120),
-    modifiedon TIMESTAMP,
-    primary_record VARCHAR(1),
-    emsp_seq_nbr NUMERIC(15),
-    emsc_seq_nbr NUMERIC(15),
-    plun_seq_nbr NUMERIC,
-    sila_seq_nbr NUMERIC(15),
-    sica_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    licn_seq_nbr NUMERIC(15),
     divi_div_nbr NUMERIC(2),
     tso_code VARCHAR(16),
-    field_team VARCHAR(150),
-    manu_id VARCHAR(60),
-    operating_zone VARCHAR(10),
-    tenure VARCHAR(40),
-    licence VARCHAR(15),
-    permit VARCHAR(40),
-    mark VARCHAR(15),
-    block_id VARCHAR(20),
-    block_nbr VARCHAR(15),
-    ubi VARCHAR(15),
-    block_state VARCHAR(20),
-    cutb_opening VARCHAR(15),
-    sp_exempt VARCHAR(4),
-    cruise_volume NUMERIC(15, 6),
-    nar_area NUMERIC,
-    hvs_status VARCHAR(30),
-    hvs_date TIMESTAMP,
-    hvs_fiscal NUMERIC,
-    hvc_status VARCHAR(30)
-);
-CREATE TABLE bcts_reporting.forestview_v_silviculture_activity AS SELECT * FROM lrm_replication.v_silviculture_activity;
-CREATE TABLE lrm_replication.v_silviculture_activity_test1 (
-    sica_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    licn_seq_nbr NUMERIC(15),
     field_team VARCHAR(150),
     manu_id VARCHAR(60),
     operating_zone VARCHAR(10),
@@ -2786,11 +2693,108 @@ CREATE TABLE lrm_replication.v_silviculture_activity_test1 (
     emsc_seq_nbr NUMERIC(15),
     plun_seq_nbr NUMERIC,
     sila_seq_nbr NUMERIC(15),
+    sica_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15),
+    licn_seq_nbr NUMERIC(15)
+);
+CREATE TABLE bcts_reporting.forestview_v_silviculture_activity AS SELECT * FROM lrm_replication.v_silviculture_activity;
+CREATE TABLE lrm_replication.v_silviculture_activity_test1 (
     divi_div_nbr NUMERIC(2),
-    tso_code VARCHAR(16)
+    tso_code VARCHAR(16),
+    field_team VARCHAR(150),
+    manu_id VARCHAR(60),
+    operating_zone VARCHAR(10),
+    tenure VARCHAR(40),
+    licence VARCHAR(15),
+    permit VARCHAR(40),
+    mark VARCHAR(15),
+    block_id VARCHAR(20),
+    block_nbr VARCHAR(15),
+    ubi VARCHAR(15),
+    block_state VARCHAR(20),
+    cutb_opening VARCHAR(15),
+    sp_exempt VARCHAR(4),
+    cruise_volume NUMERIC(15, 6),
+    nar_area NUMERIC,
+    hvs_status VARCHAR(30),
+    hvs_date TIMESTAMP,
+    hvs_fiscal NUMERIC,
+    hvc_status VARCHAR(30),
+    hvc_date TIMESTAMP,
+    hvc_fiscal NUMERIC,
+    treatment_unit VARCHAR(40),
+    block_funding VARCHAR(15),
+    activity_funding VARCHAR(10),
+    base VARCHAR(15),
+    technique VARCHAR(15),
+    method VARCHAR(15),
+    activity VARCHAR(50),
+    status VARCHAR(30),
+    start_date TIMESTAMP,
+    start_fiscal NUMERIC,
+    complete_date TIMESTAMP,
+    complete_fiscal NUMERIC,
+    sila_season VARCHAR(60),
+    treatment_area NUMERIC,
+    sila_gross_area_char VARCHAR(40),
+    cost_per_ha_plan NUMERIC,
+    cost_per_ha NUMERIC,
+    planned_total_cost NUMERIC,
+    actual_total_cost NUMERIC,
+    planned_service_line VARCHAR(200),
+    planned_sl_description VARCHAR(200),
+    items_planned_total_cost NUMERIC,
+    actual_service_line VARCHAR(200),
+    actual_sl_description VARCHAR(200),
+    items_actual_total_cost NUMERIC,
+    planting_unit NUMERIC(3),
+    plun_digitised_ind VARCHAR(1),
+    plun_planned_total_cost NUMERIC(15, 5),
+    plun_item_planned_total_cost NUMERIC,
+    plun_actual_total_cost NUMERIC(15, 5),
+    plun_item_actual_total_cost NUMERIC,
+    plun_ha_area NUMERIC(11, 6),
+    plun_net_area NUMERIC(11, 6),
+    plun_density NUMERIC(7, 2),
+    total_trees NUMERIC(12),
+    sica_key_ind VARCHAR(3),
+    objective1 VARCHAR(60),
+    objective2 VARCHAR(60),
+    objective3 VARCHAR(60),
+    responsibility VARCHAR(40),
+    target_species VARCHAR(4000),
+    apply_rate NUMERIC(13, 4),
+    pmp_nbr VARCHAR(72),
+    comments VARCHAR(4000),
+    sila_formb_date TIMESTAMP,
+    sila_formb_printed VARCHAR(1),
+    project VARCHAR(120),
+    project_start_date TIMESTAMP,
+    project_end_date TIMESTAMP,
+    contract VARCHAR(120),
+    contractor VARCHAR(60),
+    contract_start_date TIMESTAMP,
+    contract_end_date TIMESTAMP,
+    plun_modifiedby VARCHAR(120),
+    plun_modifiedon TIMESTAMP,
+    plun_modifiedusing VARCHAR(120),
+    modifiedby VARCHAR(120),
+    modifiedon TIMESTAMP,
+    primary_record VARCHAR(1),
+    emsp_seq_nbr NUMERIC(15),
+    emsc_seq_nbr NUMERIC(15),
+    plun_seq_nbr NUMERIC,
+    sila_seq_nbr NUMERIC(15),
+    sica_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15),
+    licn_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_silviculture_activity_test1 AS SELECT * FROM lrm_replication.v_silviculture_activity_test1;
 CREATE TABLE lrm_replication.v_silviculture_amendment (
+    samm_amendment_nbr NUMERIC(10),
+    samm_amendment_date TIMESTAMP,
+    samm_licensee_appr_date TIMESTAMP,
+    samm_dist_appr_date TIMESTAMP,
     samm_map_required VARCHAR(4),
     samm_comment VARCHAR(4000),
     samm_amendment_type VARCHAR(120),
@@ -2798,11 +2802,7 @@ CREATE TABLE lrm_replication.v_silviculture_amendment (
     amendment_type_code VARCHAR(150),
     amnd_description VARCHAR(160),
     responsibility VARCHAR(50),
-    silp_seq_nbr NUMERIC(15),
-    samm_amendment_nbr NUMERIC(10),
-    samm_amendment_date TIMESTAMP,
-    samm_licensee_appr_date TIMESTAMP,
-    samm_dist_appr_date TIMESTAMP
+    silp_seq_nbr NUMERIC(15)
 );
 CREATE TABLE bcts_reporting.forestview_v_silviculture_amendment AS SELECT * FROM lrm_replication.v_silviculture_amendment;
 CREATE TABLE lrm_replication.v_silviculture_overlay_xref (
@@ -2818,6 +2818,11 @@ CREATE TABLE lrm_replication.v_silviculture_overlay_xref (
 );
 CREATE TABLE bcts_reporting.forestview_v_silviculture_overlay_xref AS SELECT * FROM lrm_replication.v_silviculture_overlay_xref;
 CREATE TABLE lrm_replication.v_silviculture_prescription (
+    prescription_prepared_by VARCHAR(50),
+    additional_sp_comments VARCHAR(4000),
+    rfp_certification_comments VARCHAR(4000),
+    silp_admin_assessment_comments VARCHAR(4000),
+    amendments_comments VARCHAR(4000),
     silp_sp_report_format VARCHAR(40),
     silp_perm_access_max_area NUMERIC(11, 6),
     silp_perm_access_max_pct NUMERIC(7, 4),
@@ -2875,15 +2880,19 @@ CREATE TABLE lrm_replication.v_silviculture_prescription (
     silp_guide_registration VARCHAR(200),
     cutb_seq_nbr NUMERIC(15),
     silp_seq_nbr NUMERIC(15),
-    divi_div_nbr NUMERIC(2),
-    prescription_prepared_by VARCHAR(50),
-    additional_sp_comments VARCHAR(4000),
-    rfp_certification_comments VARCHAR(4000),
-    silp_admin_assessment_comments VARCHAR(4000),
-    amendments_comments VARCHAR(4000)
+    divi_div_nbr NUMERIC(2)
 );
 CREATE TABLE bcts_reporting.forestview_v_silviculture_prescription AS SELECT * FROM lrm_replication.v_silviculture_prescription;
 CREATE TABLE lrm_replication.v_silviculture_stocking_status (
+    sist_seq_nbr NUMERIC(15),
+    slay_layer VARCHAR(10),
+    srnk_rank VARCHAR(10),
+    sttp_stocking_type_id VARCHAR(10),
+    ssts_survey_source VARCHAR(60),
+    ssts_survey_date TIMESTAMP,
+    ssts_stock_age NUMERIC,
+    ssts_stock_age_plant NUMERIC,
+    ssts_stock_height NUMERIC(10, 4),
     ssts_crown_closure NUMERIC(7, 4),
     ssts_reference_year NUMERIC(4),
     sicl_site_class VARCHAR(10),
@@ -2919,16 +2928,7 @@ CREATE TABLE lrm_replication.v_silviculture_stocking_status (
     ssts_cvr_pattern VARCHAR(10),
     ssts_res_objective VARCHAR(10),
     ssts_total_well_spaced NUMERIC(10, 1),
-    species VARCHAR(4000),
-    sist_seq_nbr NUMERIC(15),
-    slay_layer VARCHAR(10),
-    srnk_rank VARCHAR(10),
-    sttp_stocking_type_id VARCHAR(10),
-    ssts_survey_source VARCHAR(60),
-    ssts_survey_date TIMESTAMP,
-    ssts_stock_age NUMERIC,
-    ssts_stock_age_plant NUMERIC,
-    ssts_stock_height NUMERIC(10, 4)
+    species VARCHAR(4000)
 );
 CREATE TABLE bcts_reporting.forestview_v_silviculture_stocking_status AS SELECT * FROM lrm_replication.v_silviculture_stocking_status;
 CREATE TABLE lrm_replication.v_silviculture_stratum_history (
@@ -3129,6 +3129,29 @@ CREATE TABLE lrm_replication.v_stratum_status (
 );
 CREATE TABLE bcts_reporting.forestview_v_stratum_status AS SELECT * FROM lrm_replication.v_stratum_status;
 CREATE TABLE lrm_replication.v_su (
+    cutb_seq_nbr NUMERIC(15),
+    stun_seq_nbr NUMERIC(15),
+    stun_id VARCHAR(10),
+    su_regen_obligation VARCHAR(4),
+    gross_area NUMERIC(11, 6),
+    ncbr_area NUMERIC(11, 6),
+    nar_num NUMERIC,
+    nar VARCHAR(40),
+    npnat_area NUMERIC,
+    npunn_area NUMERIC,
+    divi_div_nbr NUMERIC(2),
+    stun_max_disturbance NUMERIC(7, 4),
+    regen_delay TIMESTAMP,
+    stun_regen_date_early NUMERIC(4),
+    early_ftg TIMESTAMP,
+    stun_freegrow_date_early NUMERIC(4),
+    late_ftg TIMESTAMP,
+    stun_freegrow_date_late NUMERIC(4),
+    silv_system_id VARCHAR(15),
+    siva_variant_id VARCHAR(15),
+    siph_cut_phase_id VARCHAR(15),
+    free_grow_date TIMESTAMP,
+    free_grow_ind VARCHAR(4),
     post_harv_date TIMESTAMP,
     post_harv_ind VARCHAR(4),
     regen_date TIMESTAMP,
@@ -3156,30 +3179,7 @@ CREATE TABLE lrm_replication.v_su (
     stun_sediment_risk VARCHAR(60),
     stun_depth_unfavourable_max NUMERIC(13, 4),
     stun_depth_unfavourable_min NUMERIC(13, 4),
-    silp_sp_report_format VARCHAR(40),
-    cutb_seq_nbr NUMERIC(15),
-    stun_seq_nbr NUMERIC(15),
-    stun_id VARCHAR(10),
-    su_regen_obligation VARCHAR(4),
-    gross_area NUMERIC(11, 6),
-    ncbr_area NUMERIC(11, 6),
-    nar_num NUMERIC,
-    nar VARCHAR(40),
-    npnat_area NUMERIC,
-    npunn_area NUMERIC,
-    divi_div_nbr NUMERIC(2),
-    stun_max_disturbance NUMERIC(7, 4),
-    regen_delay TIMESTAMP,
-    stun_regen_date_early NUMERIC(4),
-    early_ftg TIMESTAMP,
-    stun_freegrow_date_early NUMERIC(4),
-    late_ftg TIMESTAMP,
-    stun_freegrow_date_late NUMERIC(4),
-    silv_system_id VARCHAR(15),
-    siva_variant_id VARCHAR(15),
-    siph_cut_phase_id VARCHAR(15),
-    free_grow_date TIMESTAMP,
-    free_grow_ind VARCHAR(4)
+    silp_sp_report_format VARCHAR(40)
 );
 CREATE TABLE bcts_reporting.forestview_v_su AS SELECT * FROM lrm_replication.v_su;
 CREATE TABLE lrm_replication.v_su_eco_allocation (
@@ -3226,28 +3226,6 @@ CREATE TABLE lrm_replication.v_third_party_interest (
 );
 CREATE TABLE bcts_reporting.forestview_v_third_party_interest AS SELECT * FROM lrm_replication.v_third_party_interest;
 CREATE TABLE lrm_replication.v_timber_inventory_dip (
-    ogs_reactivated_fn_proceed_status VARCHAR(30),
-    ogs_reactivated_fn_proceed TIMESTAMP,
-    ogs_reactivated_field_verified_status VARCHAR(30),
-    ogs_reactivated_field_verified TIMESTAMP,
-    ogs_reactivated_minor_status VARCHAR(30),
-    ogs_reactivated_minor TIMESTAMP,
-    ogs_reactivated_road_status VARCHAR(30),
-    ogs_reactivated_road TIMESTAMP,
-    ogs_reactivated_re_engineered_status VARCHAR(30),
-    ogs_reactivated_re_engineered TIMESTAMP,
-    xxx_zzz_flag VARCHAR(3),
-    spatial_flag VARCHAR(3),
-    rc_flag VARCHAR(3),
-    dr_flag VARCHAR(3),
-    dvs_flag VARCHAR(3),
-    dsc_flag VARCHAR(3),
-    dvc_flag VARCHAR(3),
-    count_of_blocks NUMERIC,
-    licn_seq_nbr NUMERIC(15),
-    mark_seq_nbr NUMERIC(15),
-    cutb_seq_nbr NUMERIC(15),
-    objectid NUMERIC,
     business_area_region_category VARCHAR(8),
     business_area_region VARCHAR(14),
     business_area VARCHAR(68),
@@ -3320,6 +3298,28 @@ CREATE TABLE lrm_replication.v_timber_inventory_dip (
     old_growth_strategy_status VARCHAR(30),
     old_growth_strategy TIMESTAMP,
     ogs_reactivated_forest_health_status VARCHAR(30),
-    ogs_reactivated_forest_health TIMESTAMP
+    ogs_reactivated_forest_health TIMESTAMP,
+    ogs_reactivated_fn_proceed_status VARCHAR(30),
+    ogs_reactivated_fn_proceed TIMESTAMP,
+    ogs_reactivated_field_verified_status VARCHAR(30),
+    ogs_reactivated_field_verified TIMESTAMP,
+    ogs_reactivated_minor_status VARCHAR(30),
+    ogs_reactivated_minor TIMESTAMP,
+    ogs_reactivated_road_status VARCHAR(30),
+    ogs_reactivated_road TIMESTAMP,
+    ogs_reactivated_re_engineered_status VARCHAR(30),
+    ogs_reactivated_re_engineered TIMESTAMP,
+    xxx_zzz_flag VARCHAR(3),
+    spatial_flag VARCHAR(3),
+    rc_flag VARCHAR(3),
+    dr_flag VARCHAR(3),
+    dvs_flag VARCHAR(3),
+    dsc_flag VARCHAR(3),
+    dvc_flag VARCHAR(3),
+    count_of_blocks NUMERIC,
+    licn_seq_nbr NUMERIC(15),
+    mark_seq_nbr NUMERIC(15),
+    cutb_seq_nbr NUMERIC(15),
+    objectid NUMERIC
 );
 CREATE TABLE bcts_reporting.forestview_v_timber_inventory_dip AS SELECT * FROM lrm_replication.v_timber_inventory_dip;
