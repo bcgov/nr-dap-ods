@@ -78,12 +78,20 @@ def del_audit_entries_rerun(current_date):
 # Function to insert the audit batch status entry
 
 
+<<<<<<< HEAD
 def audit_batch_status_insert(table_name, status, error='None'):
+=======
+def audit_batch_status_insert(table_name, status, error_message='None'):
+>>>>>>> BCTS-ORA2PG-LOG-ERROR-IN-AUDIT-BATCH-STATUS-TABLE
     postgres_connection = PgresPool.getconn()
     postgres_cursor = postgres_connection.cursor()
     try:
         audit_batch_status_query = f"""INSERT INTO {mstr_schema}.{audit_table} (object_name, application_name, etl_layer, object_execution_status, batch_run_date, error_message) VALUES (%s, %s, %s, %s, current_date, %s)"""
+<<<<<<< HEAD
         values = (table_name, app_name, 'replication', status, error)
+=======
+        values = (table_name, app_name, 'replication', status, error_message)
+>>>>>>> BCTS-ORA2PG-LOG-ERROR-IN-AUDIT-BATCH-STATUS-TABLE
         print(audit_batch_status_query, values)
         postgres_cursor.execute(audit_batch_status_query, values)
         postgres_connection.commit()
@@ -144,7 +152,7 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
             return rows
 
     except Exception as e:
-        audit_batch_status_insert(table_name, 'failed')
+        audit_batch_status_insert(table_name, 'failed', str(e))
         print(f"Error extracting data from Oracle: {str(e)}")
         # OrcPool.release(oracle_connection)  #Temporary change
         return []
