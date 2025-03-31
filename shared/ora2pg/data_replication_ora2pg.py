@@ -78,12 +78,12 @@ def del_audit_entries_rerun(current_date):
 # Function to insert the audit batch status entry
 
 
-def audit_batch_status_insert(table_name, status, error='None'):
+def audit_batch_status_insert(table_name, status, error_message='None'):
     postgres_connection = PgresPool.getconn()
     postgres_cursor = postgres_connection.cursor()
     try:
         audit_batch_status_query = f"""INSERT INTO {mstr_schema}.{audit_table} (object_name, application_name, etl_layer, object_execution_status, batch_run_date, error_message) VALUES (%s, %s, %s, %s, current_date, %s)"""
-        values = (table_name, app_name, 'replication', status, error)
+        values = (table_name, app_name, 'replication', status, error_message)
         print(audit_batch_status_query, values)
         postgres_cursor.execute(audit_batch_status_query, values)
         postgres_connection.commit()
