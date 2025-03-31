@@ -144,7 +144,7 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
             return rows
 
     except Exception as e:
-        audit_batch_status_insert(table_name, 'failed')
+        audit_batch_status_insert(table_name, 'failed', str(e))
         print(f"Error extracting data from Oracle: {str(e)}")
         # OrcPool.release(oracle_connection)  #Temporary change
         return []
