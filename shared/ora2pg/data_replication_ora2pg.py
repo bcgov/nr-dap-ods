@@ -78,6 +78,7 @@ def del_audit_entries_rerun(current_date):
 # Function to insert the audit batch status entry
 
 
+<<<<<<< HEAD
 def audit_batch_status_insert(table_name, status, error='None'):
     postgres_connection = PgresPool.getconn()
     postgres_cursor = postgres_connection.cursor()
@@ -86,6 +87,15 @@ def audit_batch_status_insert(table_name, status, error='None'):
         values = (table_name, app_name, 'replication', status, error)
         print(audit_batch_status_query, values)
         postgres_cursor.execute(audit_batch_status_query, values)
+=======
+def audit_batch_status_insert(table_name, status, error_message='None'):
+    postgres_connection = PgresPool.getconn()
+    postgres_cursor = postgres_connection.cursor()
+    try:
+        audit_batch_status_query = f"""INSERT INTO {mstr_schema}.{audit_table} VALUES ('{table_name}','{app_name}','replication','{status}',current_date, '{error_message}')"""
+        print(audit_batch_status_query)
+        postgres_cursor.execute(audit_batch_status_query)
+>>>>>>> ba08489 (Added error_message to audit_batch_status table for ora2pg scrpt)
         postgres_connection.commit()
         print("Record inserted into audit batch status table")
         return None
