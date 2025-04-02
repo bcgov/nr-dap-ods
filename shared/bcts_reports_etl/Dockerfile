@@ -4,7 +4,8 @@ FROM python:3.11.4-slim-buster
 
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2
+    && pip install psycopg2 \
+    && pip install pandas
 
 WORKDIR /app
 
