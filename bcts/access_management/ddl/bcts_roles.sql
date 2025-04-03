@@ -20,9 +20,9 @@ GRANT USAGE ON SCHEMA bcts_staging TO bcts_etl_user WITH GRANT OPTION;
 GRANT USAGE ON SCHEMA bcts_reporting TO bcts_etl_user WITH GRANT OPTION;
 
 -- 3. Grant read and write access to existing tables in schemas lrm_replication, bcts_staging, and bcts_reporting
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA lrm_replication TO bcts_etl_user WITH GRANT OPTION;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bcts_staging TO bcts_etl_user WITH GRANT OPTION;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bcts_reporting TO bcts_etl_user WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE ON ALL TABLES IN SCHEMA lrm_replication TO bcts_etl_user WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE ON ALL TABLES IN SCHEMA bcts_staging TO bcts_etl_user WITH GRANT OPTION;
+GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE ON ALL TABLES IN SCHEMA bcts_reporting TO bcts_etl_user WITH GRANT OPTION;
 
 GRANT USAGE ON SCHEMA ods_data_management TO bcts_etl_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ods_data_management.cdc_master_table_list TO bcts_etl_user;
