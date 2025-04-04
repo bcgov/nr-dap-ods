@@ -231,7 +231,7 @@ if __name__ == '__main__':
     # record end time
     end = time.time()
     OrcPool.close()
-    PgresPool.closeall()
+    PgresPool.close()
 
     print("ETL process completed successfully.")
     print(f"The time of execution of the program is: {(end - start)} secs")
