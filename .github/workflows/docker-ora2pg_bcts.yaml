@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["Ora2pg-FASTER-LOAD-TO-POSTGRES"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
