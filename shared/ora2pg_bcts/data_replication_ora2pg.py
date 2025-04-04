@@ -55,9 +55,6 @@ OrcPool = oracledb.SessionPool(user=oracle_username, password=oracle_password, d
 # print('Oracle Pool Successful')
 
 # In[7]: Setup Postgres Pool
-PgresPool = psycopg.pool.ThreadedConnectionPool(
-    minconn=concurrent_tasks, maxconn=concurrent_tasks, host=postgres_host, port=postgres_port, dbname=postgres_database, user=postgres_username, password=postgres_password
-)
 pgres_pool = ConnectionPool(
     conninfo=f"host={postgres_host} port={postgres_port} dbname={postgres_database} user={postgres_username} password={postgres_password}",
     min_size=concurrent_tasks,
