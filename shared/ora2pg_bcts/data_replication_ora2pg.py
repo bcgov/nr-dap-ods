@@ -155,28 +155,25 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
 
 
 def load_into_postgres(table_name, data, target_schema):
-    postgres_connection = PgresPool.getconn()
-    postgres_cursor = postgres_connection.cursor()
     try:
-        # Delete existing data in the target table
-        delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
-        postgres_cursor.execute(delete_query)
-        data_to_insert = [(tuple(row)) for row in data]
-        with postgres_connection.cursor().copy(f"COPY {target_schema}.{table_name} FROM STDIN") as copy:
-            for record in data_to_insert:
-                copy.write_row(record)
-            postgres_connection.commit()
-            # Insert record to audit batch table
-            audit_batch_status_insert(table_name, 'success')
+        with PgresPool.connection() as conn:
+            with conn.cursor() as cur:
+                # Truncate table
+                delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
+                cur.execute(delete_query)
+
+                data_to_insert = [(tuple(row)) for row in data]
+                with cur.copy(f"COPY {target_schema}.{table_name} FROM STDIN") as copy:
+                    for record in data_to_insert:
+                        copy.write_row(record)
+                    
+        # Insert record to audit batch table
+        audit_batch_status_insert(table_name, 'success')
 
     except Exception as e:
         print(f"Error loading data into PostgreSQL: {str(e)}")
         audit_batch_status_insert(table_name, 'failed', str(e))
-    finally:
-        # Return the connection to the pool
-        if postgres_connection:
-            postgres_cursor.close()
-            PgresPool.putconn(postgres_connection)
+    
 
 # In[11]: Function to call both extract and load functions
 
