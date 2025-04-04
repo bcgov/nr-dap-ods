@@ -55,7 +55,7 @@ OrcPool = oracledb.SessionPool(user=oracle_username, password=oracle_password, d
 # print('Oracle Pool Successful')
 
 # In[7]: Setup Postgres Pool
-pgres_pool = ConnectionPool(
+Pgres_pool = ConnectionPool(
     conninfo=f"host={postgres_host} port={postgres_port} dbname={postgres_database} user={postgres_username} password={postgres_password}",
     min_size=concurrent_tasks,
     max_size=concurrent_tasks,
