@@ -4,7 +4,8 @@
 # In[1]: Imports
 # refer if block at line 38, some imports are conditional
 import psycopg
-import psycopg.pool
+from psycopg_pool import ConnectionPool
+from psycopg import Connection
 import configparser
 import time
 import json
@@ -56,6 +57,12 @@ OrcPool = oracledb.SessionPool(user=oracle_username, password=oracle_password, d
 # In[7]: Setup Postgres Pool
 PgresPool = psycopg.pool.ThreadedConnectionPool(
     minconn=concurrent_tasks, maxconn=concurrent_tasks, host=postgres_host, port=postgres_port, dbname=postgres_database, user=postgres_username, password=postgres_password
+)
+pgres_pool = ConnectionPool(
+    conninfo=f"host={postgres_host} port={postgres_port} dbname={postgres_database} user={postgres_username} password={postgres_password}",
+    min_size=concurrent_tasks,
+    max_size=concurrent_tasks,
+    timeout=10  # how long to wait for a connection before raising an error
 )
 print('Postgres Connection Successful')
 

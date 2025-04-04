@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y libaio1 wget unzip \
 
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
-    && pip install psycopg
+    && pip install psycopg \
+    && pip install "psycopg[binary,pool]"
 
 WORKDIR /app
 
