@@ -230,6 +230,11 @@ def publish_datasets():
         FROM BCTS_STAGING.mv_licence_issued_advertised_main_hist
 	);
 
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main_hist;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.mv_licence_issued_advertised_main_hist;
+
     DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main;
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
     AS SELECT * 
