@@ -57,7 +57,7 @@ def get_last_days_of_months(start_year = 2025):
             if year == current_year and month > current_month:
                 return dates
             else:
-                if month < 4:
+                if month < 5:
                     fiscal_year_start = datetime(year - 1, 4, 1)
                 else:
                     fiscal_year_start = datetime(year, 4, 1)
