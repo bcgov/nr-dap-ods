@@ -56,7 +56,14 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_sell_hist
     ogs_reactivated_minor date,
     ogs_reactivated_road date,
     ogs_reactivated_re_engineered date,
-    cutb_seq_nbr bigint,
+    salvage_any_fire_year text COLLATE pg_catalog."default",
+    salvage_fire_years text COLLATE pg_catalog."default",
+    salvage_2021_fire text COLLATE pg_catalog."default",
+    salvage_2022_fire text COLLATE pg_catalog."default",
+    salvage_2023_fire text COLLATE pg_catalog."default",
+    salvage_2024_fire text COLLATE pg_catalog."default",
+    cutb_seq_nbr numeric(15,0),
     report_end_date date
-);
+)
+
 
