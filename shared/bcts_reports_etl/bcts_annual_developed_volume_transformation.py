@@ -70,7 +70,7 @@ def get_existing_dates():
         cursor.execute(sql_statement)
         connection.commit()
         # Fetch the result and load into a DataFrame
-        existing_date = cursor.fetchall()[0]
+        existing_date = cursor.fetchall()[0][0]
         logging.info(f"SQL script executed successfully.")
         logging.info(f"report_exists for {existing_date}")
         return existing_date
