@@ -133,20 +133,26 @@ if __name__ == "__main__":
     end_date = get_last_day_of_month()
     max_report_exist_date = get_existing_dates()
 
-    if max_report_exist_date == end_date:
-        logging.info("BCTS timber inventory ready to develop report is already up-to-date! ")
-        # Publish reporting objects to the reporting layer
-        logging.info("Updating datasets to the reporting layer...")
-        publish_datasets()
-        logging.info("Datasets in the reporting layer have been updated!")
-        sys.exit(0)
-    elif max_report_exist_date > end_date:
-        logging.error(f"Current valid end date is {end_date} but report exists for end date {max_report_exist_date}!")
-        sys.exit(1)
+    if max_report_exist_date is not None:
+        if max_report_exist_date == end_date:
+            logging.info("BCTS timber inventory ready to develop report is already up-to-date! ")
+            # Publish reporting objects to the reporting layer
+            logging.info("Updating datasets to the reporting layer...")
+            publish_datasets()
+            logging.info("Datasets in the reporting layer have been updated!")
+            sys.exit(0)
+        elif max_report_exist_date > end_date:
+            logging.error(f"Current valid end date is {end_date} but report exists for end date {max_report_exist_date}!")
+            sys.exit(1)
+        else:
+            # Run each report
+            logging.info(f"Running BCTS timber inventory ready to develop report for the reporting end date {end_date}...")
+            run_timber_inventory_ready_to_develop_report(connection, cursor, end_date)
     else:
         # Run each report
         logging.info(f"Running BCTS timber inventory ready to develop report for the reporting end date {end_date}...")
         run_timber_inventory_ready_to_develop_report(connection, cursor, end_date)
+
 
     # Publish reporting objects to the reporting layer
     logging.info("Updating datasets to the reporting layer...")
