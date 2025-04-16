@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["bcts-etl-transformation-updates"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
