@@ -6,7 +6,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
     )
 
     WITH A_D AS
-/* Block Activity Date (A_D) */
+    /* Block Activity Date (A_D) */
     (
     SELECT CUTB_SEQ_NBR,
         MAX(CASE WHEN ACTT_KEY_IND = 'DEL' THEN ACTIVITY_DATE ELSE NULL END)::DATE AS Deletion_Approval_Date,
@@ -126,7 +126,8 @@ def get_timber_inventory_ready_to_sell_query(end_date):
                 'RFV',  -- Deferred - Reactivated(OGS-Field Verified)
                 'RMN',  -- Deferred - Reactivated(OGS-Minor)
                 'RRD',  -- Deferred - Reactivated(OGS-Road)
-                'RRE'  -- Deferred - Reactivated(OGS-Re-Engineered)
+                'RRE',  -- Deferred - Reactivated(OGS-Re-Engineered)
+                'DRD'  -- Deferred - Reactivated(non-OGS). DRD Added on 2025-03-15. BD
             )
             AND A4.ACTI_STATUS_IND = 'D'  -- Done (D)
             AND A4.ACTIVITY_DATE <= '{end_date}'  -- Date: end of reporting period
@@ -167,15 +168,21 @@ def get_timber_inventory_ready_to_sell_query(end_date):
     /* Salvage - Any fire year */
 	SALVAGE_ANY_FIRE_YEAR AS
     (
-        select distinct
-            cutb_seq_nbr
+        select
+            cutb_seq_nbr,
+            string_agg(
+            DISTINCT substring(
+                    activity_type from position('2' in activity_type) for 4
+                ),
+                ', ' -- ORDER BY actt_key_ind
+            ) AS salvage_fire_years
+            from
+            lrm_replication.v_block_activity_all
 
-        from
-            LRM_REPLICATION.v_block_activity_all
-
-        where
+            where
             activity_class = 'CSB'
             and actt_key_ind like 'SFIRE%'
+            group by cutb_seq_nbr
     ),
 
     /* Salvage - 2021 Fire (calendar year of fire) */
@@ -371,30 +378,30 @@ select distinct
     A_D.OGS_Reactivated_Minor,
     A_D.OGS_Reactivated_Road,
     A_D.OGS_Reactivated_Re_Engineered,
-    -- CASE 
-	--     WHEN SALVAGE_ANY_FIRE_YEAR.cutb_seq_nbr IS NULL THEN 'N' 
-	--     ELSE 'Y' 
-	-- END AS SALVAGE_ANY_FIRE_YEAR,
+    CASE 
+	    WHEN SALVAGE_ANY_FIRE_YEAR.cutb_seq_nbr IS NULL THEN 'N' 
+	    ELSE 'Y' 
+	END AS SALVAGE_ANY_FIRE_YEAR,
+    SALVAGE_ANY_FIRE_YEAR.salvage_fire_years,
+	CASE 
+	    WHEN salvage21.actt_key_ind IS NULL THEN NULL 
+	    ELSE salvage21.activity_type || ' (' || salvage21.activity_class || ' - ' || salvage21.actt_key_ind || ')' 
+	END AS salvage_2021_fire,
 	
-	-- CASE 
-	--     WHEN salvage21.actt_key_ind IS NULL THEN NULL 
-	--     ELSE salvage21.activity_type || ' (' || salvage21.activity_class || ' - ' || salvage21.actt_key_ind || ')' 
-	-- END AS salvage_2021_fire,
+	CASE 
+	    WHEN salvage22.actt_key_ind IS NULL THEN NULL 
+	    ELSE salvage22.activity_type || ' (' || salvage22.activity_class || ' - ' || salvage22.actt_key_ind || ')' 
+	END AS salvage_2022_fire,
 	
-	-- CASE 
-	--     WHEN salvage22.actt_key_ind IS NULL THEN NULL 
-	--     ELSE salvage22.activity_type || ' (' || salvage22.activity_class || ' - ' || salvage22.actt_key_ind || ')' 
-	-- END AS salvage_2022_fire,
+	CASE 
+	    WHEN salvage23.actt_key_ind IS NULL THEN NULL 
+	    ELSE salvage23.activity_type || ' (' || salvage23.activity_class || ' - ' || salvage23.actt_key_ind || ')' 
+	END AS salvage_2023_fire,
 	
-	-- CASE 
-	--     WHEN salvage23.actt_key_ind IS NULL THEN NULL 
-	--     ELSE salvage23.activity_type || ' (' || salvage23.activity_class || ' - ' || salvage23.actt_key_ind || ')' 
-	-- END AS salvage_2023_fire,
-	
-	-- CASE 
-	--     WHEN salvage24.actt_key_ind IS NULL THEN NULL 
-	--     ELSE salvage24.activity_type || ' (' || salvage24.activity_class || ' - ' || salvage24.actt_key_ind || ')' 
-	-- END AS salvage_2024_fire,
+	CASE 
+	    WHEN salvage24.actt_key_ind IS NULL THEN NULL 
+	    ELSE salvage24.activity_type || ' (' || salvage24.activity_class || ' - ' || salvage24.actt_key_ind || ')' 
+	END AS salvage_2024_fire,
     B.CUTB_SEQ_NBR,
     '{end_date}'::date
 
@@ -442,6 +449,5 @@ ORDER BY
     L.LICENCE_ID,
     B.PERMIT_ID,
     B.BLOCK_ID;
-
     """
     return sql_statement
