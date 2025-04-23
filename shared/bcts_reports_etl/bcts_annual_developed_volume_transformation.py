@@ -48,26 +48,20 @@ def get_connection():
         logging.error(f"Error connecting to the database: {e}")
         sys.exit(1)
 
-def get_last_days_of_months(start_year = 2025):
+def get_last_day_of_month():
     current_year = datetime.today().year
     current_month = datetime.today().month 
-    dates = []
-    for year in range(start_year, current_year + 1):
-        for month in range(1, 13):
-            if year == current_year and month > current_month:
-                return dates
-            else:
-                if month < 5:
-                    fiscal_year_start = datetime(year - 1, 4, 1)
-                else:
-                    fiscal_year_start = datetime(year, 4, 1)
+    if current_month < 5:
+        fiscal_year_start = date(current_year - 1, 4, 1)
+    else:
+        fiscal_year_start = date(current_year, 4, 1)
 
-                dates.append((fiscal_year_start, date(year, month, 1) - timedelta (days=1)))
+    return(fiscal_year_start, date(current_year, current_month, 1) - timedelta (days=1))
 
 def get_existing_dates():
     sql_statement = \
     f"""
-    select distinct report_end_date
+    select max(report_end_date) as max_report_end_date
     from bcts_staging.annual_developed_volume_hist;
 
     """
@@ -76,10 +70,10 @@ def get_existing_dates():
         cursor.execute(sql_statement)
         connection.commit()
         # Fetch the result and load into a DataFrame
-        existing_dates = [row[0] for row in cursor.fetchall()]
+        existing_date = cursor.fetchall()[0][0]
         logging.info(f"SQL script executed successfully.")
-        logging.info(f"report_exists for {existing_dates}")
-        return existing_dates
+        logging.info(f"report_exists for {existing_date}")
+        return existing_date
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
@@ -143,20 +137,25 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     # Fetch the start and end dates for the report periods
-    end_dates = get_last_days_of_months()
-    report_exists_dates = get_existing_dates()
-    report_required_dates = [dt for dt in end_dates if dt[1] not in report_exists_dates]
+    start_date, end_date = get_last_day_of_month()
+    max_report_exist_date = get_existing_dates()
 
-    if len(report_required_dates) == 0:
-        logging.info("BCTS annual developed volume report is already up-to-date! ")
-        # Publish reporting objects to the reporting layer
-        logging.info("Updating datasets to the reporting layer...")
-        publish_datasets()
-        logging.info("Datasets in the reporting layer have been updated!")
-        sys.exit(0)
-
-    for start_date, end_date in report_required_dates:
-       
+    if max_report_exist_date is not None:
+        if max_report_exist_date == end_date:
+            logging.info("BCTS annual developed volume report is already up-to-date! ")
+            # Publish reporting objects to the reporting layer
+            logging.info("Updating datasets to the reporting layer...")
+            publish_datasets()
+            logging.info("Datasets in the reporting layer have been updated!")
+            sys.exit(0)
+        elif max_report_exist_date > end_date:
+            logging.error(f"Current valid end date is {end_date} but report exists for end date {max_report_exist_date}!")
+            sys.exit(1)
+        else:
+            # Run each report
+            logging.info(f"Running BCTS annual developed volume report for the reporting start_date {start_date} and end date {end_date}...")
+            run_report(connection, cursor, start_date, end_date)
+    else:
         # Run each report
         logging.info(f"Running BCTS annual developed volume report for the reporting start_date {start_date} and end date {end_date}...")
         run_report(connection, cursor, start_date, end_date)
