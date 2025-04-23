@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["BCTS-PERFORMANCE-REPORT-2025-04-07"]
 
 env:
   REGISTRY: ghcr.io

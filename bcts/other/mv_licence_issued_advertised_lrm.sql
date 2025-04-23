@@ -41,7 +41,7 @@ with licence as
             Licn_Category_ID as Category_ID_LRM,
             Category as Category_LRM
         from
-            bcts_staging.forestview_v_licence),
+            lrm_replication.v_licence),
     /* Total Licence Info -- Info about all blocks in licence */
     total_licence_info as
     (
@@ -52,7 +52,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME
         from
-            BCTS_STAGING.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
         group by
             b.licn_seq_nbr
     ),
@@ -72,7 +72,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_ALL_FIRE_YEARS,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_ALL_FIRE_YEARS
         from
-            BCTS_STAGING.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
 			INNER JOIN
             (
                 /*
@@ -83,7 +83,7 @@ with licence as
                     cutb_seq_nbr
 
                 from
-                    BCTS_STAGING.forestview_v_block_activity_all
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
 
                 where
                     activity_class = 'CSB'
@@ -113,7 +113,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2021_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2021_FIRE
         FROM
-            BCTS_STAGING.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
 			INNER JOIN
             (
                 /*
@@ -129,7 +129,7 @@ with licence as
                 select distinct
                     cutb_seq_nbr
                 from
-                    BCTS_STAGING.forestview_v_block_activity_all
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
                 where
                     activity_class = 'CSB'
                     and actt_key_ind = 'SFIRE21'
@@ -156,7 +156,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2022_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2022_FIRE
         FROM
-            bcts_staging.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
             INNER JOIN
             (
                 /*
@@ -172,7 +172,7 @@ with licence as
                 select distinct
                     cutb_seq_nbr
                 from
-                    bcts_staging.forestview_v_block_activity_all
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
                 where
                     activity_class = 'CSB'
                     and actt_key_ind = 'SFIRE22'
@@ -198,7 +198,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2023_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2023_FIRE
         FROM
-            bcts_staging.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
             INNER JOIN
             (
                 /*
@@ -214,7 +214,7 @@ with licence as
                 select distinct
                     cutb_seq_nbr
                 from
-                    bcts_staging.forestview_v_block_activity_all
+                   LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
                 where
                     activity_class = 'CSB'
                     and actt_key_ind = 'SFIRE23'
@@ -243,7 +243,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2024_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2024_FIRE
         FROM
-            bcts_staging.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
             INNER JOIN
             (
                 /*
@@ -259,7 +259,7 @@ with licence as
                 select distinct
                     cutb_seq_nbr
                 from
-                    bcts_staging.forestview_v_block_activity_all
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
                 where
                     activity_class = 'CSB'
                     and actt_key_ind = 'SFIRE24'
@@ -287,7 +287,7 @@ with licence as
             Sum(B.CRUISE_VOL) AS LRM_CRUISE_VOLUME_SALVAGE_2025_FIRE,
             Sum(COALESCE(CRUISE_VOL,0) + COALESCE(BLAL_RW_VOL,0)) AS LRM_TOTAL_VOLUME_SALVAGE_2025_FIRE
         FROM
-            bcts_staging.FORESTVIEW_V_BLOCK B
+            LRM_REPLICATION.V_BLOCK B
             INNER JOIN
             (
                 /*
@@ -303,7 +303,7 @@ with licence as
                 select distinct
                     cutb_seq_nbr
                 from
-                    bcts_staging.forestview_v_block_activity_all
+                    LRM_REPLICATION.V_BLOCK_ACTIVITY_ALL
                 where
                     activity_class = 'CSB'
                     and actt_key_ind = 'SFIRE25'
