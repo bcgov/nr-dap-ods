@@ -43,8 +43,8 @@ def get_roads_transferred_in_query(start_date, end_date):
     ((POT-POC)/1000) AS Length,
     RCOM_COMPLETION_DATE::DATE AS TRANSFER_DATE,
     CONST_METHOD_TYPE,
-    '{start_date}' AS fiscal_year_start_date,
-    '{end_date}' AS report_end_date
+    '{start_date}'::DATE AS fiscal_year_start_date,
+    '{end_date}'::DATE AS report_end_date
 FROM
     LRM_REPLICATION.V_ROAD_GAP_ANALYSIS
 WHERE

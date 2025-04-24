@@ -45,8 +45,8 @@ def get_roads_transferred_out_query(start_date, end_date):
         DEAC_METHOD_TYPE,
         DEAC_LEVEL_TYPE,
         RDST_STEWARD_NAME,
-        '{start_date}' AS fiscal_year_start_date,
-        '{end_date}' AS report_end_date
+        '{start_date}'::DATE AS fiscal_year_start_date,
+        '{end_date}'::DATE AS report_end_date
     FROM
         LRM_REPLICATION.V_ROAD_GAP_ANALYSIS
     WHERE
