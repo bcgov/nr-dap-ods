@@ -44,5 +44,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.roads_transferred_out_hist
     transfer_date date,
     deac_method_type character varying(60) COLLATE pg_catalog."default",
     deac_level_type character varying(96) COLLATE pg_catalog."default",
-    rdst_steward_name character varying(200) COLLATE pg_catalog."default"
+    rdst_steward_name character varying(200) COLLATE pg_catalog."default",
+    fiscal_year_start_date date,
+    report_end_date date
 );
