@@ -304,7 +304,7 @@ def get_currently_in_market(end_date):
 
     from
         bcts_staging.forest_division d
-    LEFT JOIN BCTS_STAGING.FORESTVIEW_V_LICENCE L
+    LEFT JOIN LRM_REPLICATION.V_LICENCE L
     ON d.divi_short_code = L.TSO_CODE
     LEFT JOIN TENPOST
     ON L.LICN_SEQ_NBR = TENPOST.LICN_SEQ_NBR 
