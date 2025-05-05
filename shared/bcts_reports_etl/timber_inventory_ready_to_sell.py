@@ -2,7 +2,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.timber_inventory_ready_to_sell_hist(
-    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, cutb_seq_nbr, report_end_date
+    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, deferred_activity, latest_deferral_date,spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, cutb_seq_nbr, report_end_date
     )
 
     WITH A_D AS
@@ -80,6 +80,24 @@ def get_timber_inventory_ready_to_sell_query(end_date):
             ) TEMP
 
             GROUP BY CUTB_SEQ_NBR
+    ),
+
+    DF AS
+    /* Deferral Block Activity and Date */
+    (SELECT DISTINCT ON (cutb_seq_nbr) 
+        cutb_seq_nbr,
+        activity_date as Latest_Deferral_Date,
+        activity_type as DEFERRED_ACTIVITY
+    FROM 
+        lrm_replication.v_block_activity_all DA1
+    WHERE  
+        acti_status_ind = 'D' 
+        AND activity_class = 'CSB'
+        AND DA1.ACTT_KEY_IND In ('DCP', 'DFN', 'DLA', 'DOG', 'DOR', 'DPC', 'DRB', 'DSD', 'DSI', 'DESI') 
+        AND DA1.ACTIVITY_DATE <= To_Date('2025-03-31', 'YYYY-MM-DD')  -- Date: end of reporting period
+    ORDER BY 
+        cutb_seq_nbr, 
+        activity_date DESC
     ),
 
 	LDF AS
@@ -346,6 +364,8 @@ select distinct
         ELSE
             'Ready to Sell'
         END AS INVENTORY_CATEGORY,
+    DF.DEFERRED_ACTIVITY,
+    DF.LATEST_DEFERRAL_DATE,
     BS.SPATIAL_FLAG,
     B.CRUISE_VOL,
     B.BLAL_RW_VOL AS RW_VOL,
@@ -413,6 +433,8 @@ FROM
 	ON B.CUTB_SEQ_NBR = LDF.CUTB_SEQ_NBR 
 	LEFT JOIN LRCT
 	ON B.CUTB_SEQ_NBR = LRCT.CUTB_SEQ_NBR 
+    LEFT JOIN DF
+	ON B.CUTB_SEQ_NBR = DF.CUTB_SEQ_NBR
 	LEFT JOIN LRM_REPLICATION.V_BLOCK_SPATIAL BS
 	ON B.CUTB_SEQ_NBR = BS.CUTB_SEQ_NBR 
 	LEFT JOIN LRM_REPLICATION.V_LICENCE L

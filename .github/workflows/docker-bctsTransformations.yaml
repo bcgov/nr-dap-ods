@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["bcts-ready-to-sell-deferred"]
 
 env:
   REGISTRY: ghcr.io
