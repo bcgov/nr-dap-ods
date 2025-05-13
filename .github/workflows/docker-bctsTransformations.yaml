@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["SD-146963-Roads-Constructed-and-Roads-Deactivated"]
 
 env:
   REGISTRY: ghcr.io
