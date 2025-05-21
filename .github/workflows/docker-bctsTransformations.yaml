@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["SD-147662-BCTS-DEVELOPMENT-IN-PROGRESS-REPORT"]
 
 env:
   REGISTRY: ghcr.io
