@@ -27,3 +27,16 @@ CREATE TABLE lrm_replication.cut_block_shape (
 CREATE OR REPLACE VIEW bcts_staging.forest_cut_block_shape AS
 SELECT * FROM lrm_replication.cut_block_shape;
 
+
+-- DROP TABLE IF EXISTS bcts_staging.old_growth_tap_deferral_categories;
+
+-- Added to store static Old Growth TAP deferral categories (Ancient, Remnant, Big Tree) used in DIP timber inventory reporting.
+-- These categories are derived from GIS analysis and do not change over time, supporting consistent dashboard reporting.
+
+CREATE TABLE IF NOT EXISTS bcts_staging.old_growth_tap_deferral_categories
+(
+    ubi text COLLATE pg_catalog."default",
+    ancient text COLLATE pg_catalog."default",
+    remanant text COLLATE pg_catalog."default",
+    big_treed text COLLATE pg_catalog."default"
+)
