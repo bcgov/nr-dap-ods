@@ -617,7 +617,7 @@ def get_timber_inventory_development_in_progress_query(end_date):
         CASE
             WHEN OGC.big_treed = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
         END AS BIG_TREED_VOLUME,
-        '{end_date}' AS report_end_date
+        '{end_date}'::date AS report_end_date
         
     FROM
         LRM_REPLICATION.CUT_BLOCK CUTB
