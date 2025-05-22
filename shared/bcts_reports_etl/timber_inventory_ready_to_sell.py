@@ -94,7 +94,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
         acti_status_ind = 'D' 
         AND activity_class = 'CSB'
         AND DA1.ACTT_KEY_IND In ('DCP', 'DFN', 'DLA', 'DOG', 'DOR', 'DPC', 'DRB', 'DSD', 'DSI', 'DESI') 
-        AND DA1.ACTIVITY_DATE <= To_Date('2025-03-31', 'YYYY-MM-DD')  -- Date: end of reporting period
+        AND DA1.ACTIVITY_DATE <= '{end_date}'  -- Date: end of reporting period
     ORDER BY 
         cutb_seq_nbr, 
         activity_date DESC
