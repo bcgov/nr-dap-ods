@@ -77,6 +77,10 @@ def generate_grant_statements(row):
         elif permission == "Read/Write":
             statements.append(f"GRANT SELECT, INSERT, UPDATE, DELETE ON {schema}.{table_name} TO {role};")
         # Ignore 'Deny' permissions
+    
+    # Grant permission to Power BI Proxy Account
+    if schema == 'bcts_reporting':
+        statements.append(f"GRANT SELECT ON {schema}.{table_name} TO proxy_bcts_bi;")
 
     return statements
 
