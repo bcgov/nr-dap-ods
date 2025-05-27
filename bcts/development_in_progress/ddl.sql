@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.old_growth_tap_deferral_categories
 (
     ubi text COLLATE pg_catalog."default",
     ancient text COLLATE pg_catalog."default",
-    remanant text COLLATE pg_catalog."default",
+    remnant text COLLATE pg_catalog."default",
     big_treed text COLLATE pg_catalog."default"
 )
 
