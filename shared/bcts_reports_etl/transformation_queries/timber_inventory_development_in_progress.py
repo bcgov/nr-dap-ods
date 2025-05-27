@@ -2,7 +2,7 @@ def get_timber_inventory_development_in_progress_query(end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.timber_inventory_development_in_progress_hist(
-    	business_area_region_category, business_area_region, business_area, business_area_code, fieldteam, manu_id, licence_id, tenure_type, perm_permit_id, mark_mark_id, block_id, ubi, block_nbr, sub_operating_area, licn_licence_state, cutb_block_state, deferred_at_report_date, inventory_category, merch_area, cruise_volume, rw_volume, rc_status, rc_date, rc_fiscal, dr_status, dr_date, dr_fiscal, dvs_status, dvs_date, dvs_fiscal, dsc_status, dsc_date, dvc_status, dvc_date, dvc_fiscal, days_in_dip, days_in_dip_category, woff_status, woff_date, woff_fiscal, auc_status, auc_date, hi_status, hi_date, hvs_status, hvs_date, hvc_status, hvc_date, fg_met_status, fg_date, def_change_of_op_plan_status, def_change_of_op_plan, def_first_nations_status, def_first_nations, def_loss_of_access_status, def_loss_of_access, def_other_status, def_other, def_planning_constraint_status, def_planning_constraint, def_returned_to_bcts_status, def_returned_to_bcts, def_stale_dated_fieldwork_status, def_stale_dated_fieldwork, def_stakeholder_issue_status, def_stakeholder_issue, def_environmental_stewardship_initiative_status, def_environmental_stewardship_initiative, def_reactivated_status, def_reactivated, old_growth_strategy_status, old_growth_strategy, ogs_reactivated_forest_health_status, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed_status, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified_status, ogs_reactivated_field_verified, ogs_reactivated_minor_status, ogs_reactivated_minor, ogs_reactivated_road_status, ogs_reactivated_road, ogs_reactivated_re_engineered_status, ogs_reactivated_re_engineered, xxx_zzz_flag, spatial_flag, rc_flag, dr_flag, dvs_flag, dsc_flag, dvc_flag, count_of_blocks, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, salvage_2025_fire, licn_seq_nbr, mark_seq_nbr, cutb_seq_nbr, ancient, remanant, big_treed, ancient_volume, remnant_volume, big_treed_volume, report_end_date   
+    	business_area_region_category, business_area_region, business_area, business_area_code, fieldteam, manu_id, licence_id, tenure_type, perm_permit_id, mark_mark_id, block_id, ubi, block_nbr, sub_operating_area, licn_licence_state, cutb_block_state, deferred_at_report_date, inventory_category, merch_area, cruise_volume, rw_volume, rc_status, rc_date, rc_fiscal, dr_status, dr_date, dr_fiscal, dvs_status, dvs_date, dvs_fiscal, dsc_status, dsc_date, dvc_status, dvc_date, dvc_fiscal, days_in_dip, days_in_dip_category, woff_status, woff_date, woff_fiscal, auc_status, auc_date, hi_status, hi_date, hvs_status, hvs_date, hvc_status, hvc_date, fg_met_status, fg_date, def_change_of_op_plan_status, def_change_of_op_plan, def_first_nations_status, def_first_nations, def_loss_of_access_status, def_loss_of_access, def_other_status, def_other, def_planning_constraint_status, def_planning_constraint, def_returned_to_bcts_status, def_returned_to_bcts, def_stale_dated_fieldwork_status, def_stale_dated_fieldwork, def_stakeholder_issue_status, def_stakeholder_issue, def_environmental_stewardship_initiative_status, def_environmental_stewardship_initiative, def_reactivated_status, def_reactivated, old_growth_strategy_status, old_growth_strategy, ogs_reactivated_forest_health_status, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed_status, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified_status, ogs_reactivated_field_verified, ogs_reactivated_minor_status, ogs_reactivated_minor, ogs_reactivated_road_status, ogs_reactivated_road, ogs_reactivated_re_engineered_status, ogs_reactivated_re_engineered, xxx_zzz_flag, spatial_flag, rc_flag, dr_flag, dvs_flag, dsc_flag, dvc_flag, count_of_blocks, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, salvage_2025_fire, licn_seq_nbr, mark_seq_nbr, cutb_seq_nbr, ancient, remnant, big_treed, ancient_volume, remnant_volume, big_treed_volume, report_end_date   
     )
     /* Block Activity (ACTB) */
     WITH ACTB AS
@@ -606,13 +606,13 @@ def get_timber_inventory_development_in_progress_query(end_date):
         BLAL.MARK_SEQ_NBR,
         CUTB.CUTB_SEQ_NBR,
         OGC.ancient,
-        OGC.remanant,
+        OGC.remnant,
         OGC.big_treed,
         CASE
             WHEN OGC.ancient = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
         END AS ANCIENT_VOLUME,
         CASE
-            WHEN OGC.remanant = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
+            WHEN OGC.remnant = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
         END AS REMNANT_VOLUME,
         CASE
             WHEN OGC.big_treed = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0

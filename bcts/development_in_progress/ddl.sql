@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_development_in_progress
     mark_seq_nbr numeric(15,0),
     cutb_seq_nbr bigint,
     ancient text COLLATE pg_catalog."default",
-    remanant text COLLATE pg_catalog."default",
+    remnant text COLLATE pg_catalog."default",
     big_treed text COLLATE pg_catalog."default",
     ancient_volume numeric,
     remnant_volume numeric,
