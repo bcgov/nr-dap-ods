@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["BCTS-UPDATE-POWERBI-ACCESS"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
