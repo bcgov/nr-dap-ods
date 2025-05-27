@@ -79,7 +79,7 @@ def generate_grant_statements(row):
         # Ignore 'Deny' permissions
     
     # Grant permission to Power BI Proxy Account
-    if schema == 'bcts_reporting':
+    if schema.upper() == 'BCTS_REPORTING':
         statements.append(f"GRANT SELECT ON {schema}.{table_name} TO proxy_bcts_bi;")
 
     return statements
