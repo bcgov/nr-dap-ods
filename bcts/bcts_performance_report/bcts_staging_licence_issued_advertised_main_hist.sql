@@ -1,17 +1,16 @@
--- Table: bcts_staging.licence_issued_advertised_official
+-- DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_main;
 
-DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_official_hist;
-
-CREATE TABLE bcts_staging.licence_issued_advertised_official_hist
+CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
     business_area text COLLATE pg_catalog."default",
-    business_area_code character varying(6) COLLATE pg_catalog."default",
-    forest_file_id character varying COLLATE pg_catalog."default",
+    management_unit character varying(60) COLLATE pg_catalog."default",
+    district character varying(60) COLLATE pg_catalog."default",
     x_axis_date timestamp without time zone,
     x_axis_fiscal text COLLATE pg_catalog."default",
     x_axis_quarter text COLLATE pg_catalog."default",
+    licence character varying COLLATE pg_catalog."default",
     file_type_code character varying COLLATE pg_catalog."default",
     auction_count_all_time_to_report_period_end bigint,
     first_auction_date timestamp without time zone,
@@ -56,12 +55,12 @@ CREATE TABLE bcts_staging.licence_issued_advertised_official_hist
     issued_in_report_period_cat_a text COLLATE pg_catalog."default",
     issued_in_report_period_cat_2_4 text COLLATE pg_catalog."default",
     advertised_in_report_period text COLLATE pg_catalog."default",
+    total_volume_salvage_all_fire_year_lrm numeric,
     fta_file_status character varying COLLATE pg_catalog."default",
     fta_file_status_date timestamp without time zone,
-    report_frequency text,
-    report_start_date date, 
+    report_frequency text COLLATE pg_catalog."default",
+    report_start_date date,
     report_end_date date,
-    fiscal_year integer
-   
-);
-
+    fiscal_year integer,
+    report_run_date DATE DEFAULT CURRENT_DATE
+)
