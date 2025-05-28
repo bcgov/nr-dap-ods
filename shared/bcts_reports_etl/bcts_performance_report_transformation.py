@@ -7,7 +7,7 @@ import psycopg2
 import logging
 import sys
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta, date
 import pytz
 
 
@@ -75,10 +75,10 @@ def get_reporting_periods(connection, cursor):
     return df
 
 
-def run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency):
+def run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date):
 
     # Run license issued advertised official report
-    sql_statement = get_licence_issued_advertised_official_query(start_date, end_date, report_frequency)
+    sql_statement = get_licence_issued_advertised_official_query(start_date, end_date)
 
     try:
         # logging.info(f"Executing the query...")
@@ -125,14 +125,14 @@ def run_currently_in_market_report(connection, cursor, start_date, end_date, rep
         connection.rollback()
         sys.exit(1)
 
-def licence_issued_advertised_main_report_exists(start_date, end_date, report_frequency):
+def licence_issued_advertised_main_report_exists(start_date, end_date):
     sql_statement = \
     f"""
 
-    select exists (select * from bcts_staging.licence_issued_advertised_official
+    select exists (select * from bcts_reporting.licence_issued_advertised_main
     where report_start_date = '{start_date}'
     and report_end_date = '{end_date}'
-    and report_frequency = '{report_frequency}') as report_exists;
+    ) as report_exists;
 
     """
 
@@ -180,37 +180,20 @@ def publish_datasets():
     AS SELECT * 
     FROM BCTS_STAGING.currently_in_market;
 
-    DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_main_fiscal_year_to_date;
-    CREATE TABLE BCTS_STAGING.licence_issued_advertised_main_fiscal_year_to_date
+    DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_main;
+    CREATE TABLE BCTS_STAGING.licence_issued_advertised_main
     AS SELECT * 
     FROM BCTS_STAGING.licence_issued_advertised_main_hist
-    WHERE report_frequency = 'Fiscal Year to Date'
-        AND report_end_date = (
+    WHERE report_end_date = (
         SELECT MAX(report_end_date)
         FROM BCTS_STAGING.licence_issued_advertised_main_hist
 	);
 
-    DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_main_fiscal_year_to_date;
-    CREATE TABLE BCTS_STAGING.licence_issued_advertised_main_current_half_month
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
     AS SELECT * 
-    FROM BCTS_STAGING.licence_issued_advertised_main_hist
-    WHERE report_frequency = 'Current Half Month'
-        AND report_end_date = (
-        SELECT MAX(report_end_date)
-        FROM BCTS_STAGING.licence_issued_advertised_main_hist
-	);
-
-    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main_fiscal_year_to_date;
-    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_fiscal_year_to_date
-    AS SELECT * 
-    FROM BCTS_STAGING.licence_issued_advertised_main_fiscal_year_to_date;
-
-    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main_fiscal_year_to_date;
-    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_fiscal_year_to_date
-    AS SELECT * 
-    FROM BCTS_STAGING.licence_issued_advertised_main_fiscal_year_to_date;
-
-
+    FROM BCTS_STAGING.licence_issued_advertised_main;
+    
     """
 
     try:
@@ -274,6 +257,17 @@ def truncate_licence_issued_advertised_official(connection, cursor):
         connection.rollback()
         sys.exit(1)
 
+def get_valid_report_period():
+    today = date.today()
+    fiscal_year_start = date(today.year, 4, 1) if today.month >= 4 else date(today.year - 1, 4, 1)
+
+    last_month_end = (today.replace(day=1) - timedelta(days=1))
+    current_month_16 = today.replace(day=16)
+
+    end_date = max(last_month_end, current_month_16)
+
+    return fiscal_year_start, end_date
+
 if __name__ == "__main__":
 
     connection = get_connection()
@@ -283,46 +277,31 @@ if __name__ == "__main__":
     fetch_fta_tables()
 
     # Fetch the start and end dates for the report periods
-    df = get_reporting_periods(connection, cursor)
+    start_date, end_date = get_valid_report_period()
 
-    currently_in_market_executed = False
-    run_main_report = False
-    licence_issued_advertised_official_truncated = False
-    for start_date, end_date, report_frequency in zip(df['start_date'], df['end_date'], df['report_frequency']):
-        # Skip if report is already generated
-        if licence_issued_advertised_main_report_exists(start_date, end_date, report_frequency):
-            logging.info("Report already exists! Skipping...")
-            continue
-        else:
-            if not licence_issued_advertised_official_truncated:
-                # Truncate bcts_staging.licence_issued_advertised_official to clear previous data for first time execution in the current run
-                truncate_licence_issued_advertised_official()
-                licence_issued_advertised_official_truncated = True
+    # Skip if report is already generated
+    if licence_issued_advertised_main_report_exists(start_date, end_date):
+        logging.info("Report already exists! Skipping...")
+    else:
+        logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
+        run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
 
-            logging.info(f"Running license issued advertised official report {report_frequency} for the period of  {start_date} and {end_date}...")
-            run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date, report_frequency)
+        # Get the current date and time in UTC
+        utc_now = datetime.now(pytz.utc)
 
-            run_main_report = True
+        # Convert to Pacific Standard Time
+        pst_timezone = pytz.timezone('US/Pacific')
+        pst_now = utc_now.astimezone(pst_timezone)
 
-            if not currently_in_market_executed:
-                # Get currently in Market if at least one report is updated and execute only once
-                # Get the current date and time in UTC
-                utc_now = datetime.now(pytz.utc)
+        # Get the current date in PST
+        current_date_pst = pst_now.date()
+        run_get_currently_in_market(current_date_pst)
 
-                # Convert to Pacific Standard Time
-                pst_timezone = pytz.timezone('US/Pacific')
-                pst_now = utc_now.astimezone(pst_timezone)
-
-                # Get the current date in PST
-                current_date_pst = pst_now.date()
-                run_get_currently_in_market(current_date_pst)
-
-                currently_in_market_executed = True
-
-    if run_main_report:
         run_licence_issued_advertised_main_report(connection, cursor)
+        # Truncate bcts_staging.licence_issued_advertised_official to prepare for next run
+        truncate_licence_issued_advertised_official()
 
-    # Publish reporting objects to the reporting layer
+    # Publish updated reporting objects to the reporting layer
     logging.info("Updating datasets to the reporting layer...")
     publish_datasets()
     logging.info("Datasets in the reporting layer have been updated!")

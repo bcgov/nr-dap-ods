@@ -4,7 +4,7 @@ def get_licence_issued_advertised_main_query():
     f"""
 
     /* qLicenceIssuedAdvertised_main */
-    INSERT INTO BCTS_STAGING.licence_issued_advertised_main_hist 
+    INSERT INTO BCTS_STAGING.licence_issued_advertised_main_hist (TODO: FILL COLUMNS HERE)
     SELECT
         official.Business_Area_Region_Category,
         official.Business_Area_Region,

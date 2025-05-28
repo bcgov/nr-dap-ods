@@ -1,10 +1,10 @@
 
-def get_licence_issued_advertised_official_query(start_date, end_date, report_frequency):
+def get_licence_issued_advertised_official_query(start_date, end_date):
     return \
     f"""
 
     /* qLicenceIssuedAdvertised_Official */
-    INSERT INTO BCTS_STAGING.licence_issued_advertised_official_hist 
+    INSERT INTO BCTS_STAGING.licence_issued_advertised_official (TODO:FILL COLUMNS HERE)
     SELECT * FROM 
     (with issued as
     /* Issued Licence Details (Licences issued within reporting period) */
@@ -441,7 +441,6 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
                 pfu.file_status_st
             end as FTA_File_Status,
         pfu.file_status_date as FTA_File_Status_Date,
-    '{report_frequency}' as report_frequency,
     '{start_date}'::Date as report_start_date,
     '{end_date}'::Date as report_end_date,
     CASE
@@ -567,7 +566,6 @@ def get_licence_issued_advertised_official_query(start_date, end_date, report_fr
         null as Advertised_in_Report_Period,
         null as FTA_File_Status,
         null as FTA_File_Status_Date,
-        '{report_frequency}' as report_frequency,
         '{start_date}'::Date as report_start_date,
         '{end_date}'::Date as report_end_date,
         CASE
