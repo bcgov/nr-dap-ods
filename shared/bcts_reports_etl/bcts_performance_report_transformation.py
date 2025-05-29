@@ -283,6 +283,9 @@ if __name__ == "__main__":
     if licence_issued_advertised_main_report_exists(start_date, end_date):
         logging.info("Report already exists! Skipping...")
     else:
+        # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
+        truncate_licence_issued_advertised_official()
+        
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
 
@@ -298,8 +301,6 @@ if __name__ == "__main__":
         run_get_currently_in_market(current_date_pst)
 
         run_licence_issued_advertised_main_report(connection, cursor)
-        # Truncate bcts_staging.licence_issued_advertised_official to prepare for next run
-        truncate_licence_issued_advertised_official()
 
         # Publish updated reporting objects to the reporting layer
         logging.info("Updating datasets to the reporting layer...")
