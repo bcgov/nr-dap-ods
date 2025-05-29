@@ -215,42 +215,6 @@ def publish_datasets():
         connection.rollback()
         sys.exit(1)
 
-def fetch_fta_tables():
-
-    sql_statement = \
-    """
-    TRUNCATE TABLE bcts_staging.fta_tenure_term;
-
-    INSERT INTO bcts_staging.fta_tenure_term(
-	forest_file_id, tenure_term, legal_effective_dt, initial_expiry_dt, current_expiry_dt, tenure_extend_cnt, tenr_extend_rsn_st, entry_timestamp, update_timestamp, revision_count)
-    SELECT forest_file_id, tenure_term, legal_effective_dt, initial_expiry_dt, current_expiry_dt, tenure_extend_cnt, tenr_extend_rsn_st, entry_timestamp, update_timestamp, revision_count 
-    FROM fta_replication.pmt_tenure_term_vw;
-
-    TRUNCATE TABLE bcts_staging.fta_prov_forest_use;
-
-    INSERT INTO bcts_staging.fta_prov_forest_use(
-	forest_file_id, file_type_code, forest_region, file_status_st, file_status_date, bcts_org_unit, sb_funded_ind, district_admin_zone, mgmt_unit_type, mgmt_unit_id, revision_count, entry_timestamp, update_timestamp, forest_tenure_guid)
-	SELECT forest_file_id, file_type_code, forest_region, file_status_st, file_status_date, bcts_org_unit, sb_funded_ind, district_admin_zone, mgmt_unit_type, mgmt_unit_id, revision_count, entry_timestamp, update_timestamp, forest_tenure_guid
-    FROM fta_replication.pmt_prov_forest_use_vw;
-
-    TRUNCATE TABLE bcts_staging.fta_tenure_file_status_code;
-
-    INSERT INTO bcts_staging.fta_tenure_file_status_code(
-	tenure_file_status_code, description, effective_date, expiry_date, update_timestamp)
-    SELECT tenure_file_status_code, description, effective_date, expiry_date, update_timestamp
-    FROM fta_replication.pmt_tenure_file_status_code_vw;
-
-    """
-
-    try:
-        cursor.execute(sql_statement)
-        connection.commit()
-        logging.info(f"SQL script executed successfully.")
-    except psycopg2.Error as e:
-        logging.error(f"Error executing the SQL script: {e}")
-        connection.rollback()
-        sys.exit(1)
-
 def truncate_licence_issued_advertised_official(connection, cursor):
 
     sql_statement = \
@@ -282,9 +246,6 @@ if __name__ == "__main__":
 
     connection = get_connection()
     cursor = connection.cursor()
-
-    # Fetch FTA tables from FTA_REPLICATION
-    fetch_fta_tables()
 
     # Fetch the start and end dates for the report periods
     start_date, end_date = get_valid_report_period()
