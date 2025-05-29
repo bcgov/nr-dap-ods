@@ -1,4 +1,4 @@
-create view bcts_staging.v_licence_issued_advertised_lrm as
+create or replace view bcts_staging.v_licence_issued_advertised_lrm as
 /* qLicenceIssuedAdvertised_LRM */
 
  /* Licence Info */
