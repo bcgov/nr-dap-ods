@@ -180,6 +180,11 @@ def publish_datasets():
     AS SELECT * 
     FROM BCTS_STAGING.currently_in_market;
 
+    DROP TABLE IF EXISTS BCTS_REPORTING.currently_in_market_hist;
+    CREATE TABLE BCTS_REPORTING.currently_in_market_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.currently_in_market_hist;
+
     DROP TABLE IF EXISTS BCTS_STAGING.licence_issued_advertised_main;
     CREATE TABLE BCTS_STAGING.licence_issued_advertised_main
     AS SELECT * 
@@ -193,6 +198,11 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main
     AS SELECT * 
     FROM BCTS_STAGING.licence_issued_advertised_main;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main_hist;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.licence_issued_advertised_main_hist;
     
     """
 
@@ -285,7 +295,7 @@ if __name__ == "__main__":
     else:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
         truncate_licence_issued_advertised_official()
-        
+
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
 
