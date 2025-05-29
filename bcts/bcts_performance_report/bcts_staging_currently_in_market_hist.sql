@@ -1,8 +1,6 @@
--- Table: bcts_staging.currently_in_market
+-- DROP TABLE IF EXISTS bcts_staging.currently_in_market_hist;
 
-DROP TABLE IF EXISTS bcts_staging.currently_in_market_hist;
-
-CREATE TABLE bcts_staging.currently_in_market_hist
+CREATE TABLE IF NOT EXISTS bcts_staging.currently_in_market_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
@@ -27,6 +25,7 @@ CREATE TABLE bcts_staging.currently_in_market_hist
     in_currentlyinmarket_query text COLLATE pg_catalog."default",
     on_bc_bid text COLLATE pg_catalog."default",
     data_error text COLLATE pg_catalog."default",
-    report_end_date date
+    report_end_date date,
+    report_run_date DATE DEFAULT CURRENT_DATE
 );
 

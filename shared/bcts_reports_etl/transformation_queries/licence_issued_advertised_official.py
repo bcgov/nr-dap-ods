@@ -4,7 +4,9 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
     f"""
 
     /* qLicenceIssuedAdvertised_Official */
-    INSERT INTO BCTS_STAGING.licence_issued_advertised_official (TODO:FILL COLUMNS HERE)
+    INSERT INTO BCTS_STAGING.licence_issued_advertised_official (
+    	business_area_region_category, business_area_region, business_area, business_area_code, forest_file_id, x_axis_date, x_axis_fiscal, x_axis_quarter, file_type_code, auction_count_all_time_to_report_period_end, first_auction_date, first_auction_fiscal, first_auction_quarter, first_bcts_category_code, first_auction_volume, first_auction_category_a_and_1_volume, first_auction_category_2_and_4_volume, first_auction_volume_is_in_report_period, first_auction_category_a_and_1_volume_is_in_report_period, first_auction_category_2_and_4_volume_is_in_report_period, last_auction_date, last_auction_fiscal, last_auction_quarter, last_auction_bcts_category_code, last_auction_volume, last_auction_category_a_and_1_volume, last_auction_category_2_and_4_volume, original_cat_2_and_4_readvertised_cat_a_and_1_volume, original_cat_a_and_1_readvertised_cat_2_and_4_volume, last_auction_no_sale_rationale, last_auction_no_sale_volume, last_auction_no_sale_category_a_1_volume, last_auction_no_sale_category_2_4_volume, last_auction_no_sale, last_auction_no_sale_cat_a, last_auction_no_sale_cat_2_4, issued_licence_legal_effective_date, issued_licence_legal_effective_fiscal, issued_licence_legal_effective_quarter, issued_licence_bcts_category_code, issued_licence_volume, category_a_and_1_issued_volume, category_2_and_4_issued_volume, issued_licence_maximum_value, issued_licence_maximum_value_cat_a, issued_licence_maximum_value_cat_2_4, issued_licence_client_number, issued_licence_client_name, issued_in_report_period, issued_in_report_period_cat_a, issued_in_report_period_cat_2_4, advertised_in_report_period, fta_file_status, fta_file_status_date, report_start_date, report_end_date, fiscal_year
+        )
     SELECT * FROM 
     (with issued as
     /* Issued Licence Details (Licences issued within reporting period) */

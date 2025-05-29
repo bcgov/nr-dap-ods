@@ -1,6 +1,6 @@
--- DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_main;
+-- DROP TABLE IF EXISTS bcts_staging.licence_issued_advertised_main_hist;
 
-CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main
+CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main_hist
 (
     business_area_region_category text COLLATE pg_catalog."default",
     business_area_region text COLLATE pg_catalog."default",
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main
     last_auction_no_sale text COLLATE pg_catalog."default",
     last_auction_no_sale_cat_a text COLLATE pg_catalog."default",
     last_auction_no_sale_cat_2_4 text COLLATE pg_catalog."default",
-    issued_licence_legal_effective_date timestamp without time zone,
+    issued_licence_legal_effective_date date,
     issued_licence_legal_effective_fiscal text COLLATE pg_catalog."default",
     issued_licence_legal_effective_quarter text COLLATE pg_catalog."default",
     issued_licence_bcts_category_code character varying COLLATE pg_catalog."default",
@@ -57,10 +57,9 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main
     advertised_in_report_period text COLLATE pg_catalog."default",
     total_volume_salvage_all_fire_year_lrm numeric,
     fta_file_status character varying COLLATE pg_catalog."default",
-    fta_file_status_date timestamp without time zone,
-    report_frequency text COLLATE pg_catalog."default",
+    fta_file_status_date date,
     report_start_date date,
     report_end_date date,
-    fiscal_year integer,
+    fiscal_year numeric,
     report_run_date DATE DEFAULT CURRENT_DATE
 )

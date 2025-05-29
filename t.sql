@@ -1,43 +1,4 @@
-"""
-Query: qCurrentlyInMarket
-Purpose: Query to identify which licences are posted on BC Bid as of midnight on
-the report end date (time of interest).
-
-* This query has a known flaw: it is unable to identify licences that were
-open at the time of interest that have since been reauctioned.
-The instructions for data entry in case of failed auctions, usually
-no-bid sales, is to set the Tender Posted (TENPOST) activitiy back from Done
-to Planned, and update the auction date. However, there is not a reliable way
-in LRM to determine whether the licence was actively posted at the time of
-interest. If the time of interest is very close to the actual query run date,
-this flaw can be avoided. In general, persons will be more interested in
-licences currently in the market close to the time of running the report,
-so this flaw is a non-issue. However, this data model means the query results
-may not always be reliably replicated at a later date.
-
-Best practice is to run this query, and compare results against BC Bid:
-https://bcbid.gov.bc.ca/page.aspx/en/rfp/request_browse_public
-Set:
-    Opportunity Type: Timber Auction
-    Organization: BC Timber Sales Branch
-    Issue Date (To): Day before date of interest (End of reporting period).
-        Corresponds to Tender Posted Done date.
-    Closing Date (From): Date of interest (Day after end of reporting period)
-        Corresponds to auction date, usually the same day the licence is
-        awarded, if applicable.
-
-Manually include or exclude results accordingly.
-"""
-
-
-def get_currently_in_market(end_date):
-    sql_statement = \
-    f"""    
-    INSERT INTO bcts_staging.currently_in_market_hist (
-    	business_area_region_category, business_area_region, business_area, business_area_code, nav_name, field_team, licence_id, tenure, lrm_category_code, lrm_category_description, lrm_category, lrm_tender_posted_done_status, lrm_tender_posted_done_date, lrm_licence_awarded_done_date, lrm_auction_done_date, lrm_total_volume, lrm_total_volume_cat_a, lrm_total_volume_cat_2_4, licn_seq_nbr, include_in_currently_in_market_report, in_currentlyinmarket_query, on_bc_bid, data_error, report_end_date
-    )
-    /* Tender Posted Activity Done Date (TENPOST) */
-    SELECT *
+SELECT *
     FROM
     (WITH TENPOST AS
     (
@@ -68,8 +29,8 @@ def get_currently_in_market(end_date):
 
         FROM
             lrm_replication.activity_class ac,
-           lrm_replication.activity_type atype,
-           lrm_replication.activity a
+            lrm_replication.activity_type atype,
+            lrm_replication.activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -126,9 +87,9 @@ def get_currently_in_market(end_date):
 
 
         FROM
-           lrm_replication.activity_class ac,
-           lrm_replication.activity_type atype,
-           lrm_replication.activity a
+            lrm_replication.activity_class ac,
+            lrm_replication.activity_type atype,
+            lrm_replication.activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -186,9 +147,9 @@ def get_currently_in_market(end_date):
 
 
         FROM
-           lrm_replication.activity_class ac,
-           lrm_replication.activity_type atype,
-           lrm_replication.activity a
+            lrm_replication.activity_class ac,
+            lrm_replication.activity_type atype,
+            lrm_replication.activity a
 
         WHERE
             ac.accl_seq_nbr = atype.accl_seq_nbr
@@ -302,10 +263,10 @@ def get_currently_in_market(end_date):
     'Y' as In_CurrentlyInMarket_query,
     null as On_BC_Bid,  -- Populate this column manually, according to what is open on BC Bid at the time of interest.
     null as Data_Error,  -- Populate this column manually if there are data errors that cause licences to be incorrectly included or excluded in the query results.
-    '{end_date}'::date as report_end_date
+    '2025-04-30'::date as report_end_date
 
     from
-       lrm_replication.division d
+        lrm_replication.division d
     LEFT JOIN LRM_REPLICATION.V_LICENCE L
     ON d.divi_short_code = L.TSO_CODE
     LEFT JOIN TENPOST
@@ -319,15 +280,15 @@ def get_currently_in_market(end_date):
 
     WHERE 1 = 1
     AND TENPOST.licn_seq_nbr is not null  -- TENPOST (CML) must be Done. If a licence does not sell at auction, TENPOST must be set back to Planned.
-        AND tenpost.LRM_Tender_Posted_Done_Date <= '{end_date}'  -- Date: report period end. Tender posted before the time of interest.
+        AND tenpost.LRM_Tender_Posted_Done_Date <= '2025-04-30'  -- Date: report period end. Tender posted before the time of interest.
     AND (
             HA.LICN_SEQ_NBR is null  -- HA (CML) must not be Done; the licence has not been awarded.
-            OR HA.LRM_Licence_Awarded_Done_Date >  '{end_date}'  -- Date: report period end. Licences not yet awarded at time of interest.
+            OR HA.LRM_Licence_Awarded_Done_Date >  '2025-04-30'  -- Date: report period end. Licences not yet awarded at time of interest.
         )
     AND (
             NOT AUC.LRM_Auction_Done_Date
                 BETWEEN tenpost.LRM_Tender_Posted_Done_Date
-                AND  '{end_date}'  -- Date: report period end. Auction date not done after the tender is posted and before the end of the report period.
+                AND  '2025-04-30'  -- Date: report period end. Auction date not done after the tender is posted and before the end of the report period.
             OR AUC.LRM_Auction_Done_Date is null
         )
         
@@ -387,10 +348,10 @@ def get_currently_in_market(end_date):
         'Y' as In_CurrentlyInMarket_query,
         'Not applicable' as On_BC_Bid,  -- n/a for these blank rows in the UNION SELECT
         'Not applicable' as Data_Error,  -- n/a for these blank rows in the UNION SELECT
-        '{end_date}'::date as report_end_date
+        '2025-04-30'::date as report_end_date
 
     from
-       lrm_replication.division d
+        lrm_replication.division d
 
     ORDER BY
         BUSINESS_AREA_REGION_CATEGORY desc,
@@ -401,5 +362,3 @@ def get_currently_in_market(end_date):
         LICENCE_ID
         ) CURRENTLY_IN_MARKET
     ;
-    """
-    return sql_statement

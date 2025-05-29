@@ -301,10 +301,10 @@ if __name__ == "__main__":
         # Truncate bcts_staging.licence_issued_advertised_official to prepare for next run
         truncate_licence_issued_advertised_official()
 
-    # Publish updated reporting objects to the reporting layer
-    logging.info("Updating datasets to the reporting layer...")
-    publish_datasets()
-    logging.info("Datasets in the reporting layer have been updated!")
+        # Publish updated reporting objects to the reporting layer
+        logging.info("Updating datasets to the reporting layer...")
+        publish_datasets()
+        logging.info("Datasets in the reporting layer have been updated!")
 
 
     # Clean up
