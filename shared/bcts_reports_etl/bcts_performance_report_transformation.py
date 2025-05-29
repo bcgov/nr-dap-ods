@@ -294,7 +294,7 @@ if __name__ == "__main__":
         logging.info("Report already exists! Skipping...")
     else:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
-        truncate_licence_issued_advertised_official()
+        truncate_licence_issued_advertised_official(connection, cursor)
 
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
