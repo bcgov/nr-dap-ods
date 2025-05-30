@@ -236,9 +236,9 @@ def get_valid_report_period():
     fiscal_year_start = date(today.year, 4, 1) if today.month >= 4 else date(today.year - 1, 4, 1)
 
     last_month_end = (today.replace(day=1) - timedelta(days=1))
-    current_month_16 = today.replace(day=16)
+    current_month_15 = today.replace(day=15)
 
-    end_date = max(last_month_end, current_month_16)
+    end_date = max(last_month_end, current_month_15)
 
     return fiscal_year_start, end_date
 
