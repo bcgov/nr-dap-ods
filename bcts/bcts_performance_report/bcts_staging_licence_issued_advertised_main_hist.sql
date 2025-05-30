@@ -61,5 +61,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main_hist
     report_start_date date,
     report_end_date date,
     fiscal_year numeric,
+    semi_monthly_report_start_date,
+    include_in_semi_monthly_report,
     report_run_date DATE DEFAULT CURRENT_DATE
 )
