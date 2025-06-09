@@ -9,6 +9,7 @@ import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
 import pytz
+import calendar
 
 
 from transformation_queries.licence_issued_advertised_official import get_licence_issued_advertised_official_query
@@ -208,17 +209,7 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.bcts_performance_report_ytd_all
     AS SELECT * 
     FROM BCTS_STAGING.bcts_performance_report_ytd_all;
-
-    DROP TABLE IF EXISTS BCTS_REPORTING.bcts_volume_summary_chart_2;
-    CREATE TABLE BCTS_REPORTING.bcts_volume_summary_chart_2
-    AS SELECT * 
-    FROM BCTS_STAGING.bcts_volume_summary_chart_2;
-
-    DROP TABLE IF EXISTS BCTS_REPORTING.recent_auctions_chart_2;
-    CREATE TABLE BCTS_REPORTING.recent_auctions_chart_2
-    AS SELECT * 
-    FROM BCTS_STAGING.recent_auctions_chart_2;
-   
+    
     """
 
     try:
@@ -246,16 +237,37 @@ def truncate_licence_issued_advertised_official(connection, cursor):
         connection.rollback()
         sys.exit(1)
 
-def get_valid_report_period():
-    today = date.today()
-    fiscal_year_start = date(today.year, 4, 1) if today.month >= 4 else date(today.year - 1, 4, 1)
+def get_semi_monthly_periods(start_date, end_date):
+    periods = []
+    current = start_date
 
-    last_month_end = (today.replace(day=1) - timedelta(days=1))
-    current_month_15 = today.replace(day=15)
+    while current <= end_date:
+        # First half
+        first_half_start = current.replace(day=1)
+        first_half_end = current.replace(day=15)
+        if first_half_end >= start_date:
+            periods.append((
+                max(first_half_start, start_date),
+                min(first_half_end, end_date)
+            ))
 
-    end_date = max(last_month_end, current_month_15)
+        # Second half
+        last_day = calendar.monthrange(current.year, current.month)[1]
+        second_half_start = current.replace(day=16)
+        second_half_end = current.replace(day=last_day)
+        if second_half_start <= end_date:
+            periods.append((
+                max(second_half_start, start_date),
+                min(second_half_end, end_date)
+            ))
 
-    return fiscal_year_start, end_date
+        # Move to next month
+        if current.month == 12:
+            current = current.replace(year=current.year + 1, month=1, day=1)
+        else:
+            current = current.replace(month=current.month + 1, day=1)
+
+    return periods
 
 if __name__ == "__main__":
 
@@ -263,28 +275,14 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     # Fetch the start and end dates for the report periods
-    start_date, end_date = get_valid_report_period()
+    periods = get_semi_monthly_periods(date(2024, 4, 1), date(2025, 6, 5))
 
-    # Skip if report is already generated
-    if licence_issued_advertised_main_report_exists(start_date, end_date):
-        logging.info("Report already exists! Skipping...")
-    else:
+    for (start_date, end_date) in periods:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
         truncate_licence_issued_advertised_official(connection, cursor)
 
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
-
-        # Get the current date and time in UTC
-        utc_now = datetime.now(pytz.utc)
-
-        # Convert to Pacific Standard Time
-        pst_timezone = pytz.timezone('US/Pacific')
-        pst_now = utc_now.astimezone(pst_timezone)
-
-        # Get the current date in PST
-        current_date_pst = pst_now.date()
-        run_get_currently_in_market(current_date_pst)
 
         run_licence_issued_advertised_main_report(connection, cursor)
 
