@@ -306,6 +306,7 @@ def publish_datasets():
         AND Last_Auction_No_Sale_Rationale IS NOT NULL     
         AND Last_Auction_Date BETWEEN semi_monthly_report_start_date AND report_end_date;
 
+    DROP TABLE IF EXISTS bcts_staging.bcts_performance_report_licence_issued_details;
     create table bcts_staging.bcts_performance_report_licence_issued_details as
     SELECT 
         business_area AS "Business Area",
@@ -335,6 +336,7 @@ def publish_datasets():
         Issued_in_report_period = 'Y' 
         AND Issued_Licence_Legal_Effective_Date BETWEEN semi_monthly_report_start_date AND report_end_date;
 
+    DROP TABLE IF EXISTS bcts_staging.recent_auctions_chart_2;
     create table bcts_staging.recent_auctions_chart_2 as
     select 
     'Licence Issued' as metric,
@@ -584,10 +586,6 @@ if __name__ == "__main__":
 
     # Fetch the start and end dates for the report periods
     periods = get_semi_monthly_periods(date(2024, 4, 1), date(2025, 6, 5))
-
-    print(periods)
-    print(type(periods))
-    print(len(periods))
 
     for (start_date, end_date) in periods:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
