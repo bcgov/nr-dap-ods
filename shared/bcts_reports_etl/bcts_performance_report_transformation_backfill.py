@@ -167,7 +167,7 @@ def publish_datasets():
 
     sql_statement = \
     """
-        DROP TABLE IF EXISTS BCTS_STAGING.currently_in_market;
+    DROP TABLE IF EXISTS BCTS_STAGING.currently_in_market;
     CREATE TABLE BCTS_STAGING.currently_in_market
     AS SELECT * 
     FROM BCTS_STAGING.currently_in_market_hist
@@ -205,6 +205,7 @@ def publish_datasets():
     AS SELECT * 
     FROM BCTS_STAGING.licence_issued_advertised_main_hist;
 
+    DROP TABLE IF EXISTS bcts_staging.currently_in_market_summary;
     create table bcts_staging.currently_in_market_summary as
     select business_area_region_category,
     business_area_region,
@@ -218,6 +219,7 @@ def publish_datasets():
     business_area_region,
     business_area;
 
+    DROP TABLE IF EXISTS bcts_staging.ytd_auctioned_issued_not_awarded;
     create table bcts_staging.ytd_auctioned_issued_not_awarded as
     select business_area_region_category,
     business_area_region,
@@ -233,6 +235,7 @@ def publish_datasets():
     business_area_region,
     business_area;
 
+    DROP TABLE IF EXISTS bcts_staging.recent_auction_results;
     create table bcts_staging.recent_auction_results as
     with temp as (
     select 
@@ -273,7 +276,8 @@ def publish_datasets():
 
     from temp;
 
-    
+
+    DROP TABLE IF EXISTS bcts_staging.bcts_performance_report_not_awarded_details;
     create table bcts_staging.bcts_performance_report_not_awarded_details as
     SELECT 
         business_area AS "Business Area", 
@@ -350,6 +354,8 @@ def publish_datasets():
     from bcts_staging.licence_issued_advertised_main
     where include_in_semi_monthly_report = 'Y';
 
+    
+    DROP TABLE IF EXISTS bcts_staging.bcts_performance_report_ytd_all;
     create table bcts_staging.bcts_performance_report_ytd_all as
     with bcts_performance_report_ytd_all as (
     select 
@@ -418,6 +424,7 @@ def publish_datasets():
     from bcts_performance_report_ytd_all;
 
 
+    DROP TABLE IF EXISTS bcts_staging.bcts_volume_summary_chart_2;
     create table bcts_staging.bcts_volume_summary_chart_2 as
     select 
     'Q1 Licence Issued Target' as metric,
@@ -510,6 +517,7 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.bcts_performance_report_licence_issued_details
     AS SELECT * 
     FROM BCTS_STAGING.bcts_performance_report_licence_issued_details;
+
     """
 
     try:
