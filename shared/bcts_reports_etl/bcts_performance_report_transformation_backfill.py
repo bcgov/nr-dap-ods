@@ -585,6 +585,10 @@ if __name__ == "__main__":
     # Fetch the start and end dates for the report periods
     periods = get_semi_monthly_periods(date(2024, 4, 1), date(2025, 6, 5))
 
+    print(periods)
+    print(type(periods))
+    print(len(periods))
+
     for (start_date, end_date) in periods:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
         truncate_licence_issued_advertised_official(connection, cursor)
