@@ -64,6 +64,7 @@ def get_licence_issued_advertised_main_query():
         round(lrm.LRM_Total_Volume_Salvage_All_Fire_Years) AS Total_Volume_Salvage_All_Fire_Year_LRM,
         Official.FTA_File_Status,
         Official.FTA_File_Status_Date,
+        Official.bidder_COUNT
         Official.report_start_date,
         Official.report_end_date,
         Official.fiscal_year,

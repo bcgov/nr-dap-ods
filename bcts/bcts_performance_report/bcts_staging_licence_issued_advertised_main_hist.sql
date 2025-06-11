@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main_hist
     total_volume_salvage_all_fire_year_lrm numeric,
     fta_file_status character varying COLLATE pg_catalog."default",
     fta_file_status_date date,
+    bidder_count numeric,
     report_start_date date,
     report_end_date date,
     fiscal_year numeric,

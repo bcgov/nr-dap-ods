@@ -219,6 +219,16 @@ def publish_datasets():
     AS SELECT * 
     FROM BCTS_STAGING.recent_auctions_chart_2;
    
+    DROP TABLE IF EXISTS BCTS_REPORTING.recent_auction_results;
+    CREATE TABLE BCTS_REPORTING.recent_auction_results
+    AS SELECT * 
+    FROM BCTS_STAGING.v_recent_auction_results;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.v_bcts_performance_report_not_awarded_details;
+    CREATE TABLE BCTS_REPORTING.v_bcts_performance_report_not_awarded_details
+    AS SELECT * 
+    FROM BCTS_STAGING.v_bcts_performance_report_not_awarded_details;
+
     """
 
     try:

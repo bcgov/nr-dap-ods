@@ -43,5 +43,16 @@ select
     "Currently in Market",
     "Auctioned",
     "Licence Issued"
-  ) as y_max
+  ) as y_max,
+   greatest(
+    sum("Q1 Licence Issued Target") over (partition by business_area_region),
+    sum("Q2 Licence Issued Target") over (partition by business_area_region),
+    sum("Q3 Licence Issued Target") over (partition by business_area_region),
+    sum("Licence Issued") over (partition by business_area_region),
+    sum("Licence Issued: Value Added") over (partition by business_area_region),
+    sum("Not Awarded") over (partition by business_area_region),
+    sum("Not Awarded: Value Added") over (partition by business_area_region),
+    sum("Auctioned") over (partition by business_area_region),
+    sum("Auctioned: Value Added") over (partition by business_area_region)
+  ) as y_max_region
 from bcts_performance_report_ytd_all;

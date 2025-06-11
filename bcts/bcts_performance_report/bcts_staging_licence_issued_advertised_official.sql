@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_official
     advertised_in_report_period text COLLATE pg_catalog."default",
     fta_file_status character varying COLLATE pg_catalog."default",
     fta_file_status_date date,
+    bidder_count numeric,
     report_start_date date,
     report_end_date date,
     fiscal_year numeric,
