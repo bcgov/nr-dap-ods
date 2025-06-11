@@ -209,7 +209,32 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.bcts_performance_report_ytd_all
     AS SELECT * 
     FROM BCTS_STAGING.bcts_performance_report_ytd_all;
-    
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.bcts_volume_summary_chart_2;
+    CREATE TABLE BCTS_REPORTING.bcts_volume_summary_chart_2
+    AS SELECT * 
+    FROM BCTS_STAGING.bcts_volume_summary_chart_2;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.recent_auctions_chart_2;
+    CREATE TABLE BCTS_REPORTING.recent_auctions_chart_2
+    AS SELECT * 
+    FROM BCTS_STAGING.recent_auctions_chart_2;
+   
+    DROP TABLE IF EXISTS BCTS_REPORTING.recent_auction_results;
+    CREATE TABLE BCTS_REPORTING.recent_auction_results
+    AS SELECT * 
+    FROM BCTS_STAGING.v_recent_auction_results;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.bcts_performance_report_not_awarded_details;
+    CREATE TABLE BCTS_REPORTING.bcts_performance_report_not_awarded_details
+    AS SELECT * 
+    FROM BCTS_STAGING.v_bcts_performance_report_not_awarded_details;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.bcts_performance_report_licence_issued_details;
+    CREATE TABLE BCTS_REPORTING.bcts_performance_report_licence_issued_details
+    AS SELECT * 
+    FROM BCTS_STAGING.v_bcts_performance_report_licence_issued_details;
+
     """
 
     try:
