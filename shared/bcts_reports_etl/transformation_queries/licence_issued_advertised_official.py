@@ -256,6 +256,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
                     and to_date('{end_date}', 'YYYY-MM-DD')  -- Date: end of reporting period
         ),
         /* LEFT JOIN to get count of bidders 2025-05-14 BD */ 
+        bidder_count as
         (
         SELECT 
             FOREST_FILE_ID, 
@@ -266,7 +267,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
 
         GROUP BY 
             FOREST_FILE_ID, AUCTION_DATE
-        ) bidder_count
+        ) 
 
     select distinct
         case
@@ -455,7 +456,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
                 pfu.file_status_st
             end as FTA_File_Status,
         pfu.file_status_date as FTA_File_Status_Date,
-    bidder_count.bidder_count,
+    bc.bidder_count,
     '{start_date}'::Date as report_start_date,
     '{end_date}'::Date as report_end_date,
     CASE
@@ -479,8 +480,8 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
         LEFT JOIN advertised_in_report_period
         ON ts.forest_file_id = advertised_in_report_period.forest_file_id
         LEFT JOIN bidder_count bc
-        ON ts.forest_file_id = bidder_count.FOREST_FILE_ID
-        AND  advertised.LAST_AUCTION_DATE = bidder_count.AUCTION_DATE
+        ON ts.forest_file_id = bc.FOREST_FILE_ID
+        AND  advertised.LAST_AUCTION_DATE = bc.AUCTION_DATE
     WHERE 1 = 1
         AND (
             /* Criteria for Licences Issued in reporting period*/
