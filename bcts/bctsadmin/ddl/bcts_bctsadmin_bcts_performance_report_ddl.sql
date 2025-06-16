@@ -18,7 +18,6 @@ CREATE TABLE bctsadmin_replication.bcts_tenure_bidder (
     issued_forest_file_id VARCHAR(10) NULL,
     issued_file_status_date TIMESTAMP NULL,
     issued_file_type_code VARCHAR(3) NULL,
-    issued_file_status_code VARCHAR(3) NULL,
     deposit_level_code VARCHAR(1) NULL,
     primary_rqmt_met_ind VARCHAR(1) NULL,
     financial_rqmt_met_ind VARCHAR(1) NULL,
