@@ -56,7 +56,6 @@ VALUES (
         NULL AS issued_forest_file_id, 
         NULL AS issued_file_status_date, 
         NULL AS issued_file_type_code, 
-        issued_file_status_code, 
         deposit_level_code, 
         primary_rqmt_met_ind, 
         financial_rqmt_met_ind, 
