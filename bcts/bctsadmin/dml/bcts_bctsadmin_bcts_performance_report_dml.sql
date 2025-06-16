@@ -52,7 +52,6 @@ VALUES (
         NULL AS completed_forest_file_id, 
         NULL AS completed_file_status_date, 
         NULL AS completed_file_type_code, 
-        completed_file_status_code, 
         NULL AS issued_forest_file_id, 
         NULL AS issued_file_status_date, 
         NULL AS issued_file_type_code, 
