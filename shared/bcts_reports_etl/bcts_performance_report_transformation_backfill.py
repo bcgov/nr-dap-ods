@@ -535,7 +535,7 @@ def truncate_licence_issued_advertised_official(connection, cursor):
 
     sql_statement = \
     f"""
-    truncate bcts_staging.licence_issued_advertised_official;
+    delete from bcts_staging.licence_issued_advertised_official;
     """
 
     try:
