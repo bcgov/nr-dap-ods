@@ -531,10 +531,10 @@ def publish_datasets():
         sys.exit(1)
 
 def truncate_licence_issued_advertised_official(connection, cursor):
-
+    # updated to delete from due to permission issues
     sql_statement = \
     f"""
-    truncate bcts_staging.licence_issued_advertised_official;
+    delete from bcts_staging.licence_issued_advertised_official;
     """
 
     try:
