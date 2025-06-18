@@ -396,18 +396,12 @@ def publish_datasets():
     select 
     *,
     GREATEST(
-        "Q1 Licence Issued Target",
-        "Q2 Licence Issued Target",
-        "Q3 Licence Issued Target",
         "Currently in Market",
         "Auctioned",
         "Licence Issued"
     ) as y_max,
     
     greatest(
-        sum("Q1 Licence Issued Target") over (partition by business_area_region),
-        sum("Q2 Licence Issued Target") over (partition by business_area_region),
-        sum("Q3 Licence Issued Target") over (partition by business_area_region),
         sum("Licence Issued") over (partition by business_area_region),
         sum("Licence Issued: Value Added") over (partition by business_area_region),
         sum("Not Awarded") over (partition by business_area_region),
