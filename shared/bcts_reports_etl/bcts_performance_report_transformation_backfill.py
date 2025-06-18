@@ -585,7 +585,7 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     # Fetch the start and end dates for the report periods
-    periods = get_cumulative_fiscal_periods(date(2024, 4, 1), date(2025, 6, 5))
+    periods = get_cumulative_fiscal_periods(date(2024, 4, 1), date(2025, 6, 15))
 
     for (start_date, end_date) in periods:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
