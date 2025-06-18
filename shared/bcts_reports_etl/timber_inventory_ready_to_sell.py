@@ -427,13 +427,13 @@ select distinct
     OGC.remnant,
     OGC.big_treed,
     CASE
-        WHEN OGC.ancient = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
+        WHEN OGC.ancient = 'Y' THEN B.CRUISE_VOL ELSE 0
     END AS ANCIENT_VOLUME,
     CASE
-        WHEN OGC.remnant = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
+        WHEN OGC.remnant = 'Y' THEN B.CRUISE_VOL ELSE 0
     END AS REMNANT_VOLUME,
     CASE
-        WHEN OGC.big_treed = 'Y' THEN BLAL.BLAL_CRUISE_M3_VOL ELSE 0
+        WHEN OGC.big_treed = 'Y' THEN B.CRUISE_VOL ELSE 0
     END AS BIG_TREED_VOLUME,
     '{end_date}'::date
 
