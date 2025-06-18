@@ -547,35 +547,41 @@ def truncate_licence_issued_advertised_official(connection, cursor):
         connection.rollback()
         sys.exit(1)
 
-def get_semi_monthly_periods(start_date, end_date):
+def get_cumulative_fiscal_periods(start_date, end_date):
     periods = []
-    current = start_date
+
+    # Determine fiscal year start for start_date
+    fiscal_year_start = date(start_date.year, 4, 1)
+    if start_date < fiscal_year_start:
+        fiscal_year_start = date(start_date.year - 1, 4, 1)
+
+    current = fiscal_year_start
 
     while current <= end_date:
-        # First half
-        first_half_start = current.replace(day=1)
+        # First half of month: 15th
         first_half_end = current.replace(day=15)
-        if first_half_end >= start_date:
-            periods.append((
-                max(first_half_start, start_date),
-                min(first_half_end, end_date)
-            ))
+        if first_half_end >= start_date and first_half_end <= end_date:
+            periods.append((fiscal_year_start, first_half_end))
 
-        # Second half
+        # End of month
         last_day = calendar.monthrange(current.year, current.month)[1]
-        second_half_start = current.replace(day=16)
-        second_half_end = current.replace(day=last_day)
-        if second_half_start <= end_date:
-            periods.append((
-                max(second_half_start, start_date),
-                min(second_half_end, end_date)
-            ))
+        end_of_month = current.replace(day=last_day)
+        if end_of_month >= start_date and end_of_month <= end_date:
+            periods.append((fiscal_year_start, end_of_month))
 
         # Move to next month
         if current.month == 12:
             current = current.replace(year=current.year + 1, month=1, day=1)
         else:
             current = current.replace(month=current.month + 1, day=1)
+
+        # If new fiscal year, update fiscal_year_start
+        if current.month == 4 and current.day == 1:
+            fiscal_year_start = current
+
+    # Optionally add one final period if end_date isn't a 15th or month-end
+    if periods and periods[-1][1] < end_date:
+        periods.append((fiscal_year_start, end_date))
 
     return periods
 
@@ -585,7 +591,7 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     # Fetch the start and end dates for the report periods
-    periods = get_semi_monthly_periods(date(2024, 4, 1), date(2025, 6, 5))
+    periods = get_cumulative_fiscal_periods(date(2024, 4, 1), date(2025, 6, 5))
 
     for (start_date, end_date) in periods:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
