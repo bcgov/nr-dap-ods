@@ -2,7 +2,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.timber_inventory_ready_to_sell_hist(
-    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, deferred_activity, latest_deferral_date,spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, cutb_seq_nbr, report_end_date
+    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, deferred_activity, latest_deferral_date,spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, cutb_seq_nbr, ancient, remnant, big_treed, ancient_volume, remnant_volume, big_treed_volume, report_end_date
     )
 
     WITH A_D AS
@@ -423,6 +423,18 @@ select distinct
 	    ELSE salvage24.activity_type || ' (' || salvage24.activity_class || ' - ' || salvage24.actt_key_ind || ')' 
 	END AS salvage_2024_fire,
     B.CUTB_SEQ_NBR,
+    OGC.ancient,
+    OGC.remnant,
+    OGC.big_treed,
+    CASE
+        WHEN OGC.ancient = 'Y' THEN B.CRUISE_VOL ELSE 0
+    END AS ANCIENT_VOLUME,
+    CASE
+        WHEN OGC.remnant = 'Y' THEN B.CRUISE_VOL ELSE 0
+    END AS REMNANT_VOLUME,
+    CASE
+        WHEN OGC.big_treed = 'Y' THEN B.CRUISE_VOL ELSE 0
+    END AS BIG_TREED_VOLUME,
     '{end_date}'::date
 
 FROM
@@ -453,6 +465,8 @@ FROM
 	ON b.cutb_seq_nbr = salvage23.cutb_seq_nbr 
 	LEFT JOIN salvage24
 	ON b.cutb_seq_nbr = salvage24.cutb_seq_nbr
+    LEFT JOIN bcts_staging.old_growth_tap_deferral_categories OGC
+    ON B.UBI = OGC.UBI
 WHERE 1 = 1
     AND COALESCE(L.TENURE,' ') <> 'B07'
     AND A_D.RC_Date Is Not Null
