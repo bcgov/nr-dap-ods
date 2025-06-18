@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["BCTS-TAP-POLYGONS-UPDATE"]
 
 env:
   REGISTRY: ghcr.io
