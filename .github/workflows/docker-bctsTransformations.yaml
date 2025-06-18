@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["BCTSADMIN-Schema-Change"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
