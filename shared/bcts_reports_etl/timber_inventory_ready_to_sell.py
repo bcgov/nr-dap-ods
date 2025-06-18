@@ -466,7 +466,7 @@ FROM
 	LEFT JOIN salvage24
 	ON b.cutb_seq_nbr = salvage24.cutb_seq_nbr
     LEFT JOIN bcts_staging.old_growth_tap_deferral_categories OGC
-    ON CUTB.CUTB_SYSTEM_ID = OGC.UBI
+    ON B.UBI = OGC.UBI
 WHERE 1 = 1
     AND COALESCE(L.TENURE,' ') <> 'B07'
     AND A_D.RC_Date Is Not Null
