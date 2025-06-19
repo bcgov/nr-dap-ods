@@ -238,18 +238,23 @@ def publish_datasets():
     create table bcts_staging.recent_auction_results as
     with temp as (
     select 
-        business_area_region_category,
-        business_area_region,
-        business_area,
-        sum(issued_licence_volume) as "Licence Issued",
-        sum(category_2_and_4_issued_volume) as "Licence Issued: Value Added",
-        sum(last_auction_no_sale_volume) as "Not Awarded",
-        sum(last_auction_no_sale_category_2_4_volume) as "Not Awarded: Value Added"
-    from bcts_staging.licence_issued_advertised_main
-    where include_in_semi_monthly_report = 'Y'
-    group by business_area_region_category,
-            business_area_region,
-            business_area
+        d.business_area_region_category,
+        d.business_area_region,
+        d.business_area,
+        sum(coalesce(issued_licence_volume, 0)) as "Licence Issued",
+        sum(coalesce(category_2_and_4_issued_volume, 0)) as "Licence Issued: Value Added",
+        sum(coalesce(last_auction_no_sale_volume, 0)) as "Not Awarded",
+        sum(coalesce(last_auction_no_sale_category_2_4_volume, 0)) as "Not Awarded: Value Added"
+    from bcts_reporting.v_forest_division d
+    left join bcts_staging.licence_issued_advertised_main m
+    on m.business_area_region_category = d.business_area_region_category
+    and m.business_area_region = d.business_area_region
+    and m.business_area = d.business_area 
+	and m.include_in_semi_monthly_report = 'Y'
+    
+    group by d.business_area_region_category,
+            d.business_area_region,
+            d.business_area
     )
 
     select *,
@@ -524,6 +529,23 @@ def publish_datasets():
         connection.rollback()
         sys.exit(1)
 
+def delete_licence_issued_advertised__main_hist(connection, cursor, start_date, end_date):
+    sql_statement = \
+    f"""
+    delete from bcts_staging.licence_issued_advertised_main_hist
+    where report_start_date = '{start_date}'
+    and report_end_date = '{end_date}';
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
 def truncate_licence_issued_advertised_official(connection, cursor):
     # updated to delete from due to permission issues
     sql_statement = \
@@ -565,6 +587,12 @@ if __name__ == "__main__":
     else:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
         truncate_licence_issued_advertised_official(connection, cursor)
+
+        # Delete data for the same period in bcts_staging.licence_issued_advertised_main_hist if it is already present.
+        # Check for existence is done on bcts_reporting.licence_issued_advertised_main. So it is possible to insert dupliocate
+        # values to the staging table if data is already present in staging and not in reporting or if data is manually removed from
+        # reporting to force ETL and not from staging.
+        delete_licence_issued_advertised__main_hist(connection, cursor, start_date, end_date)
 
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
