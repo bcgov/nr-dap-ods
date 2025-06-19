@@ -246,7 +246,7 @@ def publish_datasets():
         sum(last_auction_no_sale_volume) as "Not Awarded",
         sum(last_auction_no_sale_category_2_4_volume) as "Not Awarded: Value Added"
     from bcts_staging.licence_issued_advertised_main
-    where include_in_semi_monthly_report = 'N'
+    where include_in_semi_monthly_report = 'Y'
     group by business_area_region_category,
             business_area_region,
             business_area
