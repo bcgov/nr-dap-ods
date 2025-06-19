@@ -60,18 +60,9 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
                             )
                     end as issued_licence_maximum_value,
                 tb.client_number as issued_licence_client_number,
-            (
-                CASE 
-                    WHEN fc.legal_first_name IS NULL THEN NULL 
-                    ELSE fc.legal_first_name || ' ' 
-                END ||
-                CASE 
-                    WHEN fc.legal_middle_name IS NULL THEN NULL 
-                    ELSE fc.legal_middle_name || ' ' 
-                END ||
-                fc.client_name
-                ) AS issued_licence_client_name
-
+                COALESCE(fc.legal_first_name || ' ', '') ||
+                COALESCE(fc.legal_middle_name || ' ', '') ||
+                COALESCE(fc.client_name, '') AS issued_licence_client_name
 
             from
                 bcts_staging.the_bcts_timber_sale ts0
