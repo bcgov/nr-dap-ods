@@ -61,7 +61,7 @@ def fetch_fta_tables():
     DROP TABLE IF EXISTS bcts_staging.fta_tenure_file_status_code;
     CREATE TABLE bcts_staging.fta_tenure_file_status_code AS
 	SELECT *
-    FROM fta_replication.pmt_tenure_file_status_code_vw;
+    FROM fta_replication.tenure_file_status_code;
 
     DROP TABLE IF EXISTS bcts_staging.fta_tfl_number_code;
     CREATE TABLE bcts_staging.fta_tfl_number_code AS
