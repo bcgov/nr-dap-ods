@@ -263,14 +263,14 @@ def publish_datasets():
         "Licence Issued: Value Added",
         "Not Awarded",
         "Not Awarded: Value Added"
-    ) as y_max_business_area,
+    ) * 1.1 as y_max_business_area,
     
     greatest(
         sum("Licence Issued") over (partition by business_area_region),
         sum("Licence Issued: Value Added") over (partition by business_area_region),
         sum("Not Awarded") over (partition by business_area_region),
         sum("Not Awarded: Value Added") over (partition by business_area_region)
-    ) as y_max_region,
+    ) * 1.1 as y_max_region,
 
     case  
         when business_area_region = 'North Interior' then 1
@@ -344,9 +344,9 @@ def publish_datasets():
     create table bcts_staging.recent_auctions_chart_2 as
     select 
     'Licence Issued' as metric,
-    sum(issued_licence_volume) - sum(category_2_and_4_issued_volume) as "Total Excluding Value Added",
-    sum(issued_licence_volume) as "Total",
-    sum(category_2_and_4_issued_volume)  as "Value Added"
+    coalesce(sum(issued_licence_volume), 0) - coalesce(sum(category_2_and_4_issued_volume), 0) as "Total Excluding Value Added",
+    coalesce(sum(issued_licence_volume), 0) as "Total",
+    coalesce(sum(category_2_and_4_issued_volume), 0)  as "Value Added"
     from bcts_staging.licence_issued_advertised_main
     where include_in_semi_monthly_report = 'Y'
 
@@ -354,9 +354,9 @@ def publish_datasets():
 
     select 
     'Not Awarded' as metric,
-    sum(last_auction_no_sale_volume) - sum(last_auction_no_sale_category_2_4_volume) as "Total Excluding Value Added",
-    sum(last_auction_no_sale_volume) as "Total",
-    sum(last_auction_no_sale_category_2_4_volume)  as "Value Added"
+    coalesce(sum(last_auction_no_sale_volume), 0) - coalesce(sum(last_auction_no_sale_category_2_4_volume), 0) as "Total Excluding Value Added",
+    coalesce(sum(last_auction_no_sale_volume), 0) as "Total",
+    coalesce(sum(last_auction_no_sale_category_2_4_volume), 0)  as "Value Added"
     from bcts_staging.licence_issued_advertised_main
     where include_in_semi_monthly_report = 'Y';
 
@@ -400,11 +400,14 @@ def publish_datasets():
 
     select 
     *,
-    GREATEST(
-        "Currently in Market",
-        "Auctioned",
-        "Licence Issued"
-    ) as y_max,
+   greatest(
+        sum("Licence Issued") over (partition by business_area),
+        sum("Licence Issued: Value Added") over (partition by business_area),
+        sum("Not Awarded") over (partition by business_area),
+        sum("Not Awarded: Value Added") over (partition by business_area),
+        sum("Auctioned") over (partition by business_area),
+        sum("Auctioned: Value Added") over (partition by business_area)
+    ) * 1.1 as y_max_business_area,
     
     greatest(
         sum("Licence Issued") over (partition by business_area_region),
@@ -413,13 +416,18 @@ def publish_datasets():
         sum("Not Awarded: Value Added") over (partition by business_area_region),
         sum("Auctioned") over (partition by business_area_region),
         sum("Auctioned: Value Added") over (partition by business_area_region)
-    ) as y_max_region,
+    ) * 1.1 as y_max_region,
 
         case  
         when business_area_region = 'North Interior' then 1
         when business_area_region = 'South Interior' then 2
         else 3
-    end as business_area_region_sort_order
+    end as business_area_region_sort_order,
+
+    case  
+        when business_area_region_category = 'Interior' then 1
+        else 2
+    end as business_area_region_category_sort_order
 
     from bcts_performance_report_ytd_all;
 
@@ -517,6 +525,54 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.bcts_performance_report_licence_issued_details
     AS SELECT * 
     FROM BCTS_STAGING.bcts_performance_report_licence_issued_details;
+
+    drop table if exists bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume;
+
+    create table bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume as
+    with current_ytd as
+    (select 
+    business_area_region_category,
+    business_area_region,
+    business_area,
+    coalesce(sum(issued_licence_volume), 0) as "Current YTD Licence Issued",
+    coalesce(sum(category_2_and_4_issued_volume), 0) as "Current YTD Licence Issued: Value Added"
+    from bcts_reporting.licence_issued_advertised_main main
+    group by business_area_region_category, business_area_region, business_area
+    ),
+    previous_ytd as
+    (select 
+    business_area_region_category,
+    business_area_region,
+    business_area,
+    coalesce(sum(issued_licence_volume),0) as "Previous YTD Licence Issued",
+    coalesce(sum(category_2_and_4_issued_volume), 0) as "Previous YTD Licence Issued: Value Added"
+    from bcts_reporting.licence_issued_advertised_main_hist
+    where report_start_date = (select max(report_start_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
+    and report_end_date = (select max(report_end_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
+    group by business_area_region_category, business_area_region, business_area
+    ) 
+
+    select current_ytd.business_area_region_category,
+    current_ytd.business_area_region,
+    current_ytd.business_area,
+    current_ytd."Current YTD Licence Issued",
+    current_ytd."Current YTD Licence Issued: Value Added",
+    current_ytd."Current YTD Licence Issued" - current_ytd."Current YTD Licence Issued: Value Added" as "Current YTD Licence Issued: Other",
+    previous_ytd."Previous YTD Licence Issued",
+    previous_ytd."Previous YTD Licence Issued: Value Added",
+    previous_ytd."Previous YTD Licence Issued" - previous_ytd."Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other"
+
+    from previous_ytd
+    left join current_ytd
+    on previous_ytd.business_area_region_category = current_ytd.business_area_region_category
+    and previous_ytd.business_area_region = current_ytd.business_area_region
+    and previous_ytd.business_area = current_ytd.business_area;
+
+    drop table if exists bcts_reporting.bcts_performance_report_current_prev_ytd_issued_lic_volume;
+
+    create table bcts_reporting.bcts_performance_report_current_prev_ytd_issued_lic_volume as
+    select *
+    from bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume;
 
     """
 
