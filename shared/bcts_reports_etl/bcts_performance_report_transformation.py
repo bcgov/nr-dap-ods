@@ -238,18 +238,23 @@ def publish_datasets():
     create table bcts_staging.recent_auction_results as
     with temp as (
     select 
-        business_area_region_category,
-        business_area_region,
-        business_area,
-        sum(issued_licence_volume) as "Licence Issued",
-        sum(category_2_and_4_issued_volume) as "Licence Issued: Value Added",
-        sum(last_auction_no_sale_volume) as "Not Awarded",
-        sum(last_auction_no_sale_category_2_4_volume) as "Not Awarded: Value Added"
-    from bcts_staging.licence_issued_advertised_main
-    where include_in_semi_monthly_report = 'Y'
-    group by business_area_region_category,
-            business_area_region,
-            business_area
+        d.business_area_region_category,
+        d.business_area_region,
+        d.business_area,
+        sum(coalesce(issued_licence_volume, 0)) as "Licence Issued",
+        sum(coalesce(category_2_and_4_issued_volume, 0)) as "Licence Issued: Value Added",
+        sum(coalesce(last_auction_no_sale_volume, 0)) as "Not Awarded",
+        sum(coalesce(last_auction_no_sale_category_2_4_volume, 0)) as "Not Awarded: Value Added"
+    from bcts_reporting.v_forest_division d
+    left join bcts_staging.licence_issued_advertised_main m
+    on m.business_area_region_category = d.business_area_region_category
+    and m.business_area_region = d.business_area_region
+    and m.business_area = d.business_area 
+	and m.include_in_semi_monthly_report = 'Y'
+    
+    group by d.business_area_region_category,
+            d.business_area_region,
+            d.business_area
     )
 
     select *,
@@ -258,14 +263,14 @@ def publish_datasets():
         "Licence Issued: Value Added",
         "Not Awarded",
         "Not Awarded: Value Added"
-    ) as y_max_business_area,
+    ) * 1.1 as y_max_business_area,
     
     greatest(
         sum("Licence Issued") over (partition by business_area_region),
         sum("Licence Issued: Value Added") over (partition by business_area_region),
         sum("Not Awarded") over (partition by business_area_region),
         sum("Not Awarded: Value Added") over (partition by business_area_region)
-    ) as y_max_region,
+    ) * 1.1 as y_max_region,
 
     case  
         when business_area_region = 'North Interior' then 1
@@ -339,9 +344,9 @@ def publish_datasets():
     create table bcts_staging.recent_auctions_chart_2 as
     select 
     'Licence Issued' as metric,
-    sum(issued_licence_volume) - sum(category_2_and_4_issued_volume) as "Total Excluding Value Added",
-    sum(issued_licence_volume) as "Total",
-    sum(category_2_and_4_issued_volume)  as "Value Added"
+    coalesce(sum(issued_licence_volume), 0) - coalesce(sum(category_2_and_4_issued_volume), 0) as "Total Excluding Value Added",
+    coalesce(sum(issued_licence_volume), 0) as "Total",
+    coalesce(sum(category_2_and_4_issued_volume), 0)  as "Value Added"
     from bcts_staging.licence_issued_advertised_main
     where include_in_semi_monthly_report = 'Y'
 
@@ -349,74 +354,120 @@ def publish_datasets():
 
     select 
     'Not Awarded' as metric,
-    sum(last_auction_no_sale_volume) - sum(last_auction_no_sale_category_2_4_volume) as "Total Excluding Value Added",
-    sum(last_auction_no_sale_volume) as "Total",
-    sum(last_auction_no_sale_category_2_4_volume)  as "Value Added"
+    coalesce(sum(last_auction_no_sale_volume), 0) - coalesce(sum(last_auction_no_sale_category_2_4_volume), 0) as "Total Excluding Value Added",
+    coalesce(sum(last_auction_no_sale_volume), 0) as "Total",
+    coalesce(sum(last_auction_no_sale_category_2_4_volume), 0)  as "Value Added"
     from bcts_staging.licence_issued_advertised_main
     where include_in_semi_monthly_report = 'Y';
 
     
     DROP TABLE IF EXISTS bcts_staging.bcts_performance_report_ytd_all;
     create table bcts_staging.bcts_performance_report_ytd_all as
-    with bcts_performance_report_ytd_all as (
-    select 
-        st.business_area_region_category,
-        st.business_area_region,
-        st.business_area,
+    with base as (
+        select 
+            st.business_area_region_category,
+            st.business_area_region,
+            st.business_area,
 
-        COALESCE(st.Q1_YTD_Sales_Target_Volume, 0) as "Q1 Licence Issued Target",
-        COALESCE(st.Q2_YTD_Sales_Target_Volume, 0) as "Q2 Licence Issued Target",
-        COALESCE(st.Q3_YTD_Sales_Target_Volume, 0) as "Q3 Licence Issued Target",
-        COALESCE(st.Total_Fiscal_Year_Sales_Target_Volume, 0) as "Fiscal Year Licence Issued Target",
+            COALESCE(st.Q1_YTD_Sales_Target_Volume, 0) as "Q1 Licence Issued Target",
+            COALESCE(st.Q2_YTD_Sales_Target_Volume, 0) as "Q2 Licence Issued Target",
+            COALESCE(st.Q3_YTD_Sales_Target_Volume, 0) as "Q3 Licence Issued Target",
+            COALESCE(st.Total_Fiscal_Year_Sales_Target_Volume, 0) as "Fiscal Year Licence Issued Target",
 
-        COALESCE(st.Q1_YTD_Sales_Target_Volume_Cat_4, 0) as "Q1 Licence Issued Target: Value Added",
-        COALESCE(st.Q2_YTD_Sales_Target_Volume_Cat_4, 0) as "Q2 Licence Issued Target: Value Added",
-        COALESCE(st.Q3_YTD_Sales_Target_Volume_Cat_4, 0) as "Q3 Licence Issued Target: Value Added",
-        COALESCE(st.Total_Fiscal_Year_Sales_Target_Volume_Cat_4, 0) as "Fiscal Year Licence Issued Target: Value Added",
+            COALESCE(st.Q1_YTD_Sales_Target_Volume_Cat_4, 0) as "Q1 Licence Issued Target: Value Added",
+            COALESCE(st.Q2_YTD_Sales_Target_Volume_Cat_4, 0) as "Q2 Licence Issued Target: Value Added",
+            COALESCE(st.Q3_YTD_Sales_Target_Volume_Cat_4, 0) as "Q3 Licence Issued Target: Value Added",
+            COALESCE(st.Total_Fiscal_Year_Sales_Target_Volume_Cat_4, 0) as "Fiscal Year Licence Issued Target: Value Added",
 
-        COALESCE(cms."Currently in Market", 0) as "Currently in Market",
-        COALESCE(ain."Auctioned (First Auction is in Report Period)", 0) as "Auctioned",
-        COALESCE(ain."Licence Issued", 0) as "Licence Issued",
-        COALESCE(ain."Not Awarded (Last Auction in Report Period is No Sale)", 0) as "Not Awarded",
+            COALESCE(cms."Currently in Market", 0) as "Currently in Market",
+            COALESCE(ain."Auctioned (First Auction is in Report Period)", 0) as "Auctioned",
+            COALESCE(ain."Licence Issued", 0) as "Licence Issued",
+            COALESCE(ain."Not Awarded (Last Auction in Report Period is No Sale)", 0) as "Not Awarded",
 
-        COALESCE(cms."Volume: Value Added", 0) as "Currently in Market: Value Added",
-        COALESCE(ain."Auctioned (First Auction is in Report Period): Category 2/4", 0) as "Auctioned: Value Added",
-        COALESCE(ain."Licence Issued: Cat 2/4", 0) as "Licence Issued: Value Added",
-        COALESCE(ain."Not Awarded: Category 2/4", 0) as "Not Awarded: Value Added"
+            COALESCE(cms."Volume: Value Added", 0) as "Currently in Market: Value Added",
+            COALESCE(ain."Auctioned (First Auction is in Report Period): Category 2/4", 0) as "Auctioned: Value Added",
+            COALESCE(ain."Licence Issued: Cat 2/4", 0) as "Licence Issued: Value Added",
+            COALESCE(ain."Not Awarded: Category 2/4", 0) as "Not Awarded: Value Added"
 
-    from bcts_staging.bcts_sales_targets st
-    left join bcts_staging.currently_in_market_summary cms
-        on cms.business_area_region = st.business_area_region
-        and cms.business_area = st.business_area
-    left join bcts_staging.ytd_auctioned_issued_not_awarded ain
-        on cms.business_area_region = ain.business_area_region
-        and cms.business_area = ain.business_area
+        from bcts_staging.bcts_sales_targets st
+        left join bcts_staging.currently_in_market_summary cms
+            on cms.business_area_region = st.business_area_region
+            and cms.business_area = st.business_area
+        left join bcts_staging.ytd_auctioned_issued_not_awarded ain
+            on cms.business_area_region = ain.business_area_region
+            and cms.business_area = ain.business_area
     )
 
     select 
-    *,
-    GREATEST(
-        "Currently in Market",
-        "Auctioned",
-        "Licence Issued"
-    ) as y_max,
-    
-    greatest(
-        sum("Licence Issued") over (partition by business_area_region),
-        sum("Licence Issued: Value Added") over (partition by business_area_region),
-        sum("Not Awarded") over (partition by business_area_region),
-        sum("Not Awarded: Value Added") over (partition by business_area_region),
-        sum("Auctioned") over (partition by business_area_region),
-        sum("Auctioned: Value Added") over (partition by business_area_region)
-    ) as y_max_region,
+        *,
+        
+        greatest(
+            sum("Licence Issued") over (partition by business_area),
+            sum("Licence Issued: Value Added") over (partition by business_area),
+            sum("Not Awarded") over (partition by business_area),
+            sum("Not Awarded: Value Added") over (partition by business_area),
+            sum("Auctioned") over (partition by business_area),
+            sum("Auctioned: Value Added") over (partition by business_area),
+            -- dynamic target inclusion based on current quarter
+            max(
+                case 
+                    when extract(month from (current_date - interval '15 days')) between 4 and 6 then "Q1 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 7 and 9 then "Q2 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 10 and 12 then "Q3 Licence Issued Target"
+                    else "Fiscal Year Licence Issued Target"
+                end
+            ) over (partition by business_area)
+        ) * 1.1 as y_max_business_area,
+
+        greatest(
+            sum("Licence Issued") over (partition by business_area_region),
+            sum("Licence Issued: Value Added") over (partition by business_area_region),
+            sum("Not Awarded") over (partition by business_area_region),
+            sum("Not Awarded: Value Added") over (partition by business_area_region),
+            sum("Auctioned") over (partition by business_area_region),
+            sum("Auctioned: Value Added") over (partition by business_area_region),
+            -- dynamic target inclusion based on current quarter
+            sum(
+                case 
+                    when extract(month from (current_date - interval '15 days')) between 4 and 6 then "Q1 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 7 and 9 then "Q2 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 10 and 12 then "Q3 Licence Issued Target"
+                    else "Fiscal Year Licence Issued Target"
+                end
+            ) over (partition by business_area_region)
+        ) * 1.1 as y_max_region,
+
+        greatest(
+            sum("Licence Issued") over (),
+            sum("Licence Issued: Value Added") over (),
+            sum("Not Awarded") over (),
+            sum("Not Awarded: Value Added") over (),
+            sum("Auctioned") over (),
+            sum("Auctioned: Value Added") over (),
+            -- dynamic target inclusion based on current quarter
+            sum(
+                case 
+                    when extract(month from (current_date - interval '15 days')) between 4 and 6 then "Q1 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 7 and 9 then "Q2 Licence Issued Target"
+                    when extract(month from (current_date - interval '15 days')) between 10 and 12 then "Q3 Licence Issued Target"
+                    else "Fiscal Year Licence Issued Target"
+                end
+            ) over ()
+        ) * 1.1 as y_max_province,
 
         case  
-        when business_area_region = 'North Interior' then 1
-        when business_area_region = 'South Interior' then 2
-        else 3
-    end as business_area_region_sort_order
+            when business_area_region = 'North Interior' then 1
+            when business_area_region = 'South Interior' then 2
+            else 3
+        end as business_area_region_sort_order,
 
-    from bcts_performance_report_ytd_all;
+        case  
+            when business_area_region_category = 'Interior' then 1
+            else 2
+        end as business_area_region_category_sort_order
+
+    from base;
+
 
 
     DROP TABLE IF EXISTS bcts_staging.bcts_volume_summary_chart_2;
@@ -513,6 +564,71 @@ def publish_datasets():
     AS SELECT * 
     FROM BCTS_STAGING.bcts_performance_report_licence_issued_details;
 
+    drop table if exists bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume;
+
+    create table bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume as
+    with current_ytd as
+    (select 
+    business_area_region_category,
+    business_area_region,
+    business_area,
+    coalesce(sum(issued_licence_volume), 0) as "Current YTD Licence Issued",
+    coalesce(sum(category_2_and_4_issued_volume), 0) as "Current YTD Licence Issued: Value Added"
+    from bcts_reporting.licence_issued_advertised_main main
+    group by business_area_region_category, business_area_region, business_area
+    ),
+    previous_ytd as
+    (select 
+    business_area_region_category,
+    business_area_region,
+    business_area,
+    coalesce(sum(issued_licence_volume),0) as "Previous YTD Licence Issued",
+    coalesce(sum(category_2_and_4_issued_volume), 0) as "Previous YTD Licence Issued: Value Added"
+    from bcts_reporting.licence_issued_advertised_main_hist
+    where report_start_date = (select max(report_start_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
+    and report_end_date = (select max(report_end_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
+    group by business_area_region_category, business_area_region, business_area
+    ) 
+
+    select current_ytd.business_area_region_category,
+    current_ytd.business_area_region,
+    current_ytd.business_area,
+    current_ytd."Current YTD Licence Issued",
+    current_ytd."Current YTD Licence Issued: Value Added",
+    current_ytd."Current YTD Licence Issued" - current_ytd."Current YTD Licence Issued: Value Added" as "Current YTD Licence Issued: Other",
+    previous_ytd."Previous YTD Licence Issued",
+    previous_ytd."Previous YTD Licence Issued: Value Added",
+    previous_ytd."Previous YTD Licence Issued" - previous_ytd."Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other"
+
+    from previous_ytd
+    left join current_ytd
+    on previous_ytd.business_area_region_category = current_ytd.business_area_region_category
+    and previous_ytd.business_area_region = current_ytd.business_area_region
+    and previous_ytd.business_area = current_ytd.business_area;
+
+    drop table if exists bcts_reporting.bcts_performance_report_current_prev_ytd_issued_lic_volume;
+
+    create table bcts_reporting.bcts_performance_report_current_prev_ytd_issued_lic_volume as
+    select *
+    from bcts_staging.bcts_performance_report_current_prev_ytd_issued_lic_volume;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+def delete_licence_issued_advertised__main_hist(connection, cursor, start_date, end_date):
+    sql_statement = \
+    f"""
+    delete from bcts_staging.licence_issued_advertised_main_hist
+    where report_start_date = '{start_date}'
+    and report_end_date = '{end_date}';
     """
 
     try:
@@ -565,6 +681,12 @@ if __name__ == "__main__":
     else:
         # Truncate bcts_staging.licence_issued_advertised_official clear data from previous run
         truncate_licence_issued_advertised_official(connection, cursor)
+
+        # Delete data for the same period in bcts_staging.licence_issued_advertised_main_hist if it is already present.
+        # Check for existence is done on bcts_reporting.licence_issued_advertised_main. So it is possible to insert dupliocate
+        # values to the staging table if data is already present in staging and not in reporting or if data is manually removed from
+        # reporting to force ETL and not from staging.
+        delete_licence_issued_advertised__main_hist(connection, cursor, start_date, end_date)
 
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
