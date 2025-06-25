@@ -588,8 +588,9 @@ def publish_datasets():
     where report_start_date = (select max(report_start_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
     and report_end_date = (select max(report_end_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
     group by business_area_region_category, business_area_region, business_area
-    ) 
-
+    ),
+    base as
+    (
     select current_ytd.business_area_region_category,
     current_ytd.business_area_region,
     current_ytd.business_area,
@@ -598,13 +599,32 @@ def publish_datasets():
     current_ytd."Current YTD Licence Issued" - current_ytd."Current YTD Licence Issued: Value Added" as "Current YTD Licence Issued: Other",
     previous_ytd."Previous YTD Licence Issued",
     previous_ytd."Previous YTD Licence Issued: Value Added",
-    previous_ytd."Previous YTD Licence Issued" - previous_ytd."Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other"
+    previous_ytd."Previous YTD Licence Issued" - previous_ytd."Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other",
+	greatest(sum(current_ytd."Current YTD Licence Issued") over (partition by current_ytd.business_area), 
+                sum(previous_ytd."Previous YTD Licence Issued")over (partition by current_ytd.business_area),
+                sum(current_ytd."Current YTD Licence Issued: Value Added")over (partition by current_ytd.business_area),
+                sum(previous_ytd."Previous YTD Licence Issued: Value Added")over (partition by current_ytd.business_area)
+                )  as y_max_business_area
 
     from previous_ytd
     left join current_ytd
     on previous_ytd.business_area_region_category = current_ytd.business_area_region_category
     and previous_ytd.business_area_region = current_ytd.business_area_region
-    and previous_ytd.business_area = current_ytd.business_area;
+    and previous_ytd.business_area = current_ytd.business_area
+    )
+    select 
+        business_area_region_category,
+        business_area_region,
+        business_area,
+        "Current YTD Licence Issued",
+        "Current YTD Licence Issued: Value Added",
+        "Current YTD Licence Issued: Other",
+        "Previous YTD Licence Issued",
+        "Previous YTD Licence Issued: Value Added",
+        "Previous YTD Licence Issued" - "Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other",
+        y_max_business_area * 1.1 as y_max_business_area
+    from base
+    ;
 
     drop table if exists bcts_reporting.bcts_performance_report_current_prev_ytd_issued_lic_volume;
 
