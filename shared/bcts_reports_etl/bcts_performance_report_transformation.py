@@ -604,7 +604,7 @@ def publish_datasets():
                 sum(previous_ytd."Previous YTD Licence Issued")over (partition by current_ytd.business_area),
                 sum(current_ytd."Current YTD Licence Issued: Value Added")over (partition by current_ytd.business_area),
                 sum(previous_ytd."Previous YTD Licence Issued: Value Added")over (partition by current_ytd.business_area)
-                )  as y_max_business_area
+                )  as y_business_area
 
     from previous_ytd
     left join current_ytd
@@ -622,7 +622,7 @@ def publish_datasets():
         "Previous YTD Licence Issued",
         "Previous YTD Licence Issued: Value Added",
         "Previous YTD Licence Issued" - "Previous YTD Licence Issued: Value Added" as "Previous YTD Licence Issued: Other",
-        y_max_business_area * 1.1 as y_max_business_area
+         y_business_area * 1.1 as y_max_business_area
     from base
     ;
 
