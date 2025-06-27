@@ -51,12 +51,12 @@ def fetch_fta_tables():
     DROP TABLE IF EXISTS bcts_staging.fta_tenure_term;
     CREATE TABLE bcts_staging.fta_tenure_term AS
     SELECT *
-    FROM fta_replication.pmt_tenure_term_vw;
+    FROM fta_replication.tenure_term;
 
     DROP TABLE IF EXISTS bcts_staging.fta_prov_forest_use;
     CREATE TABLE bcts_staging.fta_prov_forest_use AS
-	SELECT *
-    FROM fta_replication.pmt_prov_forest_use_vw;
+    SELECT *
+    FROM fta_replication.prov_forest_use;
 
     DROP TABLE IF EXISTS bcts_staging.fta_tenure_file_status_code;
     CREATE TABLE bcts_staging.fta_tenure_file_status_code AS
