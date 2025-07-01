@@ -683,7 +683,7 @@ def get_valid_report_period():
     last_month_end = (today.replace(day=1) - timedelta(days=1))
     current_month_15 = today.replace(day=15)
 
-    if today >= current_month_15:
+    if today > current_month_15:
         end_date = current_month_15
     else:
         end_date = last_month_end
