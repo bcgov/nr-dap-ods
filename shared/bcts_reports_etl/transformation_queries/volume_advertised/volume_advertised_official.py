@@ -7,7 +7,6 @@ def get_volume_advertised_official_query(start_date, end_date):
     INSERT INTO BCTS_STAGING.volume_advertised_official (
 	business_area_region_category, business_area_region, business_area, business_area_code, mgmt_unit_type, mgmt_unit_id, description, forest_file_id, bcts_category_code, category, auction_date, sale_volume, fta_volume, client_count, eligible_client_count, ineligible_client_count, client_count_eligibility_indicator_missing, no_sale_rationale_code, no_sale_rationale, auction_date_fiscal, auction_date_quarter, tenure_term, initial_expiry_dt, current_expiry_dt, awarded_ind, file_status_st, first_auction_date, last_auction_date, auction_count, first_auction, last_auction, last_auction_no_sale, report_start_date, report_end_date, fiscal_year, report_run_date
     )
-    SELECT * FROM 
     with AU_CNT as
     (
         select
