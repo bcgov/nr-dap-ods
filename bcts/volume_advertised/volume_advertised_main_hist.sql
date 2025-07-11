@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.volume_advertised_main_hist
     lrm_total_volume_salvage_2022_fire numeric,
     lrm_total_volume_salvage_2023_fire numeric,
     lrm_total_volume_salvage_2024_fire numeric,
+    lrm_total_volume_salvage_2025_fire numeric,
     client_count bigint,
     eligible_client_count bigint,
     ineligible_client_count bigint,

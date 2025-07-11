@@ -35,11 +35,11 @@ def get_volume_advertised_main_query():
         AD.SALE_VOLUME,
         AD.FTA_VOLUME,
         -- ECAS data is not replicated in ODS as on 2025-07-11. These fields are not currently used in any of the BCTS reports.
-        # null as ECAS_Total_Volume,
-        # null as ECAS_Cruise_Volume,
-        # null as ECAS_Deciduous_Volume,
-        # null as ECAS_Decked_Volume,
-        # null as ECAS_RW_Volume,
+        -- null as ECAS_Total_Volume,
+        -- null as ECAS_Cruise_Volume,
+        -- null as ECAS_Deciduous_Volume,
+        -- null as ECAS_Decked_Volume,
+        -- null as ECAS_RW_Volume,
         LRM.LRM_TOTAL_VOLUME,
         LRM.LRM_CRUISE_VOLUME,
         LRM.LRM_RW_VOLUME,
@@ -71,15 +71,14 @@ def get_volume_advertised_main_query():
         ad.report_end_date,
         ad.fiscal_year,
         ad.report_run_date
-
-        # null as ECAS_ID,
-        # null as appraisal_effective_date,
-        # null as ECAS_Status,
-        # null as haul_distance,
-        # null as weighted_haul_distance,
-        # null as truck_haul_primary_cycle_time,
-        # null as truck_haul_second_cycle_time,
-        # null as total_non_scenario_appraisals_same_effective_date
+        -- null as ECAS_ID,
+        -- null as appraisal_effective_date,
+        -- null as ECAS_Status,
+        -- null as haul_distance,
+        --null as weighted_haul_distance,
+        -- null as truck_haul_primary_cycle_time,
+        -- null as truck_haul_second_cycle_time,
+        -- null as total_non_scenario_appraisals_same_effective_date
     FROM
         bcts_staging.volume_advertised_official AS AD
         LEFT JOIN bcts_staging.v_volume_advertised_lrm AS LRM ON AD.FOREST_FILE_ID = LRM.LICENCE_ID
