@@ -59,7 +59,7 @@ def run_volume_advertised_official_report(connection, cursor, start_date, end_da
         # logging.info(f"Executing the query...")
         cursor.execute(sql_statement)
         connection.commit()
-        logging.info(f"SQL script executed successfully.")
+        logging.info(f"Volume advertised official script executed successfully.")
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
@@ -73,9 +73,7 @@ def run_volume_advertised_main_report(connection, cursor):
         # logging.info(f"Executing the query...")
         cursor.execute(sql_statement)
         connection.commit()
-        logging.info(f"SQL script executed successfully.")
-
-        # Generate volume advertised main report
+        logging.info(f"Volume advertised main script executed successfully.")
         
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
