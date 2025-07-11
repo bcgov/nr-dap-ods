@@ -104,8 +104,12 @@ def volume_advertised_main_report_exists(start_date, end_date):
         logging.info(f"report_exists: {df['report_exists']}")
         return df['report_exists'][0]
     except psycopg2.Error as e:
-        logging.error(f"Error executing the SQL script: {e}")
-        connection.rollback()
+        if e.pgcode == psycopg2.errorcodes.UNDEFINED_TABLE:
+            logging.warning("Table bcts_reporting.volume_advertised_main does not exist.")
+            return False
+        else:
+            logging.error(f"Error executing the SQL script: {e}")
+            connection.rollback()
 
 def publish_datasets():
 
