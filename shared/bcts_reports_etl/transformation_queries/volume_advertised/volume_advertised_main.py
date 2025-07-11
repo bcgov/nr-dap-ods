@@ -69,8 +69,7 @@ def get_volume_advertised_main_query():
         ad.last_auction_no_sale,
         ad.report_start_date,
         ad.report_end_date,
-        ad.fiscal_year,
-        ad.report_run_date
+        ad.fiscal_year
         -- null as ECAS_ID,
         -- null as appraisal_effective_date,
         -- null as ECAS_Status,
