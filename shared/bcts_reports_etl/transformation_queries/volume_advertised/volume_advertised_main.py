@@ -5,7 +5,11 @@ def get_volume_advertised_main_query():
 
     /* qAdvertised_Official */
     INSERT INTO BCTS_STAGING.volume_advertised_main_hist (
-	business_area_region_category, business_area_region, business_area, business_area_code, mgmt_unit_type, mgmt_unit_id, nav_name, district_name, field_team, geographiclocation, operatingarea, description, forest_file_id, bcts_category_code, category, auction_date, auction_date_fiscal, auction_date_quarter, lrm_auction_date, lrm_auction_status, sale_volume, fta_volume, lrm_total_volume, lrm_cruise_volume, lrm_rw_volume, lrm_total_volume_salvage_all_fire_years, lrm_total_volume_salvage_2021_fire, lrm_total_volume_salvage_2022_fire, lrm_total_volume_salvage_2023_fire, lrm_total_volume_salvage_2024_fire, client_count, eligible_client_count, ineligible_client_count, client_count_eligibility_indicator_missing, file_status_st, awarded_ind, no_sale_rationale_code, no_sale_rationale, lrm_auc_fiscal, lrm_auc_quarter, first_auction_date, last_auction_date, auction_count, first_auction, last_auction, last_auction_no_sale, report_start_date, report_end_date, fiscal_year, report_run_date
+	business_area_region_category, business_area_region, business_area, business_area_code, mgmt_unit_type, mgmt_unit_id, nav_name, district_name, 
+    field_team, geographiclocation, operatingarea, description, forest_file_id, bcts_category_code, category, auction_date, auction_date_fiscal, 
+    auction_date_quarter, lrm_auction_date, lrm_auction_status, sale_volume, fta_volume, lrm_total_volume, lrm_cruise_volume, lrm_rw_volume, 
+    lrm_total_volume_salvage_all_fire_years, lrm_total_volume_salvage_2021_fire, lrm_total_volume_salvage_2022_fire, lrm_total_volume_salvage_2023_fire, 
+    lrm_total_volume_salvage_2024_fire, lrm_total_volume_salvage_2025_fire, client_count, eligible_client_count, ineligible_client_count, client_count_eligibility_indicator_missing, file_status_st, awarded_ind, no_sale_rationale_code, no_sale_rationale, lrm_auc_fiscal, lrm_auc_quarter, first_auction_date, last_auction_date, auction_count, first_auction, last_auction, last_auction_no_sale, report_start_date, report_end_date, fiscal_year
     )
     SELECT
         AD.BUSINESS_AREA_REGION_CATEGORY,
@@ -31,11 +35,11 @@ def get_volume_advertised_main_query():
         AD.SALE_VOLUME,
         AD.FTA_VOLUME,
         -- ECAS data is not replicated in ODS as on 2025-07-11. These fields are not currently used in any of the BCTS reports.
-        null as ECAS_Total_Volume,
-        null as ECAS_Cruise_Volume,
-        null as ECAS_Deciduous_Volume,
-        null as ECAS_Decked_Volume,
-        null as ECAS_RW_Volume,
+        # null as ECAS_Total_Volume,
+        # null as ECAS_Cruise_Volume,
+        # null as ECAS_Deciduous_Volume,
+        # null as ECAS_Decked_Volume,
+        # null as ECAS_RW_Volume,
         LRM.LRM_TOTAL_VOLUME,
         LRM.LRM_CRUISE_VOLUME,
         LRM.LRM_RW_VOLUME,
@@ -44,6 +48,7 @@ def get_volume_advertised_main_query():
         LRM.LRM_TOTAL_VOLUME_SALVAGE_2022_FIRE,
         LRM.LRM_TOTAL_VOLUME_SALVAGE_2023_FIRE,
         LRM.LRM_TOTAL_VOLUME_SALVAGE_2024_FIRE,
+        LRM.LRM_TOTAL_VOLUME_SALVAGE_2025_FIRE,
         AD.Client_Count,
         Ad.Eligible_Client_Count,
         Ad.Ineligible_Client_Count,
@@ -62,14 +67,19 @@ def get_volume_advertised_main_query():
         ad.first_auction,
         ad.last_auction,
         ad.last_auction_no_sale,
-        null as ECAS_ID,
-        null as appraisal_effective_date,
-        null as ECAS_Status,
-        null as haul_distance,
-        null as weighted_haul_distance,
-        null as truck_haul_primary_cycle_time,
-        null as truck_haul_second_cycle_time,
-        null as total_non_scenario_appraisals_same_effective_date
+        ad.report_start_date,
+        ad.report_end_date,
+        ad.fiscal_year,
+        ad.report_run_date
+
+        # null as ECAS_ID,
+        # null as appraisal_effective_date,
+        # null as ECAS_Status,
+        # null as haul_distance,
+        # null as weighted_haul_distance,
+        # null as truck_haul_primary_cycle_time,
+        # null as truck_haul_second_cycle_time,
+        # null as total_non_scenario_appraisals_same_effective_date
     FROM
         bcts_staging.volume_advertised_official AS AD
         LEFT JOIN bcts_staging.v_volume_advertised_lrm AS LRM ON AD.FOREST_FILE_ID = LRM.LICENCE_ID
