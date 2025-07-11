@@ -201,6 +201,7 @@ if __name__ == "__main__":
     if volume_advertised_main_report_exists(start_date, end_date):
         logging.info("Report already exists! Skipping...")
     else:
+        logging.info("Truncating bcts_staging.volume_advertised_official...")
         # Truncate bcts_staging.volume_advertised_official clear data from previous run
         truncate_volume_advertised_official(connection, cursor)
 
