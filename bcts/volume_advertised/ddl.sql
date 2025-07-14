@@ -1,17 +1,3 @@
--- DROP TABLE IF EXISTS lrm_replication.v_cp;
-CREATE TABLE lrm_replication.v_cp (
-    tso_code VARCHAR(15),
-    tso_name VARCHAR(50),
-    nav_name VARCHAR(60),
-    tenure VARCHAR(40),
-    licence_id VARCHAR(15),
-    permit_id VARCHAR(40),
-    perm_application_description VARCHAR(4000),
-    divi_div_nbr NUMERIC(2),
-    licn_seq_nbr NUMERIC(15),
-    perm_seq_nbr NUMERIC(15)
-);
-
 -- DROP TABLE IF EXISTS lrm_replication.sv_sales_schedule;
 CREATE TABLE lrm_replication.sv_sales_schedule (
     divi_div_nbr NUMERIC(2),

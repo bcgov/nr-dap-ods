@@ -1,23 +1,3 @@
-INSERT INTO ods_data_management.cdc_master_table_list 
-        VALUES (
-            NULL,
-            'lrm',
-            NULL,               
-            'forest',
-            'V_CP',               
-            'lrm_replication',
-            'V_CP',
-            'Y',
-            NULL,
-            NULL,
-            NULL,
-            'Y',
-            1,
-            'N',
-            'N',
-            NULL,
-            'Oracle'
-        );
 
 INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
