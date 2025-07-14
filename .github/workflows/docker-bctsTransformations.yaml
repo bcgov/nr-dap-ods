@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["SD-140098-VOLUME-ADVERTISED-REPORT"]
 
 env:
   REGISTRY: ghcr.io
