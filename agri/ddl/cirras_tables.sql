@@ -6569,4 +6569,18 @@ CREATE TABLE IF NOT EXISTS cirras_replication.cirr_insrnc_prog_policies_xref
     update_timestamp timestamp(0) without time zone NOT NULL,
     project_code character varying(7) COLLATE pg_catalog."default",
     CONSTRAINT ippx_pk PRIMARY KEY (ipl_id, insurance_program)
-)
+);
+
+CREATE TABLE IF NOT EXISTS cirras_replication.cirr_annual_plan_premiums
+(
+    app_id bigint NOT NULL,
+    ip_ip_id bigint NOT NULL,
+    annual_premium numeric(10,2) NOT NULL,
+    crop_year character varying(4) COLLATE pg_catalog."default" NOT NULL,
+    entry_timestamp timestamp(0) without time zone NOT NULL,
+    entry_userid character varying(240) COLLATE pg_catalog."default" NOT NULL,
+    update_timestamp timestamp(0) without time zone NOT NULL,
+    update_userid character varying(240) COLLATE pg_catalog."default" NOT NULL,
+    insurance_program character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT app_id_pk PRIMARY KEY (app_id)
+);
