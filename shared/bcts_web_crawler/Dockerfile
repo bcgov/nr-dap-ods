@@ -62,7 +62,7 @@ RUN pip install --no-cache-dir \
     pandas \
     psycopg \
     selenium \
-    undetected-chromedriver
+    undetected-chromedriver==3.4.7
 
 # Setup working directory
 WORKDIR /app
