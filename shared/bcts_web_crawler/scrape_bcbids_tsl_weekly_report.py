@@ -1,14 +1,3 @@
-import os
-import tempfile
-
-# Use a guaranteed writable temp dir
-temp_path = tempfile.mkdtemp()
-uc_data_path = os.path.join(temp_path, "ucdata")
-os.makedirs(uc_data_path, exist_ok=True)
-
-# Set environment variable so uc uses it internally
-os.environ["UCD_DATA_PATH"] = uc_data_path
-
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -20,6 +9,7 @@ import time
 from datetime import datetime
 import io
 import sys
+import os
 
 # In[4]: Retrieve Postgres database configuration
 postgres_username = os.environ['ODS_USERNAME']
@@ -39,9 +29,9 @@ options.add_argument("--disable-dev-shm-usage")
 
 driver = uc.Chrome(
     options=options,
-    user_data_dir=temp_path,
-    patcher_force_close=True, # Avoid lingering zombies
+    patcher_force_close=True,  # Avoid lingering zombies
 )
+
 wait = WebDriverWait(driver, 20)
 
 def load_into_postgres(df, conn_str, target_schema, target_table):

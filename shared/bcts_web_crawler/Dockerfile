@@ -25,9 +25,10 @@ RUN apt-get update && apt-get install -y \
     libappindicator1 \
     xdg-utils \
     ca-certificates \
-    --no-install-recommends
+    --no-install-recommends && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Chrome
+# Install Google Chrome
 RUN wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt-get install -y /tmp/google-chrome.deb && \
     rm /tmp/google-chrome.deb
@@ -42,6 +43,11 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
     chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver.zip
 
+# Create a writable directory for UC patching
+RUN mkdir -p /tmp/ucdata
+
+# Set environment variable so UC uses a writable patch path
+ENV UCD_DATA_PATH=/tmp/ucdata
 
 # Install Python dependencies
 RUN pip install --no-cache-dir \
@@ -53,7 +59,5 @@ RUN pip install --no-cache-dir \
 # Setup working directory
 WORKDIR /app
 
-# Copy code
+# Copy project files
 COPY . .
-
-
