@@ -4,6 +4,7 @@ print("Using UCD_DATA_PATH:", os.environ.get("UCD_DATA_PATH"))
 
 
 import undetected_chromedriver as uc
+print("Using undetected_chromedriver version:", uc.__version__)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
