@@ -1,5 +1,5 @@
 import undetected_chromedriver as uc
-import uc.settings as uc_settings
+import undetected_chromedriver.settings as uc_settings
 import tempfile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
