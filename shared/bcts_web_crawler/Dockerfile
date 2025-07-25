@@ -57,17 +57,13 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
     chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver.zip
 
-# Create UC data path and set env
-ENV UCD_DATA_PATH=/tmp/ucdata
-RUN mkdir -p /tmp/ucdata && chmod -R 777 /tmp/ucdata
-
 
 # Install Python dependencies
 RUN pip install --no-cache-dir \
     pandas \
     psycopg \
     selenium \
-    undetected-chromedriver==3.4.7
+    undetected-chromedriver==3.5.5
 
 # Setup working directory
 WORKDIR /app

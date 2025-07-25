@@ -1,26 +1,5 @@
-import os
-from pathlib import Path
-
-# Force safe HOME
-os.environ["HOME"] = "/tmp/home"
-Path.home = lambda: Path("/tmp/home")
-
-# Set UC patch directory
-os.environ.setdefault("UCD_DATA_PATH", "/tmp/ucdata")
-os.makedirs("/tmp/ucdata", exist_ok=True)
-os.chmod("/tmp/ucdata", 0o777)
-
-# Hard override of the internal patcher fallback
-import undetected_chromedriver.patcher
-undetected_chromedriver.patcher.data_path = "/tmp/ucdata"
-
 import undetected_chromedriver as uc
-print("Using undetected_chromedriver version:", uc.__version__)
-
-
-
-# import undetected_chromedriver as uc
-# print("Using undetected_chromedriver version:", uc.__version__)
+import tempfile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -30,8 +9,8 @@ import psycopg
 import time
 from datetime import datetime
 import io
-import sys
 import os
+import sys
 
 # In[4]: Retrieve Postgres database configuration
 postgres_username = os.environ['ODS_USERNAME']
@@ -42,20 +21,13 @@ postgres_database = os.environ['ODS_DATABASE']
 
 URL = 'https://www.bcbid.gov.bc.ca/page.aspx/en/rfp/request_browse_public'
 
+user_data_dir = tempfile.mkdtemp()
 options = uc.ChromeOptions()
-options.add_argument("--headless=new")
+options.headless = False
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("start-maximized")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
 
-driver = uc.Chrome(
-    options=options,
-    patcher_force_close=True,
-    data_path="/tmp/ucdata",
-    use_subprocess=True,  # ← this disables the internal path fallback logic
-)
-
+driver = uc.Chrome(options=options)
 wait = WebDriverWait(driver, 20)
 
 def load_into_postgres(df, conn_str, target_schema, target_table):
