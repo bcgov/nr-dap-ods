@@ -52,11 +52,10 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
     chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver.zip
 
-# Create a writable directory for UC patching
-RUN mkdir -p /tmp/ucdata
-
-# Set environment variable so UC uses a writable patch path
+# Create UC data path and set env
 ENV UCD_DATA_PATH=/tmp/ucdata
+RUN mkdir -p /tmp/ucdata && chmod -R 777 /tmp/ucdata
+
 
 # Install Python dependencies
 RUN pip install --no-cache-dir \

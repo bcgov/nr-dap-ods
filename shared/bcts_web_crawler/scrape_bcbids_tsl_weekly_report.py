@@ -1,3 +1,8 @@
+import os
+os.environ.setdefault("UCD_DATA_PATH", "/tmp/ucdata")
+print("Using UCD_DATA_PATH:", os.environ.get("UCD_DATA_PATH"))
+
+
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
