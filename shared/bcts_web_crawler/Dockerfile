@@ -28,10 +28,19 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
+# Install Chrome system dependencies first
+RUN apt-get update && apt-get install -y \
+    libgbm1 \
+    libgtk-3-0 \
+    libxkbcommon0 \
+    libvulkan1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Then install Chrome
 RUN wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get install -y /tmp/google-chrome.deb && \
+    apt-get update && apt-get install -y /tmp/google-chrome.deb && \
     rm /tmp/google-chrome.deb
+
 
 # Install Chromedriver matching Chrome version
 RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
