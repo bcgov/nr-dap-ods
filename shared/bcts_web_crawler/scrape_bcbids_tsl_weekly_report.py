@@ -43,8 +43,9 @@ options.add_argument("--disable-dev-shm-usage")
 
 driver = uc.Chrome(
     options=options,
-    patcher_force_close=True,  # Avoid lingering zombies
+    patcher_force_close=True,
     data_path="/tmp/ucdata",
+    use_subprocess=True,  # ← this disables the internal path fallback logic
 )
 
 wait = WebDriverWait(driver, 20)
