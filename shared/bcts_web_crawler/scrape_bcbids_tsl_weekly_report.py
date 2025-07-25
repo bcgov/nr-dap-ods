@@ -1,5 +1,15 @@
-import undetected_chromedriver as uc
+import os
 import tempfile
+
+# Use a guaranteed writable temp dir
+temp_path = tempfile.mkdtemp()
+uc_data_path = os.path.join(temp_path, "ucdata")
+os.makedirs(uc_data_path, exist_ok=True)
+
+# Set environment variable so uc uses it internally
+os.environ["UCD_DATA_PATH"] = uc_data_path
+
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,7 +19,6 @@ import psycopg
 import time
 from datetime import datetime
 import io
-import os
 import sys
 
 # In[4]: Retrieve Postgres database configuration
@@ -20,14 +29,6 @@ postgres_port = os.environ['ODS_PORT']
 postgres_database = os.environ['ODS_DATABASE']
 
 URL = 'https://www.bcbid.gov.bc.ca/page.aspx/en/rfp/request_browse_public'
-
-# Use a guaranteed writable temp dir
-temp_path = tempfile.mkdtemp()
-uc_data_path = os.path.join(temp_path, "ucdata")
-os.makedirs(uc_data_path, exist_ok=True)
-
-# Set environment variable so uc uses it internally
-os.environ["UCD_DATA_PATH"] = uc_data_path
 
 options = uc.ChromeOptions()
 options.add_argument("--headless=new")
