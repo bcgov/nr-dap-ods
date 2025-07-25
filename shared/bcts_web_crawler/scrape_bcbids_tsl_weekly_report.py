@@ -1,4 +1,12 @@
 import os
+from pathlib import Path
+
+
+# Redirect HOME before any other imports
+os.environ["HOME"] = "/tmp/home"
+Path.home = lambda: Path("/tmp/home")  # monkey patch to override fallback
+
+
 os.environ.setdefault("UCD_DATA_PATH", "/tmp/ucdata")
 print("Using UCD_DATA_PATH:", os.environ.get("UCD_DATA_PATH"))
 

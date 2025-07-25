@@ -1,5 +1,10 @@
 FROM python:3.11.9-slim-bookworm
 
+# Force HOME away from /
+ENV HOME=/tmp/home
+RUN mkdir -p $HOME && chmod -R 777 $HOME
+
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
