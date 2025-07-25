@@ -26,6 +26,9 @@ temp_path = tempfile.mkdtemp()
 uc_data_path = os.path.join(temp_path, "ucdata")
 os.makedirs(uc_data_path, exist_ok=True)
 
+# Set environment variable so uc uses it internally
+os.environ["UCD_DATA_PATH"] = uc_data_path
+
 options = uc.ChromeOptions()
 options.add_argument("--headless=new")
 options.add_argument("--disable-blink-features=AutomationControlled")
@@ -36,10 +39,7 @@ options.add_argument("--disable-dev-shm-usage")
 driver = uc.Chrome(
     options=options,
     user_data_dir=temp_path,
-    driver_executable_path=None,  # Let it manage the driver
-    browser_executable_path=None,  # Optional
-    patcher_force_close=True,  # Avoid lingering zombies
-    data_path=uc_data_path
+    patcher_force_close=True, # Avoid lingering zombies
 )
 wait = WebDriverWait(driver, 20)
 
