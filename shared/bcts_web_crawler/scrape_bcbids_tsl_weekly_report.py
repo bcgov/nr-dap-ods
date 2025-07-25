@@ -1,4 +1,5 @@
 import undetected_chromedriver as uc
+import uc.settings as uc_settings
 import tempfile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,13 +22,21 @@ postgres_database = os.environ['ODS_DATABASE']
 
 URL = 'https://www.bcbid.gov.bc.ca/page.aspx/en/rfp/request_browse_public'
 
-user_data_dir = tempfile.mkdtemp()
+# Use a guaranteed writable temp dir
+temp_path = tempfile.mkdtemp()
+
+# Override uc's internal data path BEFORE creating the Chrome driver
+uc_settings.data_path = os.path.join(temp_path, "undetected")
+
+
 options = uc.ChromeOptions()
-options.headless = False
+options.headless = True
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("start-maximized")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 
-driver = uc.Chrome(options=options, user_data_dir=user_data_dir)
+driver = uc.Chrome(options=options, user_data_dir=temp_path)
 wait = WebDriverWait(driver, 20)
 
 def load_into_postgres(df, conn_str, target_schema, target_table):
