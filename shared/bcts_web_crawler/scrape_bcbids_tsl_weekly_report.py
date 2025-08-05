@@ -54,7 +54,7 @@ def run_scraper():
     options.headless = False  # Set True to run headless
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("start-maximized")
-    user_data_dir = "/app_chrome/home"
+    user_data_dir = "/tmp"
     
 
     driver = uc.Chrome(options=options, user_data_dir=user_data_dir)
