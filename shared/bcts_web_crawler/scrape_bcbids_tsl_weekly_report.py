@@ -50,14 +50,14 @@ def load_into_postgres(df, schema, table):
         sys.exit(1)
 
 def run_scraper():
-    user_data_dir = tempfile.mkdtemp()
     options = uc.ChromeOptions()
     options.headless = False  # Set True to run headless
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("start-maximized")
+    user_data_dir = "/tmp/home"
     
 
-    driver = uc.Chrome(options=options)
+    driver = uc.Chrome(options=options, user_data_dir=user_data_dir)
     wait = WebDriverWait(driver, 20)
 
     try:
