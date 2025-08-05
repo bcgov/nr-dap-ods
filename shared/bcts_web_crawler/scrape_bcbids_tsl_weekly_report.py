@@ -1,15 +1,17 @@
-import undetected_chromedriver as uc
+import os
+import io
+import sys
+import time
+import random
 import tempfile
+import pandas as pd
+import psycopg2
+import undetected_chromedriver as uc
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import pandas as pd
-import random
-import psycopg
-import time
-from datetime import datetime
-import io
-import os
+from sqlalchemy import create_engine
 import sys
 
 # In[4]: Retrieve Postgres database configuration
@@ -18,97 +20,107 @@ postgres_password = os.environ['ODS_PASSWORD']
 postgres_host = os.environ['ODS_HOST']
 postgres_port = os.environ['ODS_PORT']
 postgres_database = os.environ['ODS_DATABASE']
+postgres_schema = "bcts_staging"
+postgres_table = "bcbids_tsl_weekly_report"
 
 URL = 'https://www.bcbid.gov.bc.ca/page.aspx/en/rfp/request_browse_public'
 
-user_data_dir = tempfile.mkdtemp()
-options = uc.ChromeOptions()
-options.headless = False
-options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument("start-maximized")
-
-driver = uc.Chrome(options=options)
-wait = WebDriverWait(driver, 20)
-
-def load_into_postgres(df, conn_str, target_schema, target_table):
+def load_into_postgres(df, schema, table):
     try:
-        with psycopg.connect(conn_str) as conn:
-            with conn.cursor() as cur:
-                # Write DataFrame to buffer
-                buffer = io.StringIO()
-                df.to_csv(buffer, index=False, header=False)
-                buffer.seek(0)
+        # Build connection string using SQLAlchemy
+        conn_str = (
+            f"postgresql+psycopg2://{postgres_username}:{postgres_password}"
+            f"@{postgres_host}:{postgres_port}/{postgres_database}"
+        )
 
-                # Use copy to load into the table
-                cur.copy(f"COPY {target_schema}.{target_table} FROM STDIN WITH (FORMAT CSV)", buffer)
-                conn.commit()
+        engine = create_engine(conn_str)
+
+        # Load the dataframe
+        df.to_sql(
+            name=table,
+            con=engine,
+            schema=schema,
+            if_exists="replace",  # or "append" if you prefer
+            index=False
+        )
+        print(f"✅ Loaded {len(df)} rows into {schema}.{table}")
+
     except Exception as e:
-        print(f"Error loading data into PostgreSQL: {str(e)}")
+        print(f"❌ Error writing to PostgreSQL with to_sql: {e}")
         sys.exit(1)
 
-if __name__ == '__main__':
+def run_scraper():
+    user_data_dir = tempfile.mkdtemp()
+    options = uc.ChromeOptions()
+    options.headless = False  # Set True to run headless
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("start-maximized")
+    
+
+    driver = uc.Chrome(options=options)
+    wait = WebDriverWait(driver, 20)
+
     try:
         driver.get(URL)
         time.sleep(5)
 
-        # === Step 1: Select "Timber Auction" ===
-        print("Selecting 'Timber Auction' in Opportunity Type filter...")
-
-        dropdown_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div[data-iv-control='body_x_selRtgrouCode'] .ui.dropdown")))
-        dropdown_button.click()
+        # Step 1: Filter to "Timber Auction"
+        print("🔘 Selecting 'Timber Auction'...")
+        dropdown = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div[data-iv-control='body_x_selRtgrouCode'] .ui.dropdown")))
+        dropdown.click()
         time.sleep(1)
-
         timber_option = wait.until(EC.element_to_be_clickable((By.ID, "body_x_selRtgrouCode_ta")))
         driver.execute_script("arguments[0].scrollIntoView(true);", timber_option)
         timber_option.click()
         time.sleep(1)
 
-        # === Step 2: Click the Search button ===
-        print("Clicking Search to apply filter...")
-        search_button = wait.until(EC.element_to_be_clickable((By.ID, "body_x_prxFilterBar_x_cmdSearchBtn")))
-        search_button.click()
+        # Step 2: Click Search
+        print("🔍 Clicking Search...")
+        search_btn = wait.until(EC.element_to_be_clickable((By.ID, "body_x_prxFilterBar_x_cmdSearchBtn")))
+        search_btn.click()
         time.sleep(3)
 
-        # === Step 3: Wait for filtered table to load ===
+        # Step 3: Wait for results
         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "table.table thead tr")))
+        headers = [h.text.strip() for h in driver.find_elements(By.CSS_SELECTOR, "table.table thead tr th") if h.text.strip()]
+        print(f"📋 Headers: {headers}")
 
-        # === Step 4: Get dynamic headers ===
-        header_elements = driver.find_elements(By.CSS_SELECTOR, "table.table thead tr th")
-        headers = [h.text.strip() for h in header_elements if h.text.strip()]
-        print(f"Detected headers: {headers}")
-
-        all_data = []
-        page = 1
-
-        # === Step 5: Scrape paginated results ===
+        all_data, page = [], 1
         while True:
-            print(f"Scraping page {page}")
+            print(f"📄 Scraping page {page}")
             rows = driver.find_elements(By.CSS_SELECTOR, "table.table tbody tr")
-
             for row in rows:
                 cols = row.find_elements(By.TAG_NAME, "td")
                 if len(cols) == len(headers):
                     row_data = {headers[i]: cols[i].text.strip() for i in range(len(headers))}
                     all_data.append(row_data)
                 else:
-                    print(f"Skipped row with {len(cols)} columns (expected {len(headers)})")
+                    print(f"⚠️ Skipped row with {len(cols)} cols (expected {len(headers)})")
 
-            # Try next page
             try:
                 next_btn = driver.find_element(By.ID, "body_x_grid_gridPagerBtnNextPage")
-                if 'disabled' in next_btn.get_attribute('class').lower():
+                if "disabled" in next_btn.get_attribute("class").lower():
                     break
                 next_btn.click()
-                time.sleep(random.uniform(3, 5))
+                time.sleep(random.uniform(2, 4))
                 page += 1
             except:
                 break
 
-        # === Step 6: Save to ODS ===
         df = pd.DataFrame(all_data)
-        df.to_sql("bcbids_tsl_weekly_report",
-                  con=PgresPool, if_exists='replace', index=False, schema="bcts_staging")
-        print(f"\nDone. Scraped {len(df)} records across {page} pages.")
+        if df.empty:
+            print("⚠️ No data found.")
+            return
+
+        load_into_postgres(df, postgres_schema, postgres_table)
+        print(f"✅ Done. Scraped {len(df)} rows from {page} pages.")
 
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
+            del driver  # ← this prevents __del__ from trying again later
+
+
+if __name__ == '__main__':
+    run_scraper()
+    
