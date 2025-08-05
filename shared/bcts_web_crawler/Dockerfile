@@ -61,6 +61,7 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
 # Install Python dependencies
 RUN pip install --no-cache-dir \
     pandas \
+    sqlalchemy \
     psycopg2-binary \
     selenium \
     undetected-chromedriver==3.5.5
