@@ -1,7 +1,7 @@
 FROM python:3.11.9-slim-bookworm
 
 # Force HOME away from /
-ENV HOME=/app_chrome/home
+ENV HOME=/app
 RUN mkdir -p $HOME && chmod -R 777 $HOME
 
 
