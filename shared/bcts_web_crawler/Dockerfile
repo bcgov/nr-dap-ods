@@ -2,6 +2,7 @@ FROM python:3.11.9-slim-bookworm
 
 # Force HOME away from /
 RUN mkdir -p /tmp/chrome/.local/share/undetected_chromedriver && chmod -R 777 /tmp/chrome/.local/share/undetected_chromedriver
+RUN mkdir -p /.local && chmod -R 777 /.local
 
 
 # Install system dependencies
