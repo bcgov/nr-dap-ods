@@ -1,5 +1,8 @@
 FROM python:3.11.9-slim-bookworm
 
+# Force HOME away from /
+ENV HOME=/tmp/chrome
+RUN mkdir -p $HOME && chmod -R 777 $HOME
 
 
 # Install system dependencies
