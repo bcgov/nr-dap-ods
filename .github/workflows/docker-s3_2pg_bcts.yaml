@@ -6,8 +6,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  DOCKERFILE_PATH: shared/bcts_web_crawler
-  IMAGE_NAME: ${{ github.repository }}-bctsWebCrawler
+  DOCKERFILE_PATH: shared/s3_2pg_bcts
+  IMAGE_NAME: ${{ github.repository }}-s3_2pg_bcts
 
 jobs:
   build:
