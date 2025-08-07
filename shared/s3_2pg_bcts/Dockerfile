@@ -5,6 +5,7 @@ RUN apt-get update \
     && pip install psycopg2 \
     && pip install pandas \
     && pip install boto3 \
+    && pip install requests \
     && pip install sqlalchemy
 
 # Setup working directory
