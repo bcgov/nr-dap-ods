@@ -151,9 +151,16 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
         # OrcPool.release(oracle_connection)  #Temporary change
         return []
 
-# In[10]: Function to load data into Target PostgreSQL using data from Source Oracle
+# Clean function to sanitize each value
+def clean(value):
+    # Remove null bytes which cause PostgreSQL COPY to fail with:
+    # "invalid byte sequence for encoding 'UTF8': 0x00"
+    # Null bytes are not allowed in PostgreSQL text fields
+    if isinstance(value, str):
+        return value.replace('\x00', '')
+    return value
 
-
+# Function to load data into Target PostgreSQL using data from Source Oracle
 def load_into_postgres(table_name, data, target_schema):
     try:
         with PgresPool.connection() as conn:
@@ -162,7 +169,8 @@ def load_into_postgres(table_name, data, target_schema):
                 delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
                 cur.execute(delete_query)
 
-                data_to_insert = [(tuple(row)) for row in data]
+                # Apply cleaning to each field in every row before writing to COPY
+                data_to_insert = [tuple(clean(v) for v in row) for row in data]
                 with cur.copy(f"COPY {target_schema}.{table_name} FROM STDIN") as copy:
                     for record in data_to_insert:
                         copy.write_row(record)
