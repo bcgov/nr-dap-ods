@@ -4,7 +4,8 @@ RUN apt-get update \
     && apt-get -y install libpq-dev gcc \
     && pip install psycopg2 \
     && pip install pandas \
-    && pip install boto3
+    && pip install boto3 \
+    && pip install sqlalchemy
 
 # Setup working directory
 WORKDIR /app
