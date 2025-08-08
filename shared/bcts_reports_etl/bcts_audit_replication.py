@@ -59,6 +59,7 @@ def audit_bcts_replication():
         result = cursor.fetchone()[0]  # Gets the boolean result from EXISTS
         if result:
             logging.error("Replication errors found in bcts_staging.replication_errors.")
+            time.sleep(10)  # Wait for 10 seconds before exiting
             sys.exit(1)
         else:
             logging.info("No replication errors found.")
