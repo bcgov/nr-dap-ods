@@ -114,8 +114,8 @@ def get_active_tables(mstr_schema, app_name):
     #"""
     list_sql = f"""
     SELECT application_name,source_schema_name,source_table_name,target_schema_name,target_table_name,truncate_flag,cdc_flag,full_inc_flag,cdc_column,replication_order,customsql_ind,customsql_query
-    FROM {mstr_schema.lower()}.cdc_master_table_list c
-    WHERE active_ind = 'Y' and LOWER(application_name)=LOWER('{app_name}')
+    FROM {mstr_schema.strip().lower()}.cdc_master_table_list c
+    WHERE active_ind = 'Y' and LOWER(application_name)=LOWER('{app_name.strip()}')
     ORDER BY replication_order, source_table_name
     """
     with postgres_connection.cursor() as curs:
