@@ -98,6 +98,11 @@ def fetch_fta_tables():
     SELECT *
     FROM fta_replication.forest_file_client;
 
+    DROP TABLE IF EXISTS bcts_staging.FTA_TIMBER_MARK ;
+    CREATE TABLE bcts_staging.FTA_TIMBER_MARK  AS
+    SELECT *
+    FROM fta_replication.TIMBER_MARK ;
+
     """
 
     try:
