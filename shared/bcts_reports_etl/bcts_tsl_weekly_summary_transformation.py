@@ -160,7 +160,7 @@ def publish_datasets():
         connection.rollback()
         sys.exit(1)
 
-def delete_volume_advertised_main_hist(connection, cursor, start_date, end_date):
+def delete_tsl_summary_main_hist(connection, cursor, start_date, end_date):
     sql_statement = \
     f"""
     delete from bcts_staging.tsl_summary_main_hist
@@ -223,6 +223,37 @@ def get_report_interval():
     end_date = prev_sunday.strftime('%Y-%m-%d')
     return (start_date, end_date)
 
+def get_licence_ids_bcbids():
+    """
+    Fetch licence IDs from the bcbids scrapped data.
+    """
+    sql_statement = \
+    f"""
+    SELECT string_agg(DISTINCT LEFT("Opportunity ID", 6), ', ')
+    FROM bcts_staging.bcbids_tsl_weekly_report;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        # Fetch the result and load into a DataFrame
+        licence_ids = cursor.fetchall()[0][0]
+        if ',' in licence_ids:
+            licence_ids = licence_ids.split(',')
+        licence_ids = [x.strip() for x in licence_ids]
+        logging.info(f"SQL script executed successfully.")
+        logging.info(f"Licence ids {licence_ids}")
+        if len(licence_ids) == 0:
+            logging.warning("No licence IDs found in bcbids scrapped data.")
+            return None
+        return ','.join(licence_ids) if len(licence_ids) > 1 else licence_ids[0]
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)    
+
+
 if __name__ == "__main__":
 
     connection = get_connection()
@@ -246,18 +277,23 @@ if __name__ == "__main__":
         # Check for existence is done on bcts_reporting.tsl_summary_main. So it is possible to insert duplicate
         # values to the staging table if data is already present in staging and not in reporting or if data is manually removed from
         # reporting to force ETL and not from staging.
-        delete_volume_advertised_main_hist(connection, cursor, start_date, end_date)
-
-        logging.info(f"Running tsl summary official report for the period of  {start_date} and {end_date}...")
-        run_tsl_summary_official_report(connection, cursor, start_date, end_date)
+        delete_tsl_summary_main_hist(connection, cursor, start_date, end_date)
 
         # Get licence ids from bcbids scrapped data
         logging.info(f"Getting licence ids...")
         licence_ids = get_licence_ids_bcbids()
+        if licence_ids is None:
+            logging.warning("No licence IDs found. Skipping LRM report generation.")
+            sys.exit(0)
 
         logging.info(f"Running tsl summary lrm report for the licence ids {licence_ids}...")
         run_tsl_summary_lrm_report(connection, cursor)
 
+
+        logging.info(f"Running tsl summary official report for the period of  {start_date} and {end_date}...")
+        run_tsl_summary_official_report(connection, cursor, start_date, end_date)
+
+        
         logging.info(f"Running tsl summary main report for the licence ids {licence_ids} and period of {start_date} and {end_date}...")
         run_tsl_summary_lrm_report(connection, cursor)
 
