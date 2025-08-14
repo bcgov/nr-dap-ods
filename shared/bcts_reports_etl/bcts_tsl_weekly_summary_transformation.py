@@ -287,7 +287,7 @@ if __name__ == "__main__":
             sys.exit(0)
 
         logging.info(f"Running tsl summary lrm report for the licence ids {licence_ids}...")
-        run_tsl_summary_lrm_report(connection, cursor)
+        run_tsl_summary_lrm_report(connection, cursor, licence_ids)
 
 
         logging.info(f"Running tsl summary official report for the period of  {start_date} and {end_date}...")
@@ -295,7 +295,7 @@ if __name__ == "__main__":
 
         
         logging.info(f"Running tsl summary main report for the licence ids {licence_ids} and period of {start_date} and {end_date}...")
-        run_tsl_summary_lrm_report(connection, cursor)
+        run_tsl_summary_main_report(connection, cursor)
 
         # Publish updated reporting objects to the reporting layer
         logging.info("Updating datasets to the reporting layer...")
