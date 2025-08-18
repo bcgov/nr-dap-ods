@@ -11,7 +11,7 @@ CREATE TABLE lrm_replication.cut_block_shape (
     feature_area NUMERIC(38, 8),
     shape_len NUMERIC(38, 8),
     shape_area NUMERIC(38, 8),
-    shape TEXT,
+    -- shape TEXT,
     licn_seq_nbr NUMERIC(16),
     manu_seq_nbr NUMERIC(16),
     mark_seq_nbr NUMERIC(16),
