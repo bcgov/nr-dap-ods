@@ -24,7 +24,10 @@ def get_tsl_summary_main_query():
         official.Upset_Rate_Value AS Upset_Rate_or_Upset_Value,
         official.Bonus_Bid_offer AS Bonus_Bid_or_Bonus_Value,
         official.Upset_Rate_Value + official.Bonus_Bid_offer AS Total_Stumpage_or_Total_Stumpage_Value,
-        official.no_bid_info
+        official.no_bid_info,
+        Official.report_start_date,
+        Official.report_end_date
+        
     FROM
         bcts_staging.tsl_summary_lrm AS lrm
         LEFT JOIN bcts_staging.tsl_summary_official AS official
