@@ -111,7 +111,9 @@ def get_tsl_summary_official_query(start_date, end_date):
         CASE
             WHEN qo.cruise_based = 'N' THEN qo.bonus_bid
             ELSE qo.bonus_offer
-        END AS bonus_bid_offer
+        END AS bonus_bid_offer,
+        '{start_date}'::Date as report_start_date,
+        '{end_date}'::Date as report_end_date
     FROM (
         SELECT DISTINCT
             CASE
