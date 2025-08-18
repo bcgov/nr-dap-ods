@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["DAPBCTS-5-WEEKLY-TSL-REPORT"]
 
 env:
   REGISTRY: ghcr.io
