@@ -69,6 +69,7 @@ def run_tsl_summary_official_report(connection, cursor, start_date, end_date):
 def run_tsl_summary_lrm_report(connection, cursor, licence_ids):
     # Run volume advertised main report
     sql_statement = get_tsl_summary_lrm_query(licence_ids)
+    print(f"SQL statement: {sql_statement}")
 
     try:
         # logging.info(f"Executing the query...")
