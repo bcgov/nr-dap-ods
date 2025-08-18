@@ -243,6 +243,7 @@ def get_licence_ids_bcbids():
         if ',' in licence_ids:
             licence_ids = licence_ids.split(',')
         licence_ids = [x.strip() for x in licence_ids]
+        licence_ids = ["'" + x + "'" for x in licence_ids]
         logging.info(f"SQL script executed successfully.")
         logging.info(f"Licence ids {licence_ids}")
         if len(licence_ids) == 0:
