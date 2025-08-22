@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["DAPBCTS-5-WEEKLY-TSL-REPORT"]
+    branches: ["DAPBCTS-8-DRIP-58-AUTOMATE-WRITEOFF-FORM-VALIDATION"]
 
 env:
   REGISTRY: ghcr.io
