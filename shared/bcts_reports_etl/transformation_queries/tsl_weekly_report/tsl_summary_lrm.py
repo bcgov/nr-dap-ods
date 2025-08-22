@@ -39,7 +39,7 @@ def get_tsl_summary_lrm_query(licence_ids):
             LICENCE_ID,
             BLOCK_ID,
             BLOCK_VOLUME,
-            regexp_matches(trim(SPECIES_DETAIL), '^([A-Z]+)')::text AS SPECIES_CD,
+            (regexp_matches(trim(SPECIES_DETAIL), '^([A-Z]+)'))[1]::text AS SPECIES_CD,
             (regexp_matches(SPECIES_DETAIL, '[0-9.]+'))[1]::numeric AS SPECIES_PCT
         FROM split_species
         WHERE BLOCK_VOLUME IS NOT NULL AND BLOCK_VOLUME > 0
@@ -89,7 +89,7 @@ def get_tsl_summary_lrm_query(licence_ids):
     RIGHT JOIN (
         SELECT DISTINCT LICENCE_ID
         FROM LRM_REPLICATION.V_LICENCE_ACTIVITY_ALL
-        WHERE LICENCE_ID IN ('{licence_ids}')
+        WHERE LICENCE_ID IN ({licence_ids})
     ) auc_data
         ON auc_data.LICENCE_ID = ss.LICENCE_ID;
     """
