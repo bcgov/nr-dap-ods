@@ -17,9 +17,6 @@ from sqlalchemy import text
 from datetime import datetime
 
 
-
-start = time.time()
-
 # Retrieve Oracle database configuration
 oracle_username = os.environ['DB_USERNAME']
 oracle_password = os.environ['DB_PASSWORD']
@@ -296,9 +293,6 @@ def validate_write_off_forms():
             logging.info(f"Form {form} validated successfully.")
         except Exception as e:
             logging.error(f"Error validating form {form}: {e}")
-    
-
-
 
 if __name__ == "__main__":
 
