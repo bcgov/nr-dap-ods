@@ -14,6 +14,7 @@ import pandas as pd
 from sqlalchemy import text
 from datetime import datetime
 import numpy as np
+import math
 
 
 # Retrieve Oracle database configuration
@@ -286,18 +287,13 @@ def load_into_ods(df):
         sys.exit(1)
 
 def normalize(val):
-    print(val)
-    print(pd.isna(val))
     if pd.isna(val):
         return np.nan
     # Try to treat as number
     try:
-        print(f"Trying to convert {val} to int: {int(val)}")
-        return int(val)
+        return math.ceil(float(str(val).strip()))
     except (ValueError, TypeError):
         # Not numeric, treat as string
-        print(f"Converting {val} to string")
-        print(str(val).strip().lower())
         return str(val).strip().lower()
 
 def validate_write_off_forms():
