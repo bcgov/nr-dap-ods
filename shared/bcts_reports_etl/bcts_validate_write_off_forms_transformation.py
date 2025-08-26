@@ -138,6 +138,7 @@ def parse_forms(form):
             field_values[field_name] = value
 
         filled_dict = {}
+        filled_dict['Business Area'] = 'Error parsing filled form'
         filled_dict['TSA or Management Unit'] = field_values['eg Cascades TSA or Management Unit 18']
         filled_dict['Current date'] = field_values['Current date']
         filled_dict['Location of the Block'] = field_values['Location of block']
@@ -289,7 +290,9 @@ def validate_write_off_forms():
         try:
             logging.info(f"Validating form: {form}")
             filled_fields = parse_forms(form)
+            logging.info(filled_fields.shape)
             expected_fields = fetch_from_ods(filled_fields['UBI'].values[0])
+            logging.info(expected_fields.shape)
             expected_row = expected_fields.iloc[0]
             filled_row = filled_fields.iloc[0]
 
