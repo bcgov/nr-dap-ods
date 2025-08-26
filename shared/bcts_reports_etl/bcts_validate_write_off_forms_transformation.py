@@ -286,14 +286,15 @@ def load_into_ods(df):
         sys.exit(1)
 
 def normalize(val):
-    # Handle NaN
     if pd.isna(val):
         return np.nan
-    # If numeric, round
-    if isinstance(val, (int, float, np.number)):
-        return round(val, 0)
-    # Otherwise, lowercase string
-    return str(val).strip().lower()
+    # Try to treat as number
+    try:
+        num = float(val)
+        return round(num, 0)
+    except (ValueError, TypeError):
+        # Not numeric, treat as string
+        return str(val).strip().lower()
 
 def validate_write_off_forms():
     forms = fetch_forms_from_object_storage()
