@@ -290,8 +290,7 @@ def normalize(val):
         return np.nan
     # Try to treat as number
     try:
-        num = float(val)
-        return round(num, 0)
+        return int(val)
     except (ValueError, TypeError):
         # Not numeric, treat as string
         return str(val).strip().lower()
