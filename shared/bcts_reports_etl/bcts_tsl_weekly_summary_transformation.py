@@ -146,21 +146,27 @@ def publish_datasets():
     FROM BCTS_STAGING.tsl_summary_main;
 
     create or replace view bcts_reporting.v_tsl_summary as
-    with tsl_summary as
+    with tsl_summary1 as
+    (
+    select *,
+    coalesce(volume_advertised_m3, 0) + coalesce(volume_readvertised_m3, 0) as total_volume
+    from bcts_reporting.tsl_summary_main
+    ),
+    tsl_summary as
     (
     select business_area_region_category,
     business_area_region,
     business_area,
-    sum(volume_advertised_m3) as "Total Volume Auctioned (Including Re-auctions)",
+    sum(total_volume) as "Total Volume Auctioned (Including Re-auctions)",
     sum(case when readvertised_auction='N' then volume_advertised_m3 else 0 end) as "Volume Auctioned (First Auction Only)",
-    sum(case when readvertised_auction='Y' then volume_advertised_m3 else 0 end) as "Volume Re-auctioned",
-    sum(case when no_bid_info='N' then volume_advertised_m3 else 0 end) as "Licence Issued",
+    sum(case when readvertised_auction='Y' then total_volume else 0 end) as "Volume Re-auctioned",
+    sum(case when no_bid_info='N' then total_volume else 0 end) as "Licence Issued",
     count(case when no_bid='' then licence_number else null end) as "Number of Licence Issued",
-    sum(case when no_bid_info='' then volume_advertised_m3 else 0 end) as "Volume Not Awarded",
-    count(case when no_bid_info='' then licence_number else null end) as "Number of Licence Not Awarded",
-    sum(case when auctioned_bcts_category_code='4' then volume_advertised_m3 else 0 end) as "Volume of Value Added (Category 4) Auctioned",
+    sum(case when no_bid_info='Y' then total_volume else 0 end) as "Volume Not Awarded",
+    count(case when no_bid_info='Y' then licence_number else null end) as "Number of Licence Not Awarded",
+    sum(case when auctioned_bcts_category_code='4' then total_volume else 0 end) as "Volume of Value Added (Category 4) Auctioned",
     count(case when auctioned_bcts_category_code='4' then licence_number else null end) as "Number of Value Added (Category 4) Licence Auctioned"
-    from bcts_reporting.tsl_summary_main
+    from tsl_summary1
     group by business_area_region_category, business_area_region, business_area
     )
     select 
@@ -181,6 +187,7 @@ def publish_datasets():
             when business_area_region = 'Coast' then 3
         end as business_area_region_sort_order
     from tsl_summary;
+
 
     DROP TABLE IF EXISTS BCTS_REPORTING.tsl_summary_main_hist;
     CREATE TABLE BCTS_REPORTING.tsl_summary_main_hist
