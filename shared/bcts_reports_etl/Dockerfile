@@ -9,7 +9,8 @@ RUN apt-get update \
     && pip install boto3 \
     && pip install pypdf \
     && pip install oracledb \
-    && pip install pandas
+    && pip install pandas \
+    && pip install SQLAlchemy 
 
 WORKDIR /app
 
