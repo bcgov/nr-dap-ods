@@ -319,7 +319,7 @@ def validate_write_off_forms():
             df_summary['form'] = form.split('/')[-1]
             df_summary['expected_value'] = df_summary['expected_value'].apply(normalize)
             df_summary['filled_value']   = df_summary['filled_value'].apply(normalize)
-            df_summary['match'] = df_summary['expected_norm'] == df_summary['filled_norm']
+            df_summary['match'] = df_summary['expected_value'] == df_summary['filled_value']
             df_summary['validated_date'] = datetime.now().date()
             load_into_ods(df_summary)
             logging.info(f"Form {form} validated successfully.")
