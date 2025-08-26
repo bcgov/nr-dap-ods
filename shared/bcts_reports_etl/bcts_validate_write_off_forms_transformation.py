@@ -274,7 +274,7 @@ def validate_write_off_forms():
     for form in forms:
         try:
             logging.info(f"Validating form: {form}")
-            filled_fields = parse_forms()
+            filled_fields = parse_forms(form)
             expected_fields = fetch_from_ods(filled_fields['UBI'])
             expected_row = expected_fields.iloc[0]
             filled_row = filled_fields.iloc[0]
@@ -291,6 +291,7 @@ def validate_write_off_forms():
             logging.info(f"Form {form} validated successfully.")
         except Exception as e:
             logging.error(f"Error validating form {form}: {e}")
+            sys.exit(1)
 
 if __name__ == "__main__":
 
