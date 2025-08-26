@@ -78,6 +78,7 @@ def get_connection():
 def run_query_oracle(sql_statement):
     connection = get_connection()
     try:
+        logging.info(f"Executing SQL script in Oracle...")
         cursor = connection.cursor()
         cursor.execute(sql_statement)
         rows = cursor.fetchall()
@@ -86,6 +87,7 @@ def run_query_oracle(sql_statement):
         df = pd.DataFrame(rows, columns=col_names)
         connection.commit()
         connection.close()
+        logging.info(f"SQL script executed successfully in Oracle.")
         return df
     except oracledb.DatabaseError as e:
         logging.error(f"Error executing SQL script: {e}")
@@ -113,7 +115,7 @@ def fetch_forms_from_object_storage():
 
 def parse_forms(form):
     try:
-        logging.info("Parsing form: {form}")
+        logging.info(f"Parsing form: {form}")
         response = s3_client.get_object(Bucket='wyprwt',  Key=form)
         reader = PdfReader(io.BytesIO(response['Body'].read()))
         form = reader.trailer["/Root"].get("/AcroForm", None)
@@ -148,7 +150,7 @@ def parse_forms(form):
         filled_dict['Fiscal year included in inventory in LRM'] = field_values['Fiscal year included in inventory in LRM']
         filled_dict['Spatial data linked'] = field_values['Spatial Data Linked']
         filled_dict['Category of WO'] = field_values['Category of Write off']
-        logging.info("Parsing form: {form} is complete!")
+        logging.info(f"Parsing form: {form} is complete!")
         return pd.DataFrame(filled_dict, index=(1,))
 
     except Exception as e:
@@ -287,7 +289,7 @@ def validate_write_off_forms():
         try:
             logging.info(f"Validating form: {form}")
             filled_fields = parse_forms(form)
-            expected_fields = fetch_from_ods(filled_fields['UBI'])
+            expected_fields = fetch_from_ods(filled_fields['UBI'].values[0])
             expected_row = expected_fields.iloc[0]
             filled_row = filled_fields.iloc[0]
 
