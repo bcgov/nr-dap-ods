@@ -292,6 +292,9 @@ def validate_write_off_forms():
             filled_fields = parse_forms(form)
             logging.info(filled_fields.shape)
             expected_fields = fetch_from_ods(filled_fields['UBI'].values[0])
+            # Match the columns
+            expected_fields = expected_fields[filled_fields.columns]
+            
             logging.info(expected_fields.shape)
             expected_row = expected_fields.iloc[0]
             filled_row = filled_fields.iloc[0]
