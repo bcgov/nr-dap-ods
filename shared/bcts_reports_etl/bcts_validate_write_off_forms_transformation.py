@@ -297,7 +297,7 @@ def validate_write_off_forms():
             filled_row = filled_fields.iloc[0]
 
             df_summary = pd.DataFrame({
-                "column_name": expected_fields.columns,
+                "field_name": expected_fields.columns,
                 "expected_value": expected_row.values,
                 "filled_value": filled_row.values
             })
