@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["DAPBCTS-8-DRIP-58-AUTOMATE-WRITEOFF-FORM-VALIDATION"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
