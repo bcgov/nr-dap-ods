@@ -11,8 +11,6 @@ from pypdf import PdfReader
 import io
 import oracledb
 import pandas as pd
-import requests
-import psycopg2
 from sqlalchemy import text
 from datetime import datetime
 
