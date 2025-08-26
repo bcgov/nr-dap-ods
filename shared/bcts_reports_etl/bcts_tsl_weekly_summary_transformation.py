@@ -72,7 +72,6 @@ def run_tsl_summary_lrm_report(connection, cursor, licence_ids):
 
     try:
         # logging.info(f"Executing the query...")
-        print(sql_statement)
         cursor.execute(sql_statement)
         connection.commit()
         logging.info(f"tsl summary lrm script executed successfully.")
