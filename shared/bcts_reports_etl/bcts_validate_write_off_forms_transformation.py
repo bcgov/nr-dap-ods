@@ -291,7 +291,7 @@ def normalize(val):
         return np.nan
     # If numeric, round
     if isinstance(val, (int, float, np.number)):
-        return round(val, 2)
+        return round(val, 0)
     # Otherwise, lowercase string
     return str(val).strip().lower()
 
