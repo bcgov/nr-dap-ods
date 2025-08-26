@@ -113,12 +113,13 @@ def fetch_forms_from_object_storage():
 
 def parse_forms(form):
     try:
+        logging.info("Parsing form: {form}")
         response = s3_client.get_object(Bucket='wyprwt',  Key=form)
         reader = PdfReader(io.BytesIO(response['Body'].read()))
         form = reader.trailer["/Root"].get("/AcroForm", None)
         if not form:
             logging.info("No form found in PDF")
-            sys.exit(1)
+            return pd.DataFrame()
 
         fields = form.get("/Fields", [])
         field_values = {}
@@ -147,6 +148,7 @@ def parse_forms(form):
         filled_dict['Fiscal year included in inventory in LRM'] = field_values['Fiscal year included in inventory in LRM']
         filled_dict['Spatial data linked'] = field_values['Spatial Data Linked']
         filled_dict['Category of WO'] = field_values['Category of Write off']
+        logging.info("Parsing form: {form} is complete!")
         return pd.DataFrame(filled_dict, index=(1,))
 
     except Exception as e:
@@ -154,6 +156,8 @@ def parse_forms(form):
         sys.exit(1)
 
 def fetch_from_ods(ubi):
+    logging.info(f"Fetching expected values for UBI: {ubi}")
+    logging.info(f"Fetching block details from V_BLOCK for UBI: {ubi}")
     # Get block details from V_BLOCK 
     sql_statement = \
         f"""
@@ -173,7 +177,9 @@ def fetch_from_ods(ubi):
 
     df1 = run_query_oracle(sql_statement)
     cutb_seq_nbr = df1['CUTB_SEQ_NBR'][0]
+    logging.info("Block details fetched successfully.")
 
+    logging.info(f"Fetching spatial and activity details from CUT_BLOCK_SHAPE and V_BLOCK_ACTIVITY_ALL for CUTB_SEQ_NBR: {cutb_seq_nbr} and UBI: {ubi}")
     # Get SPATIAL_LINKED
     sql_statement = \
         f"""
@@ -183,7 +189,9 @@ def fetch_from_ods(ubi):
         """
 
     df2 = run_query_oracle(sql_statement)
+    logging.info("Spatial and activity details fetched successfully.")
 
+    logging.info(f"Fetching fiscal year included in inventory and category of WO for UBI: {ubi}")
     # Get Fiscal year
     sql_statement = \
         f"""
@@ -205,7 +213,9 @@ def fetch_from_ods(ubi):
         """
 
     df3 = run_query_oracle(sql_statement)
+    logging.info("Fiscal year included in inventory and category of WO fetched successfully.")
 
+    logging.info(f"Fetching category of WO for UBI: {ubi}")
     # Get Category of WO
     sql_statement = \
         f"""
@@ -231,9 +241,11 @@ def fetch_from_ods(ubi):
         """
 
     df4 = run_query_oracle(sql_statement)
+    logging.info("Category of WO fetched successfully.")
     return pd.concat([df1, df2, df3, df4], axis=1)
 
 def load_into_ods(df):
+    logging.info("Loading data into PostgreSQL...")
     try:
         # Create the SQLAlchemy engine
         engine = create_engine(
@@ -263,7 +275,7 @@ def load_into_ods(df):
             for row in df_clean.to_dict(orient="records"):
                 conn.execute(text(insert_sql), row)
 
-        print("✅ Data successfully written to PostgreSQL.")
+        logging.info("✅ Data successfully written to PostgreSQL.")
 
     except Exception as e:
         print(f"❌ Error writing to PostgreSQL: {e}")
@@ -300,6 +312,7 @@ if __name__ == "__main__":
 
     # Fetch FTA tables from FTA_REPLICATION
     validate_write_off_forms()
+    logging.info("All forms validated successfully.")
 
     # Clean up
     cursor.close()
