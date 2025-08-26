@@ -317,10 +317,12 @@ def validate_write_off_forms():
                 "filled_value": filled_row.values
             })
             df_summary['form'] = form.split('/')[-1]
-            df_summary['expected_value'] = df_summary['expected_value'].apply(normalize)
-            df_summary['filled_value']   = df_summary['filled_value'].apply(normalize)
-            df_summary['match'] = df_summary['expected_value'] == df_summary['filled_value']
+            df_summary['expected_norm'] = df_summary['expected_value'].apply(normalize)
+            df_summary['filled_norm']   = df_summary['filled_value'].apply(normalize)
+
+            df_summary['match'] = df_summary['expected_norm'] == df_summary['filled_norm']
             df_summary['validated_date'] = datetime.now().date()
+            df_summary = df_summary.drop(columns=['expected_norm', 'filled_norm'])
             load_into_ods(df_summary)
             logging.info(f"Form {form} validated successfully.")
         except Exception as e:
