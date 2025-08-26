@@ -13,6 +13,7 @@ import oracledb
 import pandas as pd
 from sqlalchemy import text
 from datetime import datetime
+import numpy as np
 
 
 # Retrieve Oracle database configuration
@@ -284,6 +285,16 @@ def load_into_ods(df):
         print(f"❌ Error writing to PostgreSQL: {e}")
         sys.exit(1)
 
+def normalize(val):
+    # Handle NaN
+    if pd.isna(val):
+        return np.nan
+    # If numeric, round
+    if isinstance(val, (int, float, np.number)):
+        return round(val, 2)
+    # Otherwise, lowercase string
+    return str(val).strip().lower()
+
 def validate_write_off_forms():
     forms = fetch_forms_from_object_storage()
     for form in forms:
@@ -306,7 +317,9 @@ def validate_write_off_forms():
                 "filled_value": filled_row.values
             })
             df_summary['form'] = form.split('/')[-1]
-            df_summary['match'] = df_summary['expected_value'] == df_summary['filled_value']
+            df_summary['expected_value'] = df_summary['expected_value'].apply(normalize)
+            df_summary['filled_value']   = df_summary['filled_value'].apply(normalize)
+            df_summary['match'] = df_summary['expected_norm'] == df_summary['filled_norm']
             df_summary['validated_date'] = datetime.now().date()
             load_into_ods(df_summary)
             logging.info(f"Form {form} validated successfully.")
