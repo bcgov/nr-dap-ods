@@ -26,7 +26,7 @@ BEGIN
         INSERT INTO ods_data_management.cdc_master_table_list 
         VALUES (
             NULL,
-            'lrm',
+            'lrm2',
             NULL,               
             'forest',
             table_name,               
