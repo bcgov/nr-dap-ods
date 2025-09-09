@@ -70,8 +70,8 @@ def publish_datasets():
         connection.rollback()
         sys.exit(1)
 
-def silviliability_report_exists(current_date):
-    report_date = date(current_date.year, current_date.month, 1)
+def silviliability_report_exists(report_date):
+    
     sql_statement = \
     f"""
 
@@ -99,16 +99,37 @@ def silviliability_report_exists(current_date):
         else:
             logging.error(f"Error executing the SQL script: {e}")
 
+def truncate_silviability_main_hist(report_date):
+    
+    sql_statement = \
+    f"""
+    delete from bcts_staging.silviliability_main_hist 
+    where date_trunc('month', report_run_date) = date '{report_date}';
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        connection.rollback()
+        logging.error(f"Error executing the SQL script: {e}")
+
 if __name__ == "__main__":
 
     connection = get_connection()
     cursor = connection.cursor()
     current_date = date.today()
+    report_date = date(current_date.year, current_date.month, 1)
      # Skip if report is already generated
-    if silviliability_report_exists(current_date):
+    if silviliability_report_exists(report_date):
         logging.info("Report already exists! Skipping...")
     else:
         # Publish reporting objects to the reporting layer from views in the staging layer
+        # Remove existing entries if any in the _hist table 
+        logging.info("Deleting existing entries in the silviliability_main_hist table for the report month if any...")
+        truncate_silviability_main_hist(report_date)
         logging.info("Updating silviliability datasets to the reporting layer...")
         publish_datasets()
         logging.info("Silviliability datasets in the reporting layer have been updated!")
