@@ -88,9 +88,9 @@ VALUES (
     'results',
     NULL,               
     'the',
-    'RSLT_OPENING_POLYGON',               
+    'silviliability_results',               
     'results_replication',
-    'RSLT_OPENING_POLYGON',
+    'silviliability_results',
     'Y',
     NULL,
     NULL,
@@ -100,130 +100,64 @@ VALUES (
     'N',
     'Y',
     'SELECT
-        opening_id,
-        mapsheet_grid,
-        mapsheet_letter,
-        mapsheet_square,
-        mapsheet,
-        opening_number,
-        map_label,
-        opening_category_code,
-        opening_status_code,
-        opening_location_name,
-        district_admin_zone,
-        licensee_opening_id,
-        max_allow_permnt_access_pct,
-        approve_date,
-        tsb_number_code,
-        amendment_ind,
-        prev_tree_species1_code,
-        prev_tree_species2_code,
-        prev_stocking_status_code,
-        prev_age_class_code,
-        prev_height_class_code,
-        prev_site_index,
-        prev_site_index_source_code,
-        results_submission_id,
-        region_code,
-        region_name,
-        district_code,
-        district_name,
-        bcts_code,
-        bcts_name,
-        geo_region_code,
-        geo_district_code,
-        geo_district_name,
-        opening_gross_area,
-        forest_file_id,
-        cutting_permit_id,
-        timber_mark,
-        cut_block_id,
-        mgmt_unit_id,
-        mgmt_unit_type_code,
-        mgmt_unit_description,
-        file_type_code,
-        disturbance_start_date,
-        disturbance_end_date,
-        client_name,
-        client_number,
-        client_location_code,
-        generalized_bgc_zone_code,
-        generalized_bgc_subzone_code,
-        generalized_bgc_variant,
-        generalized_bgc_phase,
-        generalized_bec_site_series,
-        generalized_bec_site_type,
-        generalized_bec_seral,
-        denudation_1_disturbance_code,
-        denudation_1_silv_system_code,
-        denudation_1_silv_variant_code,
-        denudation_1_cut_phase_code,
-        denudation_1_completion_date,
-        denudation_2_disturbance_code,
-        denudation_2_silv_system_code,
-        denudation_2_silv_variant_code,
-        denudation_2_cut_phase_code,
-        denudation_2_completion_date,
-        denudation_count,
-        site_prep_1_technique_code,
-        site_prep_1_treatment_area,
-        site_prep_1_completion_date,
-        site_prep_2_technique_code,
-        site_prep_2_treatment_area,
-        site_prep_2_completion_date,
-        site_prep_count,
-        planting_1_technique_code,
-        planting_1_treatment_area,
-        planting_1_completion_date,
-        planting_2_technique_code,
-        planting_2_treatment_area,
-        planting_2_completion_date,
-        planting_count,
-        brushing_technique_code,
-        brushing_treatment_area,
-        brushing_completion_date,
-        brushing_count,
-        spacing_treatment_area,
-        spacing_completion_date,
-        spacing_count,
-        fertilization_treatment_area,
-        fertilization_completion_date,
-        fertilization_count,
-        pruning_treatment_area,
-        pruning_completion_date,
-        pruning_count,
-        geometry_exist_ind,
-        ''masked'' as geometry,
-        feature_area,
-        feature_perimeter,
-        feature_class_skey,
-        capture_method_code,
-        data_source_code,
-        observation_date,
-        data_quality_comment,
-        submitted_by_userid,
-        submitted_date,
-        slope,
-        aspect,
-        maximum_elevation,
-        minimum_elevation,
-        average_elevation,
-        opening_sea_calc_result_code,
-        opening_sea_confidence_code,
-        opening_who_created,
-        opening_when_created,
-        opening_who_updated,
-        opening_when_updated,
-        objectid,
-        change_timestamp1,
-        change_timestamp2,
-        change_timestamp3,
-        change_timestamp4,
-        change_timestamp5,
-        change_timestamp6,
-        change_timestamp7,
-        change_timestamp8
-    FROM THE.RSLT_OPENING_POLYGON',
-        'Oracle'
+        CB.FOREST_FILE_ID,
+        CB.CUT_BLOCK_ID,
+        MAX(CB.OPENING_ID) AS OPENING,
+        COUNT(CB.OPENING_ID) AS OPENING_COUNT,
+        -- COUNT(FG.OPENING_ID) AS OPENING_FG_COUNT,
+        MAX(FG.DECLARED_DATE) AS RESULTS_FG_DECLARED
+
+    FROM
+        THE.RSLT_OPENING_POLYGON CB,
+        (
+            SELECT
+                SU.OPENING_ID,
+                COUNT(DISTINCT SU.STOCKING_STANDARD_UNIT_ID) AS SU_COUNT,
+                COUNT(DISTINCT ML.STOCKING_STANDARD_UNIT_ID) AS SU_FG_COUNT,
+                MAX(ML.DECLARED_DATE) AS DECLARED_DATE
+
+            FROM
+                THE.STOCKING_STANDARD_UNIT SU,
+                (
+                    SELECT
+                        SM.STOCKING_STANDARD_UNIT_ID,
+                        MAX(SM.DECLARED_DATE) AS DECLARED_DATE
+                    FROM
+                        THE.STOCKING_MILESTONE SM
+                    WHERE
+                        SM.SILV_MILESTONE_TYPE_CODE = ''FG''
+                        AND SM.DECLARE_IND = ''Y''
+                    GROUP BY
+                        SM.STOCKING_STANDARD_UNIT_ID
+                    ORDER BY
+                        1
+                ) ML
+
+            WHERE
+                SU.STOCKING_STANDARD_UNIT_ID = ML.STOCKING_STANDARD_UNIT_ID (+)
+
+            GROUP BY
+                SU.OPENING_ID
+
+            HAVING
+                COUNT(DISTINCT SU.STOCKING_STANDARD_UNIT_ID) = COUNT(DISTINCT ML.STOCKING_STANDARD_UNIT_ID)
+
+            ORDER BY 1
+        ) FG
+
+    WHERE
+        CB.OPENING_ID = FG.OPENING_ID (+)
+
+    GROUP BY
+        CB.FOREST_FILE_ID, CB.CUT_BLOCK_ID
+
+    HAVING
+        COUNT(DISTINCT CB.OPENING_ID) = COUNT(DISTINCT FG.OPENING_ID)
+
+    ORDER BY
+        1,
+        2
+    ',
+    'Oracle'
 );
 

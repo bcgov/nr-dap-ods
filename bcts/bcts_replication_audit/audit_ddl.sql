@@ -1,7 +1,7 @@
 
 create or replace view bcts_staging.replication_errors_bcts as
 select * from ods_data_management.audit_batch_status
-where application_name in ('lrm', 'bctsadmin', 'mof-client') 
+where application_name in ('lrm', 'bctsadmin', 'mof-client', 'results') 
 and batch_run_date::date = CURRENT_DATE
 
 union all
