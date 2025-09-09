@@ -54,11 +54,10 @@ def publish_datasets():
     sql_statement = \
     """
     
-    TRUNCATE TABLE bcts_staging.silviliability_main_hist;
     INSERT INTO bcts_staging.silviliability_main_hist SELECT * FROM bcts_staging.silviliability_main;
 
-    TRUNCATE TABLE bcts_reporting.silviliability_main;
-    INSERT INTO bcts_reporting.silviliability_main SELECT * FROM bcts_staging.silviliability_main;
+    DROP TABLE IF EXISTS bcts_reporting.silviliability_main;
+    CREATE TABLE bcts_reporting.silviliability_main AS SELECT * FROM bcts_staging.silviliability_main;
 
     """
 
