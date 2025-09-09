@@ -46,41 +46,7 @@ BEGIN
     END LOOP;
 END $$;
 
--- DBP01
-DO $$
-DECLARE
-    tables text[] := ARRAY[
-    'STOCKING_MILESTONE',
-    'STOCKING_STANDARD_UNIT'
-]
-;
-    table_name text;
-BEGIN
-    -- Loop through the list of table names
-    FOREACH table_name IN ARRAY tables
-    LOOP
-        INSERT INTO ods_data_management.cdc_master_table_list 
-        VALUES (
-            NULL,
-            'results',
-            NULL,               
-            'the',
-            table_name,               
-            'results_replication',
-            table_name,
-            'Y',
-            NULL,
-            NULL,
-            NULL,
-            'Y',
-            1,
-            'N',
-            'N',
-            NULL,
-            'Oracle'
-        );
-    END LOOP;
-END $$;
+
 
 INSERT INTO ods_data_management.cdc_master_table_list 
 VALUES (
