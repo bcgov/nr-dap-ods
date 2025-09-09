@@ -72,7 +72,7 @@ def publish_datasets():
         sys.exit(1)
 
 def silviliability_report_exists(current_date):
-    report_date = datetime.date(current_date.year, current_date.month, 1)
+    report_date = date(current_date.year, current_date.month, 1)
     sql_statement = \
     f"""
 
