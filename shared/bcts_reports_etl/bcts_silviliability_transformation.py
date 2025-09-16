@@ -56,8 +56,59 @@ def publish_datasets():
     
     INSERT INTO bcts_staging.silviliability_main_hist SELECT * FROM bcts_staging.silviliability_main;
 
-    DROP TABLE IF EXISTS bcts_reporting.silviliability_main;
+    DROP TABLE IF EXISTS bcts_reporting.silviliability_main cascade;
     CREATE TABLE bcts_reporting.silviliability_main AS SELECT * FROM bcts_staging.silviliability_main;
+
+    CREATE OR REPLACE VIEW BCTS_REPORTING.VW_SILVILIABILITY_MAIN AS
+    WITH TEMP AS
+    (SELECT *,
+    CASE
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
+            THEN DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '3 months'
+            ELSE DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '9 months'
+    END AS fiscal_year_start_date
+    FROM bcts_reporting.silviliability_main
+    )
+    select *
+    from TEMP
+    WHERE fg_done >= 
+        CASE
+            WHEN EXTRACT(MONTH FROM CURRENT_DATE) >= 4 
+            THEN DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '3 months'
+            ELSE DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '9 months'
+    END;
+
+    create or replace view bcts_reporting.VW_SILVILIABILITY_MAIN_PBI as
+
+    with ubis as 
+    (
+    SELECT business_area_region_category, business_area_region, business_area,ubi,
+    max(EXTRACT(DAY from (fg_done - hvc_date))) as days_to_free_growing,
+    max(EXTRACT(epoch from (fg_done - hvc_date))/(365.25*24*60*60)) as years_to_free_growing,
+    max(hvc_date::Date - hvs_date::Date) as duration_of_harvesting,
+    sum(planned_total_cost) as planned_total_cost,
+    sum(actual_total_cost) as actual_total_cost,
+    max(nar_area) as nar_area,
+    sum(total_trees) as total_trees
+    FROM BCTS_REPORTING.VW_SILVILIABILITY_MAIN
+    group by business_area_region_category, business_area_region, business_area, ubi
+    )
+    select business_area_region_category, business_area_region, business_area,
+    count(ubi) as "Number of Blocks",
+    round(sum(nar_area), 0) as "Total Net Area to be Reforested",
+    sum(total_trees) as "Total Trees Planted",
+    round(sum(total_trees)/sum(nar_area), 0) as "Total trees planted per ha of NAR",
+    round(avg(years_to_free_growing), 1) as "Average years to free growing",
+    round(avg(days_to_free_growing/nar_area), 0) as "Average days to free growing per ha of NAR",
+    round(avg(duration_of_harvesting), 0) as "Average duration of harvesting in days",
+    round(sum(planned_total_cost), 0) as "Average planned total cost",
+    round(sum(actual_total_cost), 0) as "Average actual total cost",
+    round((sum(planned_total_cost)/sum(nar_area)), 0) as "Average planned total cost per ha of NAR",
+    round((sum(actual_total_cost))/sum(nar_area), 0) as "Average actual total cost per ha of NAR"
+
+    from ubis 
+    group by business_area_region_category, business_area_region, business_area;
+
 
     """
 
@@ -94,7 +145,7 @@ def silviliability_report_exists(report_date):
     except psycopg2.Error as e:
         connection.rollback()
         if e.pgcode == errorcodes.UNDEFINED_TABLE:
-            logging.warning("Table bcts_reporting.volume_advertised_main does not exist.")
+            logging.warning("Table bcts_reporting.silviliability_main does not exist.")
             return False
         else:
             logging.error(f"Error executing the SQL script: {e}")
