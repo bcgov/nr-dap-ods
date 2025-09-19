@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS bcts_staging.licence_transfer_hist
+(
+    business_area_region text COLLATE pg_catalog."default",
+    business_area text COLLATE pg_catalog."default",
+    management_unit_type text COLLATE pg_catalog."default",
+    management_unit_id character varying(4) COLLATE pg_catalog."default",
+    management_unit character varying(120) COLLATE pg_catalog."default",
+    forest_file_id character varying(10) COLLATE pg_catalog."default",
+    bcts_category_code character varying(1) COLLATE pg_catalog."default",
+    category character varying(120) COLLATE pg_catalog."default",
+    auction_date timestamp without time zone,
+    sale_volume numeric(13,1),
+    fta_file_status text COLLATE pg_catalog."default",
+    legal_effective_date date,
+    client_number character varying(8) COLLATE pg_catalog."default",
+    client_name text COLLATE pg_catalog."default",
+    client_type text COLLATE pg_catalog."default",
+    registry_company_type_code character varying(4) COLLATE pg_catalog."default",
+    licensee_start_date date,
+    licensee_end_date date,
+    revision_count numeric(5,0),
+    licensee_order bigint,
+    report_start_date date,
+    report_end_date date,
+    report_run_date date DEFAULT CURRENT_DATE
+)
