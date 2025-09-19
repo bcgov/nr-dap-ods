@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: [" DAP-BCTS-11-Licence-Transfer-Report"]
+    branches: ["DAP-BCTS-11-Licence-Transfer-Report"]
 
 env:
   REGISTRY: ghcr.io
