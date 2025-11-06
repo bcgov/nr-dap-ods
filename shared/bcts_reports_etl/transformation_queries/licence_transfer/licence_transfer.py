@@ -1,7 +1,7 @@
 def get_licence_transfer_query(start_date, end_date):
     return \
     f"""
-    INSERT INTO bcts_staging._hist(
+    INSERT INTO bcts_staging.licence_transfer_hist(
 	business_area_region, business_area, management_unit_type, management_unit_id, management_unit, forest_file_id, bcts_category_code, category, auction_date, sale_volume, fta_file_status, legal_effective_date, client_number, client_name, client_type, registry_company_type_code, licensee_start_date, licensee_end_date, revision_count, licensee_order,report_start_date, report_end_date)
     WITH CL AS
     (
