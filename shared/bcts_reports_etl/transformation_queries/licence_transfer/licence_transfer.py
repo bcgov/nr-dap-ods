@@ -123,9 +123,9 @@ def get_licence_transfer_query(start_date, end_date):
     ts.forest_file_id = CC.forest_file_id
     LEFT JOIN BCTS_STAGING.FTA_tenure_file_status_code tfsc 
     ON pfu.file_status_st = tfsc.tenure_file_status_code
-    LEFT JOIN BCTS_STAGING.FTA_file_client_type_code fctc 
+    LEFT JOIN MOFCLIENT_REPLICATION.file_client_type_code fctc 
     ON cl.forest_file_client_type_code = fctc.file_client_type_code
-    LEFT JOIN BCTS_STAGING.FTA_mgmt_unit_type_code mutc 
+    LEFT JOIN BCTS_STAGING.fta_mgmt_unit_type_code mutc 
     ON pfu.mgmt_unit_type = mutc.mgmt_unit_type_code
     LEFT JOIN BCTS_STAGING.FTA_tsa_number_code ta 
     ON pfu.mgmt_unit_id = ta.tsa_number
