@@ -19,7 +19,7 @@ def get_licence_transfer_query(start_date, end_date):
                 fc.REGISTRY_COMPANY_TYPE_CODE
             FROM
                 BCTS_STAGING.FTA_FOREST_FILE_CLIENT ff,
-                BCTS_STAGING.FTA_FOREST_CLIENT FC -- Not available in BCTS schema
+                MOFCLIENT_REPLICATION.V_CLIENT_PUBLIC FC 
             WHERE
                 ff.CLIENT_NUMBER = FC.CLIENT_NUMBER
                 AND FC.CLIENT_NAME NOT LIKE ('TIMBER SALES MANAGER%')
@@ -31,7 +31,7 @@ def get_licence_transfer_query(start_date, end_date):
                 COUNT(DISTINCT FF1.CLIENT_NUMBER) CLIENT_COUNT
             FROM
                 BCTS_STAGING.FTA_FOREST_FILE_CLIENT FF1,
-                BCTS_STAGING.FTA_FOREST_CLIENT FC1,
+                MOFCLIENT_REPLICATION.V_CLIENT_PUBLIC FC1,
                 BCTS_STAGING.FTA_tenure_term TT1
             WHERE
                 FF1.CLIENT_NUMBER = FC1.CLIENT_NUMBER
