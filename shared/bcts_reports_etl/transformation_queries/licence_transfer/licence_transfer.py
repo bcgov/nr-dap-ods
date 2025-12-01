@@ -15,8 +15,8 @@ def get_licence_transfer_query(start_date, end_date):
                 fc.legal_middle_name,
                 fc.CLIENT_NAME,
                 ff.FOREST_FILE_CLIENT_TYPE_CODE,
-                FC.CLIENT_ACRONYM,
-                fc.REGISTRY_COMPANY_TYPE_CODE
+                'REDACTED' AS CLIENT_ACRONYM,
+                'REDACTED' AS REGISTRY_COMPANY_TYPE_CODE
             FROM
                 BCTS_STAGING.FTA_FOREST_FILE_CLIENT ff,
                 MOFCLIENT_REPLICATION.V_CLIENT_PUBLIC FC 
