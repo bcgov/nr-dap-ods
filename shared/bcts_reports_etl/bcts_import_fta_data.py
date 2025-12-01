@@ -102,17 +102,6 @@ def fetch_fta_tables():
     CREATE TABLE bcts_staging.FTA_TIMBER_MARK  AS
     SELECT *
     FROM fta_replication.TIMBER_MARK ;
-
-    DROP TABLE IF EXISTS bcts_staging.fta_forest_client ;
-    CREATE TABLE bcts_staging.fta_forest_client  AS
-    SELECT *
-    FROM fta_replication.forest_client ;
-
-    DROP TABLE IF EXISTS bcts_staging.fta_file_client_type_code ;
-    CREATE TABLE bcts_staging.fta_file_client_type_code  AS
-    SELECT *
-    FROM fta_replication.file_client_type_code ;
-
     
     DROP TABLE IF EXISTS bcts_staging.fta_mgmt_unit_type_code ;
     CREATE TABLE bcts_staging.fta_mgmt_unit_type_code  AS
