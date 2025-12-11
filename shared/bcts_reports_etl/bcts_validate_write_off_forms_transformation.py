@@ -201,7 +201,7 @@ def fetch_from_ods(ubi):
     sql_statement = \
         f"""
         with min_date as
-            (select  min(TO_DATE(activity_date, 'YY-MM-DD')) as earliest_date
+            (select  min(TO_DATE(activity_date, 'RR-MM-DD')) as earliest_date
             from FORESTVIEW.v_block_activity_all
             where ubi = '{ubi}'
             and actt_key_ind in ('DVC', 'DVS', 'DR')
