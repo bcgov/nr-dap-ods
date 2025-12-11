@@ -218,6 +218,7 @@ def fetch_from_ods(ubi):
         """
 
     df3 = run_query_oracle(sql_statement)
+    logging.info(df3)
     logging.info("Fiscal year included in inventory and category of WO fetched successfully.")
 
     logging.info(f"Fetching category of WO for UBI: {ubi}")
@@ -247,7 +248,9 @@ def fetch_from_ods(ubi):
 
     df4 = run_query_oracle(sql_statement)
     logging.info("Category of WO fetched successfully.")
-    return pd.concat([df1, df2, df3, df4], axis=1)
+    df = pd.concat([df1, df2, df3, df4], axis=1)
+    logging.info(df.to_string())
+    return df
 
 def load_into_ods(df):
     logging.info("Loading data into PostgreSQL...")
