@@ -218,6 +218,7 @@ def fetch_from_ods(ubi):
         """
 
     df3 = run_query_oracle(sql_statement)
+    logging.info(sql_statement)
     logging.info(df3)
     logging.info("Fiscal year included in inventory and category of WO fetched successfully.")
 
