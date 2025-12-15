@@ -209,6 +209,8 @@ CREATE TABLE IF NOT EXISTS lrm_replication.standard_unit (
     createdby VARCHAR(120) NULL,
     createdon TIMESTAMP NULL,
     createdusing VARCHAR(120) NULL,
+    STUN_PRIMARY_OBJ VARCHAR(10),
+    STUN_SECONDARY_OBJ VARCHAR(10),
     PRIMARY KEY (stun_seq_nbr)
 );
 
