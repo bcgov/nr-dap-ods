@@ -103,12 +103,31 @@ def publish_datasets():
     """
     DROP TABLE IF EXISTS BCTS_STAGING.annual_developed_volume;
     CREATE TABLE BCTS_STAGING.annual_developed_volume
-    AS SELECT * 
-    FROM BCTS_STAGING.annual_developed_volume_hist
-    WHERE report_end_date = (
-	    SELECT MAX(report_end_date)
-	    FROM BCTS_STAGING.annual_developed_volume_hist
-    );
+    AS 
+    with adv as
+    (
+    SELECT * 
+        FROM BCTS_STAGING.annual_developed_volume_hist
+        WHERE report_end_date = (
+            SELECT MAX(report_end_date)
+            FROM BCTS_STAGING.annual_developed_volume_hist
+        )
+    ),
+    advt as
+    (
+    select *
+    from bcts_staging.bcts_adv_targets
+    where fiscal_year = (select max(fiscal_year) from bcts_staging.bcts_adv_targets)
+    )
+
+    select
+        adv.*,
+        advt.adv_target_m3
+        FROM adv
+        left join advt
+        on adv.business_area_region = advt.business_area_region
+        and adv.business_area = advt.business_area
+	;
 
     DROP TABLE IF EXISTS BCTS_REPORTING.annual_developed_volume_hist;
     CREATE TABLE BCTS_REPORTING.annual_developed_volume_hist
