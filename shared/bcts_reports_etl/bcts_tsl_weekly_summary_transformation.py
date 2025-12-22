@@ -141,7 +141,11 @@ def publish_datasets():
 
     DROP TABLE IF EXISTS BCTS_REPORTING.tsl_summary_main cascade;
     CREATE TABLE BCTS_REPORTING.tsl_summary_main
-    AS SELECT * 
+    AS SELECT *,
+        case when business_area_region = 'North Interior' then 1
+                when business_area_region = 'South Interior' then 2
+                when business_area_region = 'Coast' then 3
+        end as business_area_region_sort_order
     FROM BCTS_STAGING.tsl_summary_main;
 
     create or replace view bcts_reporting.v_tsl_summary as
@@ -192,6 +196,11 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.tsl_summary_main_hist
     AS SELECT * 
     FROM BCTS_STAGING.tsl_summary_main_hist;
+
+    GRANT SELECT ON BCTS_REPORTING.v_tsl_summary TO BCTS_DEV_ROLE;
+    GRANT SELECT ON BCTS_REPORTING.v_tsl_summary TO proxy_bcts_bi;
+    GRANT SELECT ON BCTS_REPORTING.tsl_summary_main TO BCTS_DEV_ROLE;
+    GRANT SELECT ON BCTS_REPORTING.tsl_summary_main TO proxy_bcts_bi;
 
     """
 
