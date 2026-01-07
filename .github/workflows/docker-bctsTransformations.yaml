@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["DAPBCTS-14-LICENCE-SOLD-TO-OUT-OF-PROVINCE-REGISTRANTS"]
 
 env:
   REGISTRY: ghcr.io
