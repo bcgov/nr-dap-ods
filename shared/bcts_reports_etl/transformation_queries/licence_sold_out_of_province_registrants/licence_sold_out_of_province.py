@@ -2,6 +2,7 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
     return \
     f"""
     INSERT INTO bcts_staging.licence_sold_to_out_of_province_registrants_hist(
+    management_unit, forest_file_id, bcts_category_code, legal_effective_date, auction_date, sale_volume, client_number, licensee_name, licensee_address, postal_code, city, province, country, client_locn_code, forest_file_client_type_code, registry_company_type_code, registrant_expiry_date, client_comment, org_unit_code, mgmt_unit_type, mgmt_unit_id, category, file_status_st, fiscal_issued, upset_rate, total_upset_value, bonus_bid, bonus_offer, report_start_date, report_end_date
     )
     WITH licence_info AS
     (
@@ -53,7 +54,7 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
             ON pfu.mgmt_unit_id = tf.tfl_number
         LEFT JOIN bcts_staging.fta_tenure_term        AS tt
             ON pfu.forest_file_id = tt.forest_file_id
-            AND tt.legal_effective_dt BETWEEN DATE To_Date ('{start_date}', 'YYYY-MM-DD') -- Report period start date
+            AND tt.legal_effective_dt BETWEEN To_Date ('{start_date}', 'YYYY-MM-DD') -- Report period start date
             AND To_Date  ('{end_date}', 'YYYY-MM-DD') -- Report period end date
         WHERE pfu.file_status_st IN ('HI', 'HC', 'LC', 'HX', 'HS', 'HRS')
         AND ts.no_sale_rationale_code IS NULL
@@ -70,22 +71,20 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
         br.client_number,
         CASE
             WHEN fc.legal_first_name IS NOT NULL
-            AND fc.legal_middle_name IS NOT NULL THEN fc.legal_first_name | | ' ' | | fc.legal_middle_name | | ' ' | | FC.CLIENT_NAME
-            WHEN fc.legal_first_name IS NOT NULL THEN fc.legal_first_name | | ' ' | | FC.CLIENT_NAME
+            AND fc.legal_middle_name IS NOT NULL THEN fc.legal_first_name || ' ' || fc.legal_middle_name || ' ' || FC.CLIENT_NAME
+            WHEN fc.legal_first_name IS NOT NULL THEN fc.legal_first_name || ' ' || FC.CLIENT_NAME
             ELSE FC.CLIENT_NAME
         END AS Licensee_Name,
-        (
-            CL.ADDRESS_1 | | Decode (CL.ADDRESS_2, NULL, NULL, ' ' | | CL.ADDRESS_2) | | Decode (CL.ADDRESS_3, NULL, NULL, ' ' | | CL.ADDRESS_3)
-        ) AS Licensee_Address,
+        CONCAT_WS(' ', CL.address_1, CL.address_2, CL.address_3) AS licensee_address,
         CL.POSTAL_CODE,
         CL.City,
         CL.PROVINCE,
         CL.COUNTRY,
         br.CLIENT_LOCN_CODE,
         FFC.FOREST_FILE_CLIENT_TYPE_CODE,
-        FC.REGISTRY_COMPANY_TYPE_CODE,
+        NULL AS REGISTRY_COMPANY_TYPE_CODE,
         br.registrant_expiry_date,
-        FC.CLIENT_COMMENT,
+        NULL AS CLIENT_COMMENT,
         licence_info.org_unit_code,
         licence_info.MGMT_UNIT_TYPE,
         licence_info.mgmt_unit_id,
@@ -114,7 +113,7 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
     WHERE
     /* Registrant criteria */
     ffc.forest_file_client_type_code = 'A'  -- Licensee client type
-    AND cl.province <> 'BC';               -- Registrants outside BC
+    AND cl.province <> 'BC'               -- Registrants outside BC
 
     ORDER BY
         licence_info.legal_effective_dt DESC,

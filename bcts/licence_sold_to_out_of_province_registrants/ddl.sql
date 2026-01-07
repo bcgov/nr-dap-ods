@@ -58,3 +58,41 @@ CREATE TABLE mofclient_replication.client_location (
 
 CREATE OR REPLACE VIEW bcts_staging.THE_CLIENT_LOCATION AS
 SELECT * FROM mofclient_replication.client_location;
+
+-- DROP TABLE IF EXISTS bcts_staging.licence_sold_to_out_of_province_registrants_hist;
+
+CREATE TABLE IF NOT EXISTS bcts_staging.licence_sold_to_out_of_province_registrants_hist
+(
+    management_unit character varying(120) COLLATE pg_catalog."default",
+    forest_file_id character varying(10) COLLATE pg_catalog."default",
+    bcts_category_code character varying(1) COLLATE pg_catalog."default",
+    legal_effective_date date,
+    auction_date timestamp without time zone,
+    sale_volume numeric(13,1),
+    client_number character varying(8) COLLATE pg_catalog."default",
+    licensee_name character varying COLLATE pg_catalog."default",
+    licensee_address text COLLATE pg_catalog."default",
+    postal_code character varying(10) COLLATE pg_catalog."default",
+    city character varying(30) COLLATE pg_catalog."default",
+    province character varying(50) COLLATE pg_catalog."default",
+    country character varying(50) COLLATE pg_catalog."default",
+    client_locn_code character varying(2) COLLATE pg_catalog."default",
+    forest_file_client_type_code character varying(1) COLLATE pg_catalog."default",
+    registry_company_type_code text COLLATE pg_catalog."default",
+    registrant_expiry_date timestamp without time zone,
+    client_comment text COLLATE pg_catalog."default",
+    org_unit_code character varying(6) COLLATE pg_catalog."default",
+    mgmt_unit_type character varying(1) COLLATE pg_catalog."default",
+    mgmt_unit_id character varying(4) COLLATE pg_catalog."default",
+    category character varying(120) COLLATE pg_catalog."default",
+    file_status_st character varying(3) COLLATE pg_catalog."default",
+    fiscal_issued numeric,
+    upset_rate numeric(8,2),
+    total_upset_value numeric(9,2),
+    bonus_bid numeric(8,2),
+    bonus_offer numeric(9,2),
+    report_start_date date,
+    report_end_date date,
+    report_run_date date DEFAULT CURRENT_DATE
+)
+
