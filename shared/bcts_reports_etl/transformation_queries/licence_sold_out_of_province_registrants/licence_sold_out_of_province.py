@@ -27,31 +27,31 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
             btb.bonus_offer,
             ffc.client_number,
             ffc.client_locn_code
-        FROM THE.bcts_timber_sale        AS ts
-        LEFT JOIN THE.bcts_category_code AS c
+        FROM bctsadmin_replication.bcts_timber_sale        AS ts
+        LEFT JOIN bctsadmin_replication.bcts_category_code AS c
             ON ts.bcts_category_code = c.bcts_category_code
-        LEFT JOIN THE.bcts_tenure_bidder AS btb
+        LEFT JOIN bctsadmin_replication.bcts_tenure_bidder AS btb
             ON ts.forest_file_id = btb.forest_file_id
             AND ts.auction_date   = btb.auction_date
             AND btb.sale_awarded_ind = 'Y'
-        LEFT JOIN THE.forest_client      AS fc
+        LEFT JOIN mofclient_replication.v_client_public      AS fc
             ON btb.client_number = fc.client_number
-        JOIN THE.forest_file_client      AS ffc
+        JOIN bcts_staging.fta_forest_file_client      AS ffc
             ON ts.forest_file_id = ffc.forest_file_id
-        JOIN THE.client_location         AS cl
+        JOIN mofclient_replication.client_location         AS cl
             ON ffc.client_number   = cl.client_number
             AND ffc.client_locn_code = cl.client_locn_code
-        JOIN THE.forest_client           AS fc2
+        JOIN mofclient_replication.v_client_public           AS fc2
             ON cl.client_number = fc2.client_number
-        JOIN THE.prov_forest_use         AS pfu
+        JOIN bcts_staging.fta_prov_forest_use         AS pfu
             ON ts.forest_file_id = pfu.forest_file_id
-        JOIN THE.org_unit                AS ou
+        JOIN bcts_staging.fta_org_unit                AS ou
             ON pfu.bcts_org_unit = ou.org_unit_no
-        LEFT JOIN THE.tsa_number_code    AS ta
+        LEFT JOIN bcts_staging.fta_tsa_number_code    AS ta
             ON pfu.mgmt_unit_id = ta.tsa_number
-        LEFT JOIN THE.tfl_number_code    AS tf
+        LEFT JOIN bcts_staging.fta_tfl_number_code    AS tf
             ON pfu.mgmt_unit_id = tf.tfl_number
-        LEFT JOIN THE.tenure_term        AS tt
+        LEFT JOIN bcts_staging.fta_tenure_term        AS tt
             ON pfu.forest_file_id = tt.forest_file_id
             AND tt.legal_effective_dt BETWEEN DATE To_Date ('{start_date}', 'YYYY-MM-DD') -- Report period start date
             AND To_Date  ('{end_date}', 'YYYY-MM-DD') -- Report period end date
@@ -99,14 +99,14 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
         '{start_date}'::Date as report_start_date,
         '{end_date}'::Date as report_end_date
 
-    FROM THE.bcts_registrant      AS br
-    JOIN THE.client_location      AS cl
+    FROM bctsadmin_replication.bcts_registrant      AS br
+    JOIN mofclient_replication.client_location      AS cl
     ON br.client_number   = cl.client_number
     AND br.client_locn_code = cl.client_locn_code
-    JOIN THE.forest_file_client   AS ffc
+    JOIN bcts_staging.fta_forest_file_client   AS ffc
     ON br.client_number   = ffc.client_number
     AND br.client_locn_code = ffc.client_locn_code
-    JOIN THE.forest_client        AS fc
+    JOIN mofclient_replication.v_client_public        AS fc
     ON br.client_number = fc.client_number
     JOIN licence_info
     ON br.client_number   = licence_info.client_number

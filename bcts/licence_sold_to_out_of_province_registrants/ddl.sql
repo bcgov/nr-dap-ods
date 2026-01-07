@@ -1,5 +1,5 @@
 -- BCTSADMIN DBP01 THE. bcts_registrant 
-CREATE TABLE lrm_replication.bcts_registrant (
+CREATE TABLE bctsadmin_replication.bcts_registrant (
     client_number VARCHAR(8),
     client_locn_code VARCHAR(2),
     org_unit_no NUMERIC(10),
@@ -25,7 +25,7 @@ CREATE OR REPLACE VIEW bcts_staging.THE_BCTS_REGISTRANT AS
 SELECT * FROM bctsadmin_replication.bcts_registrant;
 
 -- FOREST CLIENT DBP01 THE. client_location  
-CREATE TABLE lrm_replication.client_location (
+CREATE TABLE mofclient_replication.client_location (
     client_number VARCHAR(8),
     client_locn_code VARCHAR(2),
     client_locn_name VARCHAR(40),
@@ -57,4 +57,4 @@ CREATE TABLE lrm_replication.client_location (
 
 
 CREATE OR REPLACE VIEW bcts_staging.THE_CLIENT_LOCATION AS
-SELECT * FROM bctsadmin_replication.client_location;
+SELECT * FROM mofclient_replication.client_location;
