@@ -54,10 +54,10 @@ def get_licence_sold_out_of_province_query(start_date, end_date):
             ON pfu.mgmt_unit_id = tf.tfl_number
         LEFT JOIN bcts_staging.fta_tenure_term        AS tt
             ON pfu.forest_file_id = tt.forest_file_id
-            AND tt.legal_effective_dt BETWEEN To_Date ('{start_date}', 'YYYY-MM-DD') -- Report period start date
-            AND To_Date  ('{end_date}', 'YYYY-MM-DD') -- Report period end date
         WHERE pfu.file_status_st IN ('HI', 'HC', 'LC', 'HX', 'HS', 'HRS')
         AND ts.no_sale_rationale_code IS NULL
+        AND AND tt.legal_effective_dt BETWEEN To_Date ('{start_date}', 'YYYY-MM-DD') -- Report period start date
+            AND To_Date  ('{end_date}', 'YYYY-MM-DD') -- Report period end date
         ORDER BY tt.legal_effective_dt DESC
     ) 
 
