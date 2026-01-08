@@ -229,7 +229,7 @@ def fetch_from_ods(ubi):
         WITH activity AS 
         (
                 SELECT *
-                FROM lrm_replication.v_block_activity_all
+                FROM FORESTVIEW.v_block_activity_all
                 WHERE ubi = '{ubi}'
             ),
             activity_status as
