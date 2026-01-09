@@ -251,7 +251,7 @@ def fetch_from_ods(ubi):
 									   then 'Cat 4: Surrendered TSL'
 				when dvc_status = 'D' then 'Cat 3: RTS Timber Inventory - DVC done'
             end as "Category of WO"
-            from activity_status;
+            from activity_status
 
         """
 
