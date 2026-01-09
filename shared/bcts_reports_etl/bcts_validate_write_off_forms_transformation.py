@@ -153,6 +153,8 @@ def parse_forms(form):
         filled_dict['Fiscal year included in inventory in LRM'] = field_values['Fiscal year included in inventory in LRM']
         filled_dict['Spatial data linked'] = field_values['Spatial Data Linked']
         filled_dict['Category of WO'] = field_values['Category of Write off']
+        filled_dict['Development Started Block Activity Status'] = "NA"
+        filled_dict['Development Completed Block Activity Status'] = "NA"
         logging.info(f"Parsing form: {form} is complete!")
         return pd.DataFrame(filled_dict, index=(1,))
 
@@ -237,11 +239,19 @@ def fetch_from_ods(ubi):
                 FROM activity
             )
             select
+			dvs_status as "Development Started Block Activity Status",
+			dvc_status as "Development Completed Block Activity Status",
             case when dvs_status = 'P' and dvc_status = 'P' then 'Cat 1: Pre DIP-DVS NOT done'
                 when dvs_status = 'D' and dvc_status = 'P' then 'Cat 2: DIP-DVS done and DVC NOT done'
-                when dvc_status = 'D' then 'Cat 3: RTS Timber Inventory - DVC done'
+                when dvc_status = 'D' and exists(SELECT 1
+											FROM lrm_replication.v_licence_activity_all
+											where actt_key_ind = 'HS' 
+											and licn_seq_nbr = (select distinct licn_seq_nbr from lrm_replication.v_block WHERE ubi = '{ubi}' limit 1 )
+											)
+									   then 'Cat 4: Surrendered TSL'
+				when dvc_status = 'D' then 'Cat 3: RTS Timber Inventory - DVC done'
             end as "Category of WO"
-            from activity_status
+            from activity_status;
 
         """
 
