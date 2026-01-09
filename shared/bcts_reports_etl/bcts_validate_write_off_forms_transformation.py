@@ -244,9 +244,9 @@ def fetch_from_ods(ubi):
             case when dvs_status = 'P' and dvc_status = 'P' then 'Cat 1: Pre DIP-DVS NOT done'
                 when dvs_status = 'D' and dvc_status = 'P' then 'Cat 2: DIP-DVS done and DVC NOT done'
                 when dvc_status = 'D' and exists(SELECT 1
-											FROM lrm_replication.v_licence_activity_all
+											FROM FORESTVIEW.v_licence_activity_all
 											where actt_key_ind = 'HS' 
-											and licn_seq_nbr = (select distinct licn_seq_nbr from lrm_replication.v_block WHERE ubi = '{ubi}' limit 1 )
+											and licn_seq_nbr = (select distinct licn_seq_nbr from FORESTVIEW.v_block WHERE ubi = '{ubi}' and rownum = 1 )
 											)
 									   then 'Cat 4: Surrendered TSL'
 				when dvc_status = 'D' then 'Cat 3: RTS Timber Inventory - DVC done'
