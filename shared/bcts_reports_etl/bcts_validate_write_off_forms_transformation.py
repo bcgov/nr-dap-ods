@@ -202,8 +202,8 @@ def fetch_from_ods(ubi):
     # Get Fiscal year
     sql_statement = \
         f"""
-        with min_date as
-            (select  min(activity_date) as earliest_date
+        with max_date as
+            (select  max(activity_date) as earliest_date
             from FORESTVIEW.v_block_activity_all
             where ubi = '{ubi}'
             and actt_key_ind in ('DVC', 'DVS', 'DR')
@@ -215,7 +215,7 @@ def fetch_from_ods(ubi):
                     THEN TO_NUMBER(TO_CHAR(earliest_date, 'YYYY'))
                     ELSE TO_NUMBER(TO_CHAR(earliest_date, 'YYYY')) - 1
                 END AS "Fiscal year included in inventory in LRM"
-            from min_date
+            from max_date
 
         """
 
