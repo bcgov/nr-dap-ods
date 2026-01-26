@@ -167,8 +167,8 @@ def publish_datasets():
     count(case when no_bid='' then licence_number else null end) as "Number of Licence Issued",
     sum(case when no_bid_info='Y' then total_volume else 0 end) as "Volume Not Awarded",
     count(case when no_bid_info='Y' then licence_number else null end) as "Number of Licence Not Awarded",
-    sum(case when auctioned_bcts_category_code='4' then total_volume else 0 end) as "Volume of Value Added (Category 4) Auctioned",
-    count(case when auctioned_bcts_category_code='4' then licence_number else null end) as "Number of Value Added (Category 4) Licence Auctioned"
+    sum(case when auctioned_bcts_category_code='4' and no_bid_info != 'Y' then total_volume else 0 end) as "Volume of Value Added (Category 4) Auctioned",
+    count(case when auctioned_bcts_category_code='4' and no_bid_info != 'Y' then licence_number else null end) as "Number of Value Added (Category 4) Licence Auctioned"
     from tsl_summary1
     group by business_area_region_category, business_area_region, business_area
     )
