@@ -173,7 +173,7 @@ def fetch_from_ods(ubi):
         null as "Current date",
         opar_operating_area_name as "Location of the Block",
         '{ubi}' as "UBI",
-        block_nbr as "Block ID/Name",
+        block_id as "Block ID/Name",
         CRUISE_VOL as "Cruise volume from LRM block allocation tab",
         GROSS_AREA as "Gross area from LRM block shape",
         null as "Fiscal year block was created",
@@ -241,8 +241,8 @@ def fetch_from_ods(ubi):
             select
 			dvs_status as "Development Started Block Activity Status",
 			dvc_status as "Development Completed Block Activity Status",
-            case when dvs_status = 'P' and dvc_status = 'P' then 'Cat 1: Pre DIP-DVS NOT done'
-                when dvs_status = 'D' and dvc_status = 'P' then 'Cat 2: DIP-DVS done and DVC NOT done'
+            case when dvs_status = 'P' and (dvc_status = 'P' or dvc_status is null) then 'Cat 1: Pre DIP-DVS NOT done'
+                when dvs_status = 'D' and (dvc_status = 'P' or dvc_status is null) then 'Cat 2: DIP-DVS done and DVC NOT done'
                 when dvc_status = 'D' and exists(SELECT 1
 											FROM FORESTVIEW.v_licence_activity_all
 											where actt_key_ind = 'HS' 
