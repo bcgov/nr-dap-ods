@@ -264,6 +264,9 @@ def fetch_from_ods(ubi):
 
 def load_into_ods(df):
     logging.info("Loading data into PostgreSQL...")
+    logging.info(df.to_string())
+    logging.info(df.dtypes)
+    logging.info(type(df))
     try:
         # Create the SQLAlchemy engine
         engine = create_engine(
