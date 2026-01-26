@@ -258,15 +258,11 @@ def fetch_from_ods(ubi):
     df4 = run_query_oracle(sql_statement)
     logging.info("Category of WO fetched successfully.")
     df = pd.concat([df1, df2, df3, df4], axis=1)
-    
     logging.info(df.to_string())
     return df
 
 def load_into_ods(df):
     logging.info("Loading data into PostgreSQL...")
-    logging.info(df.to_string())
-    logging.info(df.dtypes)
-    logging.info(type(df))
     try:
         # Create the SQLAlchemy engine
         engine = create_engine(
