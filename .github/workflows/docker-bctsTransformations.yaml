@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["BCTS-Update-write-off-forms-validation"]
 
 env:
   REGISTRY: ghcr.io
