@@ -270,7 +270,7 @@ def load_into_ods(df):
         )
        # Convert all values to native Python types to avoid numpy issues
         df_clean = df.astype(object).where(pd.notnull(df), None)
-        df_clean = df_clean.applymap(lambda x: x.item() if hasattr(x, "item") else x)
+        df_clean = df_clean.map(lambda x: x.item() if hasattr(x, "item") else x)
 
         # Build the insert query
         insert_sql = """
