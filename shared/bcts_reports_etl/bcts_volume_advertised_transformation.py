@@ -9,7 +9,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 
 
 from transformation_queries.volume_advertised.volume_advertised_official import get_volume_advertised_official_query

@@ -9,7 +9,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, date, timedelta
-import pytz
+
 
 
 start = time.time()

@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, date, timedelta
-import pytz
+
 
 
 from roads_transferred_in import get_roads_transferred_in_query

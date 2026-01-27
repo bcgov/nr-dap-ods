@@ -9,7 +9,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 
 
 from transformation_queries.licence_transfer.licence_transfer import get_licence_transfer_query

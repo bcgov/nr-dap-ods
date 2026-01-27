@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, date, timedelta
-import pytz
+
 
 
 from timber_inventory_ready_to_develop import get_timber_inventory_ready_to_develop_query
