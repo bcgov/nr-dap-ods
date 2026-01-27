@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 
 
 from transformation_queries.licence_issued_advertised_official import get_licence_issued_advertised_official_query

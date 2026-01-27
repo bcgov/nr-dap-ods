@@ -9,7 +9,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 
 
 from transformation_queries.licence_sold_out_of_province_registrants.licence_sold_out_of_province import get_licence_sold_out_of_province_query

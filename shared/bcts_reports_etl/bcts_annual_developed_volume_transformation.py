@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, date, timedelta
-import pytz
+
 
 
 from annual_developed_volume import get_annual_developed_volume_query

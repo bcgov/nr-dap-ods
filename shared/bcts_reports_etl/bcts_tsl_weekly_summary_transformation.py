@@ -9,7 +9,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 
 
 from transformation_queries.tsl_weekly_report.tsl_summary_official import get_tsl_summary_official_query

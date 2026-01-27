@@ -8,7 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
-import pytz
+
 import calendar
 
 
