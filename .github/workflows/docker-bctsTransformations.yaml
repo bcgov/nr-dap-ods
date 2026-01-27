@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["DAPBCTS-16-LICENCE-SOLD-WITH-UNBILLED-VOLUME"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
