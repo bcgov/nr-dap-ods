@@ -155,6 +155,7 @@ def parse_forms(form):
         filled_dict['Category of WO'] = field_values['Category of Write off']
         filled_dict['Development Started Block Activity Status'] = "NA"
         filled_dict['Development Completed Block Activity Status'] = "NA"
+        filled_dict['Write-off Block Activity Status'] = "NA"
         logging.info(f"Parsing form: {form} is complete!")
         return pd.DataFrame(filled_dict, index=(1,))
 
@@ -235,12 +236,14 @@ def fetch_from_ods(ubi):
             activity_status as
             (
                 SELECT MAX(CASE WHEN actt_key_ind = 'DVS' THEN acti_status_ind END) AS dvs_status,
-                    MAX(CASE WHEN actt_key_ind = 'DVC' THEN acti_status_ind END) AS dvc_status
+                    MAX(CASE WHEN actt_key_ind = 'DVC' THEN acti_status_ind END) AS dvc_status,
+                    MAX(CASE WHEN actt_key_ind = 'WO' THEN acti_status_ind END) AS wo_status
                 FROM activity
             )
             select
 			dvs_status as "Development Started Block Activity Status",
 			dvc_status as "Development Completed Block Activity Status",
+            wo_status as "Write-off Block Activity Status",
             case when dvs_status = 'P' and (dvc_status = 'P' or dvc_status is null) then 'Cat 1: Pre DIP-DVS NOT done'
                 when dvs_status = 'D' and (dvc_status = 'P' or dvc_status is null) then 'Cat 2: DIP-DVS done and DVC NOT done'
                 when dvc_status = 'D' and exists(SELECT 1
