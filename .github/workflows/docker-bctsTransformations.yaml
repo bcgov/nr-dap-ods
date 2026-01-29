@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["BCTS-WO-FORM-VALIDATION-UPDATED-FORMAT"]
 
 env:
   REGISTRY: ghcr.io
