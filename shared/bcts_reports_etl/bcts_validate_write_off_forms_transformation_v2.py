@@ -140,19 +140,19 @@ def parse_forms(form):
             field_values[field_name] = value
 
         filled_dict = {}
-        filled_dict['Business Area'] = 'Error parsing filled form'
-        filled_dict['TSA or Management Unit'] = field_values['eg Cascades TSA or Management Unit 18']
-        filled_dict['Current date'] = field_values['Current date']
-        filled_dict['Location of the Block'] = field_values['Location of block']
-        filled_dict['UBI'] = field_values['UBI (N/A if UBI not assigned)']
-        filled_dict['Block ID/Name'] = field_values['Block ID / Name']
-        filled_dict['TSL (if applicable)'] = field_values['TSL # (if applicable)']
-        filled_dict['Cruise volume from LRM block allocation tab'] = field_values['Crusie volume from LRM block allocation tab m3']
-        filled_dict['Gross area from LRM block shape'] = field_values['Gross area from LRM block shape (ha)']
-        filled_dict['Fiscal year block was created'] = field_values['Fiscal yar block was created (estimate if unknown)']
-        filled_dict['Fiscal year included in inventory in LRM'] = field_values['Fiscal year included in inventory in LRM']
+        filled_dict['Business Area'] = field_values['Business Area']
+        filled_dict['Date Submitted'] = field_values['Date Submitted']
+        filled_dict['TSL (if applicable)'] = field_values['TSL if applicable']
+        filled_dict['Block ID/Name'] = field_values['Block ID  Name']
+        filled_dict['UBI'] = field_values['UBI enter NA if not assigned']
+        filled_dict['Block Location'] = field_values['Block Location']
+        filled_dict['Timber Sale Area / Management Unit'] = field_values['Timber Sale Area  Management Unit']
+        filled_dict['Gross Area (LRM Block Shape, ha)'] = field_values['Gross Area LRM Block Shape ha']
+        filled_dict['Cruise Volume (LRM Block Allocation Tab, m³)'] = field_values['Cruise Volume LRM Block Allocation Tab m³']
+        filled_dict['Fiscal Year Block Created (estimate)'] = field_values['Fiscal Year Block Created estimate']
+        filled_dict['Fiscal Year Added to Timber Inventory'] = field_values['Fiscal Year Added to Timber Inventory']
         filled_dict['Spatial data linked'] = field_values['Spatial Data Linked']
-        filled_dict['Category of WO'] = field_values['Category of Write off']
+        filled_dict['Category of Write-Off'] = field_values['Category of Write-off']
         filled_dict['Development Started Block Activity Status'] = "NA"
         filled_dict['Development Completed Block Activity Status'] = "NA"
         filled_dict['Write-off Block Activity Status'] = "NA"
@@ -170,14 +170,14 @@ def fetch_from_ods(ubi):
     sql_statement = \
         f"""
         select TSO_NAME || '(' || TSO_CODE || ')' as "Business Area",
-        field_team_desc as "TSA or Management Unit",
-        null as "Current date",
-        opar_operating_area_name as "Location of the Block",
+        field_team_desc as "Timber Sale Area / Management Unit",
+        null as "Date Submitted",
+        opar_operating_area_name as "Block Location",
         '{ubi}' as "UBI",
         block_id as "Block ID/Name",
-        CRUISE_VOL as "Cruise volume from LRM block allocation tab",
-        GROSS_AREA as "Gross area from LRM block shape",
-        null as "Fiscal year block was created",
+        CRUISE_VOL as "Cruise Volume (LRM Block Allocation Tab, m³)",
+        GROSS_AREA as "Gross Area (LRM Block Shape, ha)",
+        null as "Fiscal Year Block Created (estimate)",
         cutb_seq_nbr 
         from forestview.v_block
         where ubi = '{ubi}'
@@ -215,7 +215,7 @@ def fetch_from_ods(ubi):
                     WHEN TO_CHAR(earliest_date, 'MM') >= '04' 
                     THEN TO_NUMBER(TO_CHAR(earliest_date, 'YYYY'))
                     ELSE TO_NUMBER(TO_CHAR(earliest_date, 'YYYY')) - 1
-                END AS "Fiscal year included in inventory in LRM"
+                END AS "Fiscal Year Added to Timber Inventory"
             from max_date
 
         """
@@ -253,7 +253,7 @@ def fetch_from_ods(ubi):
 											)
 									   then 'Cat 4: Surrendered TSL'
 				when dvc_status = 'D' then 'Cat 3: RTS Timber Inventory - DVC done'
-            end as "Category of WO"
+            end as "Category of Write-Off"
             from activity_status
 
         """
@@ -277,7 +277,7 @@ def load_into_ods(df):
 
         # Build the insert query
         insert_sql = """
-        INSERT INTO bcts_reporting.write_off_forms
+        INSERT INTO bcts_reporting.write_off_forms_v2
             (field_name, expected_value, filled_value, match, form, validated_date)
         VALUES
             (:field_name, :expected_value, :filled_value, :match, :form, :validated_date)
