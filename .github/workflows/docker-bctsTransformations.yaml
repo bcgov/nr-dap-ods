@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["BCTS-UPDATE-FTA-DATA-IMPORT"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
