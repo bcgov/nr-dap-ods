@@ -79,7 +79,7 @@ def licence_issued_with_unbilled_volume_report_exists(report_date):
     f"""
 
     select exists (select * from bcts_reporting.licence_issued_with_unbilled_volume_main
-    where date_trunc('month', report_run_date) = date '{report_date}'
+    where date_trunc('month', report_date) = date '{report_date}'
     ) as report_exists;
 
     """
@@ -101,13 +101,14 @@ def licence_issued_with_unbilled_volume_report_exists(report_date):
             return False
         else:
             logging.error(f"Error executing the SQL script: {e}")
+            sys.exit(1)
 
 def truncate_licence_issued_with_unbilled_volume_hist(report_date):
     
     sql_statement = \
     f"""
     delete from bcts_staging.licence_issued_with_unbilled_volume_hist 
-    where date_trunc('month', report_run_date) = date '{report_date}';
+    where date_trunc('month', report_date) = date '{report_date}';
 
     """
 
