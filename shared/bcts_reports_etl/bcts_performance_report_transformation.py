@@ -8,6 +8,7 @@ import logging
 import sys
 import pandas as pd
 from datetime import datetime, timedelta, date
+from zoneinfo import ZoneInfo
 
 
 
@@ -714,14 +715,11 @@ if __name__ == "__main__":
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
 
-        # Get the current date and time in UTC
-        utc_now = datetime.now(pytz.utc)
-
-        # Convert to Pacific Standard Time
-        pst_timezone = pytz.timezone('US/Pacific')
-        pst_now = utc_now.astimezone(pst_timezone)
-
-        # Get the current date in PST
+        # Get current time in UTC
+        utc_now = datetime.now(tz=ZoneInfo("UTC"))
+        # Convert to Pacific Time
+        pst_now = utc_now.astimezone(ZoneInfo("US/Pacific"))
+        # Get current date in Pacific Time
         current_date_pst = pst_now.date()
         run_get_currently_in_market(current_date_pst)
 
