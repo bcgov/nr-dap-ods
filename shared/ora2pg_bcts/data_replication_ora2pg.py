@@ -129,6 +129,7 @@ def extract_from_oracle(table_name, source_schema, customsql_ind, customsql_quer
     oracle_connection = OrcPool.acquire()
     oracle_cursor = oracle_connection.cursor()
     try:
+
         if customsql_ind == "Y":
             # Use placeholders in the query and bind the table name as a parameter
             sql_query = customsql_query
@@ -160,14 +161,30 @@ def clean(value):
         return value.replace('\x00', '')
     return value
 
-# Function to load data into Target PostgreSQL using data from Source Oracle
-def load_into_postgres(table_name, data, target_schema):
+def fetch_last_updated_timestamp(target_schema, table_name, cdc_column):
     try:
         with PgresPool.connection() as conn:
             with conn.cursor() as cur:
-                # Truncate table
-                delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
-                cur.execute(delete_query)
+                query = f'SELECT MAX({cdc_column}) FROM {target_schema}.{table_name}'
+                cur.execute(query)
+                result = cur.fetchone()
+                last_updated_timestamp = result[0] if result and result[0] is not None else None
+                print(f"Last updated timestamp for {table_name}: {last_updated_timestamp}")
+                return last_updated_timestamp
+    except Exception as e:
+        print(f"Error fetching last updated timestamp: {str(e)}")
+        return None
+
+# Function to load data into Target PostgreSQL using data from Source Oracle
+def load_into_postgres(table_name, data, target_schema, truncate_flag='Y'):
+    try:
+        with PgresPool.connection() as conn:
+            
+            with conn.cursor() as cur:
+                if truncate_flag == 'Y':
+                    # Truncate table
+                    delete_query = f'TRUNCATE TABLE {target_schema}.{table_name}'
+                    cur.execute(delete_query)
 
                 # Apply cleaning to each field in every row before writing to COPY
                 data_to_insert = [tuple(clean(v) for v in row) for row in data]
@@ -186,10 +203,17 @@ def load_into_postgres(table_name, data, target_schema):
 # In[11]: Function to call both extract and load functions
 
 
-def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_ind, customsql_query):
+def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_ind, customsql_query, truncate_flag, cdc_flag, cdc_column):
     # Extract data from Oracle
     print(f'Source: Thread {table_name} started at ' +
           datetime.now().strftime("%H:%M:%S"))
+    if cdc_flag == 'Y':
+        # Fetch last successful run timestamp from target table
+        last_updated_timestamp = fetch_last_updated_timestamp(target_schema, table_name, cdc_column)
+        where_clause = f" WHERE TRUNC({cdc_column}) > TO_DATE('{last_updated_timestamp}', 'RR-MM-DD')" if last_updated_timestamp else ""
+        customsql_ind = 'Y'
+        customsql_query = f'SELECT * FROM {source_schema}.{table_name}{where_clause}'
+        print(f"Custom SQL for CDC: {customsql_query}")
     # Ensure table name is in uppercase
     oracle_data = extract_from_oracle(
         table_name, source_schema, customsql_ind, customsql_query)
@@ -198,7 +222,7 @@ def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_i
 
     if oracle_data:
         # Load data into PostgreSQL
-        load_into_postgres(table_name, oracle_data, target_schema)
+        load_into_postgres(table_name, oracle_data, target_schema, truncate_flag)
         print(f"Target: Data loaded into table: {table_name}")
         print(f'Target: Thread {table_name} ended at ' +
               datetime.now().strftime("%H:%M:%S"))
@@ -209,7 +233,10 @@ if __name__ == '__main__':
     # Main ETL process
     active_tables_rows = get_active_tables(mstr_schema, app_name)
     # print(active_tables_rows)
-    tables_to_extract = [(row[2], row[1], row[3], row[10], row[11])
+    # row[5] = truncate_flag
+    # row[6] = cdc_flag
+    # row[8] = cdc_column
+    tables_to_extract = [(row[2], row[1], row[3], row[10], row[11], row[5], row[6], row[8])
                          for row in active_tables_rows]
 
     print(f"tables to extract are {tables_to_extract}")
@@ -220,7 +247,7 @@ if __name__ == '__main__':
     with concurrent.futures.ThreadPoolExecutor(max_workers=concurrent_tasks) as executor:
         # Submit tasks to the executor
         future_to_table = {executor.submit(
-            load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4]): table for table in tables_to_extract}
+            load_data_from_src_tgt, table[0], table[1], table[2], table[3], table[4], table[5], table[6], table[7]): table for table in tables_to_extract}
 
         # Wait for all tasks to complete
         concurrent.futures.wait(future_to_table)
