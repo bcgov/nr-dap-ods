@@ -210,7 +210,7 @@ def load_data_from_src_tgt(table_name, source_schema, target_schema, customsql_i
     if cdc_flag == 'Y':
         # Fetch last successful run timestamp from target table
         last_updated_timestamp = fetch_last_updated_timestamp(target_schema, table_name, cdc_column)
-        where_clause = f" WHERE TRUNC({cdc_column}) > TO_DATE('{last_updated_timestamp}', 'RR-MM-DD')" if last_updated_timestamp else ""
+        where_clause = f" WHERE {cdc_column} > TO_DATE('{last_updated_timestamp}', 'YYYY-MM-DD HH24:MI:SS')" if last_updated_timestamp else ""
         customsql_ind = 'Y'
         customsql_query = f'SELECT * FROM {source_schema}.{table_name}{where_clause}'
         print(f"Custom SQL for CDC: {customsql_query}")
