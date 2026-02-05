@@ -15,6 +15,7 @@ import sys
 import os
 import argparse
 import oracledb
+import upsert_config
 
 start = time.time()
 
@@ -188,10 +189,37 @@ def load_into_postgres(table_name, data, target_schema, truncate_flag='Y'):
 
                 # Apply cleaning to each field in every row before writing to COPY
                 data_to_insert = [tuple(clean(v) for v in row) for row in data]
-                with cur.copy(f"COPY {target_schema}.{table_name} FROM STDIN") as copy:
-                    for record in data_to_insert:
-                        copy.write_row(record)
-                    
+
+                # Check if upsert is needed for this table
+                upsert_info = upsert_config.UPSERT_CONFIG.get(table_name)
+                if upsert_info and upsert_info.get('UPSERT_FLAG') == 'Y':
+                    p_key_name = upsert_info.get('P_KEY_NAME')
+                    update_cols = upsert_info.get('UPDATE_COLS', [])
+                    all_cols = upsert_info.get('P_KEY_COLS', []) + update_cols
+                    # Create a temporary staging table
+                    staging_table = f"{table_name}_staging"
+                    cur.execute(f"CREATE TEMP TABLE {staging_table} (LIKE {target_schema}.{table_name} INCLUDING ALL)")
+
+                    # Copy data into the staging table
+                    with cur.copy(f"COPY {staging_table} FROM STDIN") as copy:
+                        for record in data_to_insert:
+                            copy.write_row(record)
+
+                    upsert_query = f"""
+                    INSERT INTO {target_schema}.{table_name} ({', '.join(all_cols)})
+                    SELECT {', '.join(all_cols)} FROM {staging_table}
+                    ON CONFLICT ({p_key_name}) DO UPDATE
+                    SET {', '.join([f"{c} = EXCLUDED.{c}" for c in update_cols])}
+                    """
+                    cur.execute(upsert_query)
+
+                    # Drop the staging table
+                    cur.execute(f"DROP TABLE {staging_table}")
+                else:
+                    with cur.copy(f"COPY {target_schema}.{table_name} FROM STDIN") as copy:
+                        for record in data_to_insert:
+                            copy.write_row(record)
+                        
         # Insert record to audit batch table
         audit_batch_status_insert(table_name, 'success')
 
