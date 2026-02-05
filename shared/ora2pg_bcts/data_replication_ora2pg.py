@@ -208,7 +208,7 @@ def load_into_postgres(table_name, data, target_schema, truncate_flag='Y'):
                     upsert_query = f"""
                     INSERT INTO {target_schema}.{table_name} ({', '.join(all_cols)})
                     SELECT {', '.join(all_cols)} FROM {staging_table}
-                    ON CONFLICT ({p_key_name}) DO UPDATE
+                    ON CONFLICT ON CONSTRAINT {p_key_name} DO UPDATE
                     SET {', '.join([f"{c} = EXCLUDED.{c}" for c in update_cols])}
                     """
                     cur.execute(upsert_query)
