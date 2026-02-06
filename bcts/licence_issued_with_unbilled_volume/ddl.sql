@@ -28,6 +28,22 @@ CREATE TABLE lrm_replication.v_scaling_history (
     )
 );
 
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_fta_harvest_sale_forest_file_id
+ON bcts_staging.fta_harvest_sale (forest_file_id);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_fta_prov_forest_use_forest_file_id
+ON bcts_staging.fta_prov_forest_use (forest_file_id);
+
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_fta_timber_mark_forest_file_id
+ON bcts_staging.fta_timber_mark (forest_file_id);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_v_scaling_history_timber_mark
+  ON lrm_replication.v_scaling_history (timber_mark);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_fta_timber_mark_timber_mark
+  ON bcts_staging.fta_timber_mark (timber_mark);
+
 -- If table is already created
 ALTER TABLE lrm_replication.v_scaling_history
 ADD CONSTRAINT sh_pk PRIMARY KEY (
