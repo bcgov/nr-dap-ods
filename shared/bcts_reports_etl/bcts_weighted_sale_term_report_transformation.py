@@ -11,7 +11,7 @@ from datetime import datetime, date, timedelta
 
 
 
-from transformation_queries.weighted_sale_term import get_weighted_sale_term_query
+from transformation_queries.weighted_sale_term.weighted_sale_term import get_weighted_sale_term_query
 
 start = time.time()
 
