@@ -2,7 +2,7 @@ def get_weighted_sale_term_query(start_date, end_date):
     return \
     f"""
     INSERT INTO bcts_staging.weighted_sale_term_hist(
-    business_area_region_category, business_area_region, business_area, auction_fiscal, awarded_licence_volume_class, sum_awarded_licence_volume, sum_awarded_licence_volume_x_tenure_term, weighted_tenure_term, count_awarded_licences, report_start_date, report_end_date, report_run_date, report_run_timestamp
+    business_area_region_category, business_area_region, business_area, auction_fiscal, awarded_licence_volume_class, sum_awarded_licence_volume, sum_awarded_licence_volume_x_tenure_term, weighted_tenure_term, count_awarded_licences, report_start_date, report_end_date 
     )
     --weighted term
     with sold_licence_bid_info as 
@@ -257,9 +257,7 @@ def get_weighted_sale_term_query(start_date, end_date):
         ) as weighted_tenure_term,
         count(awarded_licence_volume) as count_awarded_licences,
         '{start_date}'::Date as report_start_date,
-        '{end_date}'::Date as report_end_date,
-        report_run_date date DEFAULT CURRENT_DATE,
-        report_run_timestamp timestamp DEFAULT CURRENT_TIMESTAMP AT TIME ZONE 'PST'
+        '{end_date}'::Date as report_end_date
 
     from per_licence
 
