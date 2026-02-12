@@ -1,0 +1,192 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+#Imports
+import os, time
+import psycopg2
+import logging
+import sys
+import pandas as pd
+from datetime import datetime, date, timedelta
+
+
+
+from transformation_queries.weighted_sale_term import get_weighted_sale_term_query
+
+start = time.time()
+
+# Retrieve Postgres database configuration
+postgres_username = os.environ['ODS_USERNAME']
+postgres_password = os.environ['ODS_PASSWORD']
+postgres_host = os.environ['ODS_HOST']
+postgres_port = os.environ['ODS_PORT']
+postgres_database = os.environ['ODS_DATABASE']
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+
+def get_connection():
+    # Establish database connection
+    try:
+        connection = psycopg2.connect(
+            dbname=postgres_database,
+            user=postgres_username,
+            password=postgres_password,
+            host=postgres_host,
+            port=postgres_port
+        )
+        cursor = connection.cursor()
+        logging.info("Database connection established.")
+        return connection
+    except psycopg2.Error as e:
+        logging.error(f"Error connecting to the database: {e}")
+        sys.exit(1)
+
+def get_last_day_of_month():
+    current_year = datetime.today().year
+    current_month = datetime.today().month 
+    return date(current_year, current_month, 1) - timedelta (days=1)
+
+def get_existing_dates():
+    sql_statement = \
+    f"""
+    select max(report_end_date) as max_report_end_date
+    from bcts_reporting.weighted_sale_term;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        # Fetch the result and load into a DataFrame
+        existing_date = cursor.fetchall()[0][0]
+        logging.info(f"SQL script executed successfully.")
+        logging.info(f"report_exists for {existing_date}")
+        return existing_date
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+
+def run_report(connection, cursor, start_date, end_date):
+
+    sql_statement = get_weighted_sale_term_query(start_date, end_date)
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+
+def publish_datasets():
+    """
+    Publish the latest report from the historic records
+    """
+
+    sql_statement = \
+    """
+    DROP TABLE IF EXISTS BCTS_STAGING.weighted_sale_term;
+    CREATE TABLE BCTS_STAGING.weighted_sale_term
+    AS SELECT * 
+    FROM BCTS_STAGING.weighted_sale_term_hist
+    WHERE report_end_date = (
+	    SELECT MAX(report_end_date)
+	    FROM BCTS_STAGING.weighted_sale_term_hist
+    );
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.weighted_sale_term_hist;
+    CREATE TABLE BCTS_REPORTING.weighted_sale_term_hist
+    AS SELECT * 
+    FROM BCTS_STAGING.weighted_sale_term_hist;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.weighted_sale_term;
+    CREATE TABLE BCTS_REPORTING.weighted_sale_term
+    AS SELECT * 
+    FROM BCTS_STAGING.weighted_sale_term;
+
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+def delete_weighted_sale_term_hist(connection, cursor, start_date, end_date):
+    sql_statement = \
+    f"""
+    delete from bcts_staging.weighted_sale_term_hist
+    where report_start_date = '{start_date}'
+    and report_end_date = '{end_date}';
+    """
+
+    try:
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+if __name__ == "__main__":
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    # Fetch the start and end dates for the report periods
+    # Start date is fixed for this report
+    start_date = date(2015, 4, 1)
+    end_date = get_last_day_of_month()
+    max_report_exist_date = get_existing_dates()
+
+    if max_report_exist_date is not None:
+        if max_report_exist_date == end_date:
+            logging.info("BCTS weighted sale term report is already up-to-date! ")
+            # Publish reporting objects to the reporting layer
+            logging.info("Updating datasets to the reporting layer...")
+            publish_datasets()
+            logging.info("Datasets in the reporting layer have been updated!")
+            sys.exit(0)
+        elif max_report_exist_date > end_date:
+            logging.error(f"Current valid end date is {end_date} but report exists for end date {max_report_exist_date}!")
+            sys.exit(1)
+        else:
+            # Run each report
+            logging.info(f"Running BCTS weighted sale term report for the reporting start_date {start_date} and end date {end_date}...")
+            # Delete data for the same period in bcts_staging.volume_advertised_main_hist if it is already present.
+            # Check for existence is done on bcts_reporting.volume_advertised_main. So it is possible to insert dupliocate
+            # values to the staging table if data is already present in staging and not in reporting or if data is manually removed from
+            # reporting to force ETL and not from staging.
+            delete_weighted_sale_term_hist(connection, cursor, start_date, end_date)
+            run_report(connection, cursor, start_date, end_date)
+    else:
+        # Run each report
+        logging.info(f"Running BCTS weighted sale term report for the reporting start_date {start_date} and end date {end_date}...")
+        delete_weighted_sale_term_hist(connection, cursor, start_date, end_date)
+        run_report(connection, cursor, start_date, end_date)
+
+    # Publish reporting objects to the reporting layer
+    logging.info("Updating datasets to the reporting layer...")
+    publish_datasets()
+    logging.info("Datasets in the reporting layer have been updated!")
+
+
+    # Clean up
+    cursor.close()
+    connection.close()
+        
