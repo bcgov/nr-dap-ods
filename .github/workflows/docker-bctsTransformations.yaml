@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["DAPBCTS-18-WEIGHTED-SALE-TERM-REPORT"]
+    branches: ["main"]
 
 env:
   REGISTRY: ghcr.io
