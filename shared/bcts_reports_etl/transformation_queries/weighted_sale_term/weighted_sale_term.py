@@ -236,7 +236,7 @@ def get_weighted_sale_term_query(start_date, end_date):
         WHERE
             
                 -- Criteria for Licences Sold in reporting period
-                (ts.no_sale_rationale_code IS NULL
+                ts.no_sale_rationale_code IS NULL
                 AND pfu.file_status_st IN ('HI','HC','LC','HX','HS','HRS')
                 AND tt.legal_effective_dt BETWEEN To_Date('{start_date}', 'YYYY-MM-DD') AND To_Date('{end_date}', 'YYYY-MM-DD')
                 -- Criteria for auctions within the reporting period
