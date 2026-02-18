@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["BCTS-ADV-BIWEEKLY"]
 
 env:
   REGISTRY: ghcr.io
