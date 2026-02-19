@@ -58,6 +58,20 @@ def get_last_day_of_month():
 
     return(fiscal_year_start, date(current_year, current_month, 1) - timedelta (days=1))
 
+def get_valid_report_period():
+    today = date.today()
+    fiscal_year_start = date(today.year, 4, 1) if today.month >= 4 else date(today.year - 1, 4, 1)
+
+    last_month_end = (today.replace(day=1) - timedelta(days=1))
+    current_month_15 = today.replace(day=15)
+
+    if today > current_month_15:
+        end_date = current_month_15
+    else:
+        end_date = last_month_end
+
+    return fiscal_year_start, end_date
+
 def get_existing_dates():
     sql_statement = \
     f"""
@@ -156,7 +170,7 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     # Fetch the start and end dates for the report periods
-    start_date, end_date = get_last_day_of_month()
+    start_date, end_date = get_valid_report_period()
     max_report_exist_date = get_existing_dates()
 
     if max_report_exist_date is not None:
