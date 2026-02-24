@@ -52,5 +52,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.volume_advertised_main_hist
     report_start_date date,
     report_end_date date,
     fiscal_year numeric,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

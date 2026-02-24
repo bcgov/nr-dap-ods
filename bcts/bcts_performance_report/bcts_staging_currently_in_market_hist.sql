@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.currently_in_market_hist
     on_bc_bid text COLLATE pg_catalog."default",
     data_error text COLLATE pg_catalog."default",
     report_end_date date,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 );
 

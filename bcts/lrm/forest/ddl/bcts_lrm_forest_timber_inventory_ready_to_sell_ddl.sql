@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_sell_hist
     salvage_2023_fire text COLLATE pg_catalog."default",
     salvage_2024_fire text COLLATE pg_catalog."default",
     cutb_seq_nbr numeric(15,0),
-    report_end_date date
+    report_end_date date,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )
 
 

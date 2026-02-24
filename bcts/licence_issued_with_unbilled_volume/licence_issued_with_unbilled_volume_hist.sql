@@ -35,5 +35,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_with_unbilled_volume_hist
     report_date date,
     unbilled_volume_over_20_month numeric,
     unbilled_volume_expire_in_6_month numeric,
-    report_run_date date DEFAULT CURRENT_DATE
+    report_run_date date DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

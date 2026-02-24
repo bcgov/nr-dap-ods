@@ -24,5 +24,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.tsl_summary_main_hist
     no_bid_info text COLLATE pg_catalog."default",
     report_start_date date,
     report_end_date date,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

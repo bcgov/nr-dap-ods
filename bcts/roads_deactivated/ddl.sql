@@ -22,5 +22,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.roads_deactivated_hist
     deac_method_type character varying(60) COLLATE pg_catalog."default",
     fiscal_year_start_date date,
     report_end_date date,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 );
