@@ -564,5 +564,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.annual_developed_volume_hist
     dvc_done_fiscal numeric,
     cutb_seq_nbr bigint,
     fiscal_year_start_date date,
-    report_end_date date
+    report_end_date date,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

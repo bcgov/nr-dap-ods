@@ -64,5 +64,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_issued_advertised_main_hist
     fiscal_year numeric,
     semi_monthly_report_start_date date,
     include_in_semi_monthly_report text,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

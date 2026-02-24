@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.annual_development_ready_hist
     licn_seq_nbr numeric(15,0),
     cutb_seq_nbr bigint,
     fiscal_year_start_date date,
-    report_end_date date
+    report_end_date date,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )
 

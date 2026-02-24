@@ -155,5 +155,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_development_in_progress
     remnant_volume numeric,
     big_treed_volume numeric,
     report_end_date date,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

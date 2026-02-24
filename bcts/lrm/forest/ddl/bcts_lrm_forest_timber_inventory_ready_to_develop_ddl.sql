@@ -69,5 +69,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.timber_inventory_ready_to_develop_hist
     ogs_reactivated_re_engineered date,
     spatial_flag character varying(3) COLLATE pg_catalog."default",
     cutb_seq_nbr bigint,
-    report_end_date date
+    report_end_date date,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_sold_to_out_of_province_registra
     bonus_offer numeric(9,2),
     report_start_date date,
     report_end_date date,
-    report_run_date date DEFAULT CURRENT_DATE
+    report_run_date date DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )
 

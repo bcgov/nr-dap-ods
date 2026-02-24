@@ -91,5 +91,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.silviliability_main_hist
     sica_seq_nbr numeric(15,0),
     cutb_seq_nbr bigint,
     licn_seq_nbr bigint,
-    report_run_date date DEFAULT CURRENT_DATE
+    report_run_date date DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

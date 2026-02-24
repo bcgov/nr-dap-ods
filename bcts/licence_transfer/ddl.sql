@@ -22,5 +22,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.licence_transfer_hist
     licensee_order bigint,
     report_start_date date,
     report_end_date date,
-    report_run_date date DEFAULT CURRENT_DATE
+    report_run_date date DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 )

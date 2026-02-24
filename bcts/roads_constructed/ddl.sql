@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS bcts_staging.roads_constructed_hist
     rdst_steward_name character varying(200) COLLATE pg_catalog."default",
     fiscal_year_start_date date,
     report_end_date date,
-    report_run_date DATE DEFAULT CURRENT_DATE
+    report_run_date DATE DEFAULT CURRENT_DATE,
+    report_run_timestamp timestamp DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'PST')
 );
