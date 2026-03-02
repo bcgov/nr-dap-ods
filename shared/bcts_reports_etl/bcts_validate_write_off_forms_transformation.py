@@ -213,8 +213,8 @@ def fetch_from_ods(ubi):
             select 
                 CASE 
                     WHEN TO_CHAR(earliest_date, 'MM') >= '04' 
-                    THEN TO_NUMBER(TO_CHAR(earliest_date, 'YYYY'))
-                    ELSE TO_NUMBER(TO_CHAR(earliest_date, 'YYYY')) - 1
+                    THEN TO_NUMBER(TO_CHAR(earliest_date, 'YYYY')) + 1
+                    ELSE TO_NUMBER(TO_CHAR(earliest_date, 'YYYY'))
                 END AS "Fiscal year included in inventory in LRM"
             from max_date
 
@@ -244,8 +244,8 @@ def fetch_from_ods(ubi):
 			dvs_status as "Development Started Block Activity Status",
 			dvc_status as "Development Completed Block Activity Status",
             wo_status as "Write-off Block Activity Status",
-            case when dvs_status = 'P' and (dvc_status = 'P' or dvc_status is null) then 'Cat 1: Pre DIP-DVS NOT done'
-                when dvs_status = 'D' and (dvc_status = 'P' or dvc_status is null) then 'Cat 2: DIP-DVS done and DVC NOT done'
+            case when dvs_status = 'P' and (dvc_status = 'P' or dvc_status is null or dvc_status = 'N') then 'Cat 1: Pre DIP-DVS NOT done'
+                when dvs_status = 'D' and (dvc_status = 'P' or dvc_status is null or dvc_status = 'N') then 'Cat 2: DIP-DVS done and DVC NOT done'
                 when dvc_status = 'D' and exists(SELECT 1
 											FROM FORESTVIEW.v_licence_activity_all
 											where actt_key_ind = 'HS' 
