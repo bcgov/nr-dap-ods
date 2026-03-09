@@ -2,7 +2,7 @@ def get_tsl_summary_main_query():
     return \
     f"""
     INSERT INTO bcts_staging.tsl_summary_main_hist(
-	business_area_region_category, business_area_region, business_area_code, business_area, licence_number, geographic_location, field_team, species, volume_advertised_m3, volume_readvertised_m3, auctioned_bcts_category_code, total_auction_count, readvertised_auction, auction_closing_date, number_of_bidders, no_bid, upset_rate_or_upset_value, bonus_bid_or_bonus_value, total_stumpage_or_total_stumpage_value, no_bid_info, report_start_date, report_end_date
+	business_area_region_category, business_area_region, business_area_code, business_area, licence_number, geographic_location, field_team, species, volume_advertised_m3, volume_readvertised_m3, auctioned_bcts_category_code, total_auction_count, readvertised_auction, auction_closing_date, number_of_bidders, no_bid, upset_rate_or_upset_value, bonus_bid_or_bonus_value, total_stumpage_or_total_stumpage_value, no_bid_info, report_start_date, report_end_date, client_name
     )
         SELECT
             official.Business_Area_Region_Category,
