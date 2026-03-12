@@ -25,7 +25,7 @@ select distinct on (business_area_region_category, business_area_region, busines
             when business_area_region = 'South Interior' then 2
             when business_area_region = 'Coast' then 3
         end as business_area_region_sort_order,
-		        case when business_area_region_category in ('North Interior', 'South Interior') then 1
+		        case when business_area_region_category in ('Interior') then 1
 				else 2
         end as business_area_region_cat_sort_order
 from bcts_staging.bcts_adv_targets;
