@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["DAPBCTS-18-ROADS-PLANNED-FOR-DEACTIVATION"]
 
 env:
   REGISTRY: ghcr.io
