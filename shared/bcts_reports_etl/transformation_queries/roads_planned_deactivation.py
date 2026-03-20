@@ -163,8 +163,6 @@ def get_roads_planned_deactivation_query(end_date):
         EXTRACT(
             YEAR FROM (deac_planned_date + INTERVAL '9 months')
         ) AS fiscal_year,
-        '{end_date}'::DATE AS report_end_date
-
         CASE
             WHEN EXTRACT(YEAR FROM (deac_planned_date + INTERVAL '9 months'))
             < EXTRACT(YEAR FROM (DATE '{end_date}' + INTERVAL '9 months'))
@@ -221,7 +219,8 @@ def get_roads_planned_deactivation_query(end_date):
                 '6th Fiscal-Onwards ('
                 || (EXTRACT(YEAR FROM (DATE '{end_date}' + INTERVAL '9 months')) + 6)
                 || '+)'
-        END AS fiscal
+        END AS fiscal,
+        '{end_date}'::DATE AS report_end_date
 
     FROM R
     LEFT JOIN DC ON R.DEAC_SEQ_NBR = DC.DEAC_SEQ_NBR
