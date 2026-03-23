@@ -169,6 +169,7 @@ def get_tsl_summary_official_query(start_date, end_date):
         (
             SELECT forest_file_id, MAX(bonus_bid) AS bonus_bid
             FROM bctsadmin_replication.bcts_tenure_bidder
+            WHERE sale_awarded_ind = 'Y'
             GROUP BY forest_file_id, auction_date
         ) tb
         on ts.forest_file_id = tb.forest_file_id
@@ -176,6 +177,7 @@ def get_tsl_summary_official_query(start_date, end_date):
         (
             SELECT forest_file_id, MAX(bonus_offer) AS bonus_offer
             FROM bctsadmin_replication.bcts_tenure_bidder
+            WHERE sale_awarded_ind = 'Y'
             GROUP BY forest_file_id, auction_date
         ) tb1
         on ts.forest_file_id = tb1.forest_file_id 
