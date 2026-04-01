@@ -679,15 +679,14 @@ def truncate_licence_issued_advertised_official(connection, cursor):
 
 def get_valid_report_period():
     today = date.today()
-    fiscal_year_start = date(today.year, 4, 1) if today.month >= 4 else date(today.year - 1, 4, 1)
+    
 
-    last_month_end = (today.replace(day=1) - timedelta(days=1))
-    current_month_15 = today.replace(day=15)
-
-    if today > current_month_15:
-        end_date = current_month_15
+    if today.day >= 16:
+        end_date = today.replace(day=15)
     else:
-        end_date = last_month_end
+        end_date = today.replace(day=1) - timedelta(days=1)
+
+    fiscal_year_start = date(end_date.year, 4, 1) if end_date.month >= 4 else date(end_date.year - 1, 4, 1)
 
     return fiscal_year_start, end_date
 
