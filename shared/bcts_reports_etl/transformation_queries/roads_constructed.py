@@ -2,7 +2,7 @@ def get_roads_constructed_query(start_date, end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.roads_constructed_hist(
-	business_area_region_category, business_area_region, business_area, business_area_code, road_seq_nbr, uri, road_road_name, rcls_accounting_type, poc, pot, length, rcom_completion_date, const_method_type, rcom_method, rdst_steward_name, fiscal_year_start_date, report_end_date   
+	business_area_region_category, business_area_region, business_area, business_area_code, road_seq_nbr, uri, road_road_name, rcls_accounting_type, poc, pot, length, rcom_completion_date, const_method_type, rcom_method, rdst_steward_name, field_team_desc, fiscal_year_start_date, report_end_date   
     )
     SELECT DISTINCT
         case
@@ -45,6 +45,7 @@ def get_roads_constructed_query(start_date, end_date):
         CONST_METHOD_TYPE,
         RCOM_METHOD,
         RDST_STEWARD_NAME,
+        FIELD_TEAM_DESC,
         '{start_date}'::DATE AS fiscal_year_start_date,
         '{end_date}'::DATE AS report_end_date
     FROM
