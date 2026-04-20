@@ -2,7 +2,7 @@ name: Push to GHCR
 
 on:
   push:
-    branches: ["main"]
+    branches: ["DAPBCTS-22-DRIP-60-STUMPAGE-RATE-REPORT"]
 
 env:
   REGISTRY: ghcr.io

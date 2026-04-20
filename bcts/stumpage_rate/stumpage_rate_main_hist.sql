@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS bcts_staging.stumpage_rate_main_hist
+(
+    licence_id character varying(15) COLLATE pg_catalog."default",
+    tso_name character varying(50) COLLATE pg_catalog."default",
+    acti_variable_cost_upset numeric,
+    acti_total_cost_upset numeric,
+    acti_mps70 numeric,
+    business_area_region_category text COLLATE pg_catalog."default",
+    business_area_region text COLLATE pg_catalog."default",
+    business_area text COLLATE pg_catalog."default",
+    business_area_code character varying(6) COLLATE pg_catalog."default",
+    forest_file_id character varying(10) COLLATE pg_catalog."default",
+    bcts_category_code character varying(1) COLLATE pg_catalog."default",
+    auction_date timestamp without time zone,
+    legal_effective_dt timestamp(0) without time zone,
+    sale_volume numeric(13,1),
+    upset_rate numeric(8,2),
+    total_upset_value numeric(9,2),
+    bonus_bid numeric,
+    bonus_offer numeric,
+    client_count bigint,
+    file_status_st character varying(3) COLLATE pg_catalog."default",
+    total_stumpage_m3 numeric,
+    total_stumpage_value numeric,
+    report_start_date date,
+    report_end_date date,
+    report_run_date date
+)
