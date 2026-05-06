@@ -1,0 +1,2 @@
+ALTER TABLE bcts_staging.timber_inventory_development_in_progress_hist
+ADD COLUMN inventory_category_new text COLLATE pg_catalog."default";
