@@ -2,7 +2,7 @@ def get_timber_inventory_ready_to_sell_query(end_date):
     sql_statement = \
     f"""    
     INSERT INTO bcts_staging.timber_inventory_ready_to_sell_hist(
-    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, deferred_activity, latest_deferral_date,spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, cutb_seq_nbr, ancient, remnant, big_treed, ancient_volume, remnant_volume, big_treed_volume, report_end_date
+    business_area_region_category, business_area_region, business_area, business_area_code, field_team, nav_name, operatingarea, location, tenure, licence_id, licence_state, permit_id, block_id, ubi, block_state, dvc_category, dr_category, deferred_at_report_date, inventory_category, deferred_activity, latest_deferral_date,spatial_flag, cruise_vol, rw_vol, rc_date, rc_fiscal, rc_quarter, dr_date, dr_fiscal, dr_quarter, dvs_date, dvc_date, dvc_fiscal, dvc_quarter, auc_date, auc_status, def_change_of_op_plan, def_first_nations, def_loss_of_access, def_other, def_planning_constraint, def_returned_to_bcts, def_stale_dated_fieldwork, def_stakeholder_issue, def_environmental_stewardship_initiative, def_reactivated, old_growth_strategy, ogs_reactivated_forest_health, ogs_reactivated_fn_proceed, ogs_reactivated_field_verified, ogs_reactivated_minor, ogs_reactivated_road, ogs_reactivated_re_engineered, salvage_any_fire_year, salvage_fire_years, salvage_2021_fire, salvage_2022_fire, salvage_2023_fire, salvage_2024_fire, salvage_2025_fire, cutb_seq_nbr, ancient, remnant, big_treed, ancient_volume, remnant_volume, big_treed_volume, report_end_date
     )
 
     WITH A_D AS
@@ -270,6 +270,23 @@ def get_timber_inventory_ready_to_sell_query(end_date):
         where
             activity_class = 'CSB'
             and actt_key_ind = 'SFIRE24'
+    ),
+
+    /* Salvage - 2025 Fire (calendar year of fire) */
+	SALVAGE25 AS
+    (
+        select distinct   -- Stafff can enter multiple CSB SFIRE25 activity for a block; use DISTINCT to include the SFIRE25 activity only once per block.
+            cutb_seq_nbr,
+            activity_class,
+            actt_key_ind,
+            activity_type
+
+        from
+            LRM_REPLICATION.v_block_activity_all
+
+        where
+            activity_class = 'CSB'
+            and actt_key_ind = 'SFIRE25'
     )
 
 
@@ -422,6 +439,10 @@ select distinct
 	    WHEN salvage24.actt_key_ind IS NULL THEN NULL 
 	    ELSE salvage24.activity_type || ' (' || salvage24.activity_class || ' - ' || salvage24.actt_key_ind || ')' 
 	END AS salvage_2024_fire,
+    CASE 
+        WHEN salvage25.actt_key_ind IS NULL THEN NULL 
+        ELSE salvage25.activity_type || ' (' || salvage25.activity_class || ' - ' || salvage25.actt_key_ind || ')' 
+	END AS salvage_2025_fire,
     B.CUTB_SEQ_NBR,
     OGC.ancient,
     OGC.remnant,

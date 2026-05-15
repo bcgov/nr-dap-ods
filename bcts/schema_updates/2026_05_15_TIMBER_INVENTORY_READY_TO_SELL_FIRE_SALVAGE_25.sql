@@ -1,0 +1,2 @@
+ALTER TABLE bcts_staging.timber_inventory_ready_to_sell_hist
+ADD COLUMN salvage_2025_fire TEXT;
