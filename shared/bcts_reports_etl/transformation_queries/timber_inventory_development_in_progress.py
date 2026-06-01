@@ -441,23 +441,27 @@ def get_timber_inventory_development_in_progress_query(end_date):
             ELSE
                 'No Deferral'
             END AS INVENTORY_CATEGORY,
-            CASE
-            WHEN ACTB.Old_Growth_Strategy > Nvl (
+
+        CASE
+            WHEN ACTB.Old_Growth_Strategy > COALESCE(
                 LRCT.LATEST_OGS_REACTIVATED,
-                To_Date ('1900-01-01', 'YYYY-MM-DD')
-            ) -- Date: fixed (1900-01-01)
-            THEN 'Deferred-OGS'
-            WHEN ACTB_S.DEF_First_Nations_Status = 'D'
-                AND ACTB.DEF_First_Nations > Nvl (
-                ACTB.DEF_REACTIVATED,
-                To_Date ('1900-01-01', 'YYYY-MM-DD')
+                DATE '1900-01-01'
             )
+            THEN 'Deferred-OGS'
+
+            WHEN ACTB_S.DEF_First_Nations_Status = 'D'
+                AND ACTB.DEF_First_Nations > COALESCE(
+                    ACTB.DEF_REACTIVATED,
+                    DATE '1900-01-01'
+                )
             THEN 'Deferred-FN'
-            WHEN LDF.LATEST_DEF > Nvl (
+
+            WHEN LDF.LATEST_DEF > COALESCE(
                 ACTB.DEF_REACTIVATED,
-                To_Date ('1900-01-01', 'YYYY-MM-DD')
-            ) -- Date: fixed (1900-01-01)
+                DATE '1900-01-01'
+            )
             THEN 'Deferred-Other'
+
             ELSE 'No Deferral'
         END AS INVENTORY_CATEGORY_NEW,
         BLAL.BLAL_MERCH_HA_AREA AS MERCH_AREA,
