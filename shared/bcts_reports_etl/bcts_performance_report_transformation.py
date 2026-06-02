@@ -171,10 +171,10 @@ def publish_datasets():
     CREATE TABLE BCTS_STAGING.currently_in_market
     AS SELECT * 
     FROM BCTS_STAGING.currently_in_market_hist
-    WHERE report_end_date = (
-	SELECT MAX(report_end_date)
+    WHERE report_run_timestamp = (
+	SELECT MAX(report_run_timestamp)
 	FROM BCTS_STAGING.currently_in_market_hist
-    );
+	);
 
     DROP TABLE IF EXISTS BCTS_REPORTING.currently_in_market;
     CREATE TABLE BCTS_REPORTING.currently_in_market
