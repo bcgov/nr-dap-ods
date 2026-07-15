@@ -19,16 +19,32 @@ SET business_area_region_category =
     END;
 
 
-create or replace view bcts_staging.dim_business_area as
-select distinct on (business_area_region_category, business_area_region, business_area) business_area_region_category, business_area_region, business_area,
-        case when business_area_region = 'North Interior' then 1
-            when business_area_region = 'South Interior' then 2
-            when business_area_region = 'Coast' then 3
-        end as business_area_region_sort_order,
-		        case when business_area_region_category in ('Interior') then 1
-				else 2
-        end as business_area_region_cat_sort_order
-from bcts_staging.bcts_adv_targets;
+CREATE OR REPLACE VIEW bcts_staging.dim_business_area AS
+
+SELECT DISTINCT
+    business_area_region_category,
+    business_area_region,
+
+    CASE
+        WHEN business_area IN ('Prince George (TPG)', 'Stuart-Nechako (TSN)')
+            THEN 'Omineca (TPG-TSN)'
+        ELSE business_area
+    END AS business_area,
+
+    business_area AS business_area_reporting_unit,
+
+    CASE
+        WHEN business_area_region = 'North Interior' THEN 1
+        WHEN business_area_region = 'South Interior' THEN 2
+        WHEN business_area_region = 'Coast' THEN 3
+    END AS business_area_region_sort_order,
+
+    CASE
+        WHEN business_area_region_category = 'Interior' THEN 1
+        ELSE 2
+    END AS business_area_region_cat_sort_order
+
+FROM bcts_staging.bcts_adv_targets;
 
 GRANT SELECT ON bcts_staging.dim_business_area TO BCTS_DEV_ROLE;
 GRANT SELECT ON bcts_staging.dim_business_area TO proxy_bcts_bi;
