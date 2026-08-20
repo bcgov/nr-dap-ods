@@ -289,7 +289,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
         WHEN ou.org_unit_code IS NULL THEN NULL
         ELSE REPLACE(
             CASE 
-                WHEN ou.org_unit_name = 'Seaward Timber Sales Office' THEN 'Seaward-Tlasta'
+                WHEN ou.org_unit_name = 'Seaward-tlasta Timber Sales Office' THEN 'Seaward-Tlasta'
                 ELSE ou.org_unit_name
             END || ' (' || ou.org_unit_code || ')',
             ' Timber Sales Office',
@@ -515,7 +515,7 @@ def get_licence_issued_advertised_official_query(start_date, end_date):
             REPLACE(
                 CONCAT(
                     CASE 
-                        WHEN ou.org_unit_name = 'Seaward Timber Sales Office' THEN 'Seaward-Tlasta'
+                        WHEN ou.org_unit_name = 'Seaward-tlasta Timber Sales Office' THEN 'Seaward-Tlasta'
                         ELSE ou.org_unit_name
                     END,
                     ' (', ou.org_unit_code, ')'
