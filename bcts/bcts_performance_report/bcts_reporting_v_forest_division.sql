@@ -15,7 +15,7 @@ CASE
 		WHEN d.divi_short_code IN ( 'TCH', 'TST', 'TSG' ) THEN
 			'Coast'
 	END                                             AS business_area_region,
-	CASE WHEN d.divi_division_name = 'Seaward' THEN 'Seaward-Tlasta' ELSE d.divi_division_name END
+	CASE WHEN d.divi_division_name = 'Seaward-tlasta' THEN 'Seaward-Tlasta' ELSE d.divi_division_name END
 	|| ' ('
 	|| d.divi_short_code
 	|| ')'                                          AS business_area,
