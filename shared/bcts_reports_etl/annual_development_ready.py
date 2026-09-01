@@ -56,7 +56,7 @@ def get_annual_development_ready_query(start_date, end_date):
                 'Coast'
             end as BUSINESS_AREA_REGION,
         CASE 
-            WHEN D.DIVI_DIVISION_NAME = 'Seaward' THEN 'Seaward-Tlasta' 
+            WHEN D.DIVI_DIVISION_NAME = 'Seaward-tlasta' THEN 'Seaward-Tlasta' 
             ELSE D.DIVI_DIVISION_NAME 
         END || ' (' || D.DIVI_SHORT_CODE || ')' AS BUSINESS_AREA,
         D.DIVI_SHORT_CODE AS BUSINESS_AREA_CODE,

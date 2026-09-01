@@ -261,7 +261,7 @@ def get_currently_in_market(end_date):
             'Coast'
         end as BUSINESS_AREA_REGION,
     CASE 
-        WHEN D.DIVI_DIVISION_NAME = 'Seaward' 
+        WHEN D.DIVI_DIVISION_NAME = 'Seaward-tlasta' 
         THEN 'Seaward-Tlasta' 
         ELSE D.DIVI_DIVISION_NAME 
     END || ' (' || L.TSO_CODE || ')' AS BUSINESS_AREA,
@@ -364,7 +364,7 @@ def get_currently_in_market(end_date):
                 'Coast'
             end as BUSINESS_AREA_REGION,
         CASE 
-            WHEN D.DIVI_DIVISION_NAME = 'Seaward' THEN 'Seaward-Tlasta'
+            WHEN D.DIVI_DIVISION_NAME = 'Seaward-tlasta' THEN 'Seaward-Tlasta'
             ELSE D.DIVI_DIVISION_NAME
         END || ' (' || D.DIVI_SHORT_CODE || ')' AS BUSINESS_AREA,
         D.DIVI_SHORT_CODE as business_area_code,
