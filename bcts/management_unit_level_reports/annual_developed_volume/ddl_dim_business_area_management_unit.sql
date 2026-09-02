@@ -19,7 +19,7 @@
 --         WHEN business_area_region_category = 'Interior' THEN 1
 --         ELSE 2
 --     END AS business_area_region_cat_sort_order
--- from bcts_reporting.annual_developed_volume_hist
+-- from bcts_staging.annual_developed_volume_hist
 -- group by business_area_region_category, business_area_region,
 -- CASE
 --         WHEN business_area IN ('Prince George (TPG)', 'Stuart-Nechako (TSN)')
@@ -71,7 +71,7 @@ with src as (
             when business_area_region_category = 'Interior' then 1
             else 2
         end as business_area_region_cat_sort_order
-    from bcts_reporting.annual_developed_volume_hist
+    from bcts_staging.annual_developed_volume_hist
 )
 select
     business_area_region_category,
