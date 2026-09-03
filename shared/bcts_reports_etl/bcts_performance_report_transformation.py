@@ -12,6 +12,8 @@ from zoneinfo import ZoneInfo
 
 
 
+from shared.bcts_reports_etl.transformation_queries.licence_issued_advertised_main_previous_ytd import get_licence_issued_advertised_main_previous_ytd_query
+from shared.bcts_reports_etl.transformation_queries.licence_issued_advertised_official_previous_ytd import get_licence_issued_advertised_official_previous_ytd_query
 from transformation_queries.licence_issued_advertised_official import get_licence_issued_advertised_official_query
 from transformation_queries.licence_issued_advertised_main import get_licence_issued_advertised_main_query
 from transformation_queries.CurrentlyInMarket import get_currently_in_market
@@ -93,11 +95,47 @@ def run_licence_issued_advertised_official_report(connection, cursor, start_date
         logging.error(f"Error executing the SQL script: {e}")
         connection.rollback()
         sys.exit(1)
+
+def run_licence_issued_advertised_official_previous_ytd_report(connection, cursor, start_date, end_date):
+
+    # Run license issued advertised official report
+    sql_statement = get_licence_issued_advertised_official_previous_ytd_query(start_date, end_date)
+
+    try:
+        # logging.info(f"Executing the query...")
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+
+        # Generate license issued advertised main report
+
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
     
 def run_licence_issued_advertised_main_report(connection, cursor):
 
     # Run licence issued advertised main report
     sql_statement = get_licence_issued_advertised_main_query()
+
+    try:
+        # logging.info(f"Executing the query...")
+        cursor.execute(sql_statement)
+        connection.commit()
+        logging.info(f"SQL script executed successfully.")
+
+        # Generate license issued advertised main report
+        
+    except psycopg2.Error as e:
+        logging.error(f"Error executing the SQL script: {e}")
+        connection.rollback()
+        sys.exit(1)
+
+def run_licence_issued_advertised_main_previous_ytd_report(connection, cursor):
+
+    # Run licence issued advertised main report
+    sql_statement = get_licence_issued_advertised_main_previous_ytd_query()
 
     try:
         # logging.info(f"Executing the query...")
@@ -204,6 +242,19 @@ def publish_datasets():
     CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_hist
     AS SELECT * 
     FROM BCTS_STAGING.licence_issued_advertised_main_hist;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_official_previous_ytd;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_official_previous_ytd
+    AS SELECT * 
+    FROM BCTS_STAGING.licence_issued_advertised_official_previous_ytd;
+
+    DROP TABLE IF EXISTS BCTS_REPORTING.licence_issued_advertised_main_previous_ytd;
+    CREATE TABLE BCTS_REPORTING.licence_issued_advertised_main_previous_ytd
+    AS SELECT * 
+    FROM BCTS_STAGING.licence_issued_advertised_main_previous_ytd;
+
+    GRANT SELECT ON BCTS_REPORTING.licence_issued_advertised_official_previous_ytd TO BCTS_DEV_ROLE;
+    GRANT SELECT ON BCTS_REPORTING.licence_issued_advertised_main_previous_ytd TO BCTS_DEV_ROLE;
 
     DROP TABLE IF EXISTS bcts_staging.currently_in_market_summary;
     create table bcts_staging.currently_in_market_summary as
@@ -666,6 +717,8 @@ def truncate_licence_issued_advertised_official(connection, cursor):
     sql_statement = \
     f"""
     delete from bcts_staging.licence_issued_advertised_official;
+    delete from bcts_staging.licence_issued_advertised_official_previous_ytd;
+    delete from bcts_staging.licence_issued_advertised_main_previous_ytd;
     """
 
     try:
@@ -713,6 +766,7 @@ if __name__ == "__main__":
 
         logging.info(f"Running license issued advertised official report for the period of  {start_date} and {end_date}...")
         run_licence_issued_advertised_official_report(connection, cursor, start_date, end_date)
+        run_licence_issued_advertised_official_previous_ytd_report(connection, cursor, start_date, end_date)
 
         # Get current time in UTC
         utc_now = datetime.now(tz=ZoneInfo("UTC"))
@@ -723,6 +777,7 @@ if __name__ == "__main__":
         run_get_currently_in_market(current_date_pst)
 
         run_licence_issued_advertised_main_report(connection, cursor)
+        run_licence_issued_advertised_main_previous_ytd_report(connection, cursor)
 
         # Publish updated reporting objects to the reporting layer
         logging.info("Updating datasets to the reporting layer...")
