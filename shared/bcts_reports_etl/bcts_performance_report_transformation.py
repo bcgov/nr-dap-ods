@@ -93,6 +93,7 @@ def run_licence_issued_advertised_official_report(connection, cursor, start_date
 
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
+        logging.info(sql_statement)
         connection.rollback()
         sys.exit(1)
 
@@ -111,6 +112,7 @@ def run_licence_issued_advertised_official_previous_ytd_report(connection, curso
 
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
+        logging.info(sql_statement)
         connection.rollback()
         sys.exit(1)
     
@@ -129,6 +131,7 @@ def run_licence_issued_advertised_main_report(connection, cursor):
         
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
+        logging.info(sql_statement)
         connection.rollback()
         sys.exit(1)
 
@@ -147,6 +150,7 @@ def run_licence_issued_advertised_main_previous_ytd_report(connection, cursor):
         
     except psycopg2.Error as e:
         logging.error(f"Error executing the SQL script: {e}")
+        logging.info(sql_statement)
         connection.rollback()
         sys.exit(1)
 
