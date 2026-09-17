@@ -640,9 +640,7 @@ def publish_datasets():
     business_area,
     coalesce(sum(issued_licence_volume),0) as "Previous YTD Licence Issued",
     coalesce(sum(category_2_and_4_issued_volume), 0) as "Previous YTD Licence Issued: Value Added"
-    from bcts_reporting.licence_issued_advertised_main_hist
-    where report_start_date = (select max(report_start_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
-    and report_end_date = (select max(report_end_date) - interval '1 year' from bcts_reporting.licence_issued_advertised_main)
+    from bcts_reporting.licence_issued_advertised_main_previous_ytd
     group by business_area_region_category, business_area_region, business_area
     ),
     base as
