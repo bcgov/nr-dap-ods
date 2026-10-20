@@ -104,7 +104,7 @@ def get_volume_advertised_official_query(start_date, end_date):
             end as Business_Area_Region,
         replace(
             CASE 
-                WHEN ou.org_unit_name = 'Seaward Timber Sales Office' 
+                WHEN ou.org_unit_name = 'Seaward-tlasta Timber Sales Office' 
                 THEN 'Seaward-Tlasta' 
                 ELSE ou.org_unit_name 
             END || ' (' || ou.org_unit_code || ')',
