@@ -63,7 +63,7 @@ def get_licence_transfer_query(start_date, end_date):
 
         REPLACE(
             CASE
-                WHEN ou.org_unit_name = 'Seaward Timber Sales Office' THEN 'Seaward/Tlasta'
+                WHEN ou.org_unit_name = 'Seaward-tlasta Timber Sales Office' THEN 'Seaward/Tlasta'
                 ELSE ou.org_unit_name
             END || ' (' || ou.org_unit_code || ')',
             ' Timber Sales Office',
