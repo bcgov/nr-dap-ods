@@ -167,8 +167,8 @@ def publish_datasets():
     count(case when no_bid='' then licence_number else null end) as "Number of Licence Issued",
     sum(case when no_bid_info='Y' then total_volume else 0 end) as "Volume Not Awarded",
     count(case when no_bid_info='Y' then licence_number else null end) as "Number of Licence Not Awarded",
-    sum(case when auctioned_bcts_category_code='4' and no_bid_info != 'Y' then total_volume else 0 end) as "Volume of Value Added (Category 4) Auctioned",
-    count(case when auctioned_bcts_category_code='4' and no_bid_info != 'Y' then licence_number else null end) as "Number of Value Added (Category 4) Licence Auctioned"
+    sum(case when auctioned_bcts_category_code in ('4', '5', 'V') and no_bid_info != 'Y' then total_volume else 0 end) as "Volume of Value Added Auctioned",
+    count(case when auctioned_bcts_category_code in ('4', '5', 'V') and no_bid_info != 'Y' then licence_number else null end) as "Number of Value Added Licence Auctioned"
     from tsl_summary1
     group by business_area_region_category, business_area_region, business_area
     )
@@ -183,8 +183,8 @@ def publish_datasets():
         "Number of Licence Issued",
         "Volume Not Awarded",
         "Number of Licence Not Awarded",
-        "Volume of Value Added (Category 4) Auctioned",
-        "Number of Value Added (Category 4) Licence Auctioned",
+        "Volume of Value Added Auctioned",
+        "Number of Value Added Licence Auctioned",
         case when business_area_region = 'North Interior' then 1
             when business_area_region = 'South Interior' then 2
             when business_area_region = 'Coast' then 3
