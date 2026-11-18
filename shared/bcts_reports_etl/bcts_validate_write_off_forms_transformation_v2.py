@@ -269,7 +269,7 @@ def load_into_ods(df):
     try:
         # Create the SQLAlchemy engine
         engine = create_engine(
-            f"postgresql://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_database}"
+            f"postgresql+psycopg2://{postgres_username}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_database}"
         )
        # Convert all values to native Python types to avoid numpy issues
         df_clean = df.astype(object).where(pd.notnull(df), None)
